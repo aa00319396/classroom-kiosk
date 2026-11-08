@@ -1,713 +1,194 @@
 <!doctype html>
-<html lang="zh-Hant-TW">
+<html lang="zh-Hant">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#fffaf5">
-<title>監考小看板 v3.2｜穩定性修正版</title>
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover">
+<title>教室多功能白板 V2.0｜離線教學版</title>
 <style>
-:root{color-scheme:dark;--bg:#0a1424;--surface:#16253c;--surface2:#203550;--line:#38526d;--muted:#c6d5e7;--white:#f9fbff;--mint:#baf36d;--blue:#85e1ff;--amber:#ffd477;--red:#ff9a96;--shadow:0 9px 25px #0003}
-*{box-sizing:border-box}
-html,body{margin:0;width:100%;height:100%;overflow:hidden}
-body{background:var(--bg);color:var(--white);font:700 16px/1.35 system-ui,-apple-system,"Noto Sans TC","Microsoft JhengHei",sans-serif}
-button,input,select{font:inherit}button{cursor:pointer}button:disabled{cursor:not-allowed;opacity:.45}
-:focus-visible{outline:3px solid var(--mint);outline-offset:2px}
-button{border:1px solid #58718a;color:var(--white);background:#2a425e;border-radius:11px;padding:9px 13px;white-space:nowrap;transition:background .1s}
-button:hover:not(:disabled){background:#365777}
-.btn-primary{background:#baf36d;color:#14231a;border-color:#baf36d;font-weight:950}
-.btn-primary:hover:not(:disabled){background:#cefa93}
-.btn-danger{border-color:#8f4e55;color:#ffb7b3;background:#422833}
-.btn-small{padding:6px 10px;font-size:14px}
-.app{height:100vh;height:100dvh;display:flex;flex-direction:column;min-height:0;gap:clamp(6px,.9vh,11px);padding:clamp(9px,1.2vw,18px)}
-header{height:clamp(45px,6.4vh,65px);flex:none;display:flex;align-items:center;gap:12px;justify-content:space-between;min-width:0}
-.brand{display:flex;align-items:center;gap:11px;font-weight:950;font-size:clamp(21px,2.2vw,32px);letter-spacing:.04em;white-space:nowrap;min-width:0}
-.brand:before{content:"";height:32px;width:9px;background:var(--mint);border-radius:22px;flex:none;box-shadow:0 0 14px #baf36d55}
-.version{font-size:11px;color:#abc1d5;font-weight:750;align-self:end;margin-bottom:5px}
-.top-actions{display:flex;align-items:center;gap:clamp(6px,.8vw,11px);min-width:0}
-.date-now{color:var(--muted);font-size:clamp(12px,1.2vw,18px);font-variant-numeric:tabular-nums;white-space:nowrap}
-.mode-pill{font-size:clamp(11px,1vw,15px);padding:7px 11px;border:1px solid #587289;border-radius:99px;color:#c8dbea;white-space:nowrap}
-#modeBtn{font-weight:900}
-.editor{flex:none;background:#111f33;border:1px solid var(--line);border-radius:16px;padding:clamp(8px,1vw,13px);display:flex;flex-direction:column;gap:8px;min-width:0;box-shadow:var(--shadow)}
-body.view-mode .editor{display:none}
-.editor-head{display:flex;justify-content:space-between;align-items:center;gap:8px;min-width:0}
-.editor-title{font-weight:950;color:var(--mint);white-space:nowrap;font-size:clamp(15px,1.25vw,19px)}
-.editor-right{display:flex;gap:6px;justify-content:end;align-items:center;flex-wrap:wrap;min-width:0}
-.schedule{display:flex;align-items:center;gap:6px;max-width:100%;min-width:0}
-.schedule-list{display:flex;gap:6px;overflow-x:auto;scrollbar-width:thin;flex:1;min-width:0;padding:2px}
-.schedule-tab{padding:6px 12px;font-size:clamp(13px,1.05vw,17px);border-color:#415d77;max-width:170px;overflow:hidden;text-overflow:ellipsis}
-.schedule-tab.active{color:#12221a;background:var(--mint);border-color:var(--mint)}
-.mini-bar{display:flex;justify-content:space-between;gap:10px;align-items:center}
-.mini-note{font-size:clamp(11px,.95vw,14px);color:var(--muted);font-weight:650}
-.fields{display:grid;grid-template-columns:1.2fr .75fr 1.35fr .9fr .8fr .9fr;gap:7px;min-width:0}
-.field{min-width:0;border:1px solid #344d67;background:#1a2b43;border-radius:10px;padding:6px 10px;display:flex;flex-direction:column;gap:2px}
-.field label{font-size:clamp(12px,.95vw,16px);color:var(--muted);white-space:nowrap}
-.field input{width:100%;min-width:0;background:transparent;color:white;border:0;border-bottom:1px solid #53728d;border-radius:0;padding:3px 0;font-weight:850;font-size:clamp(16px,1.45vw,25px);height:36px}
-.field input[type=date],.field input[type=time]{font-size:clamp(14px,1.2vw,19px);font-variant-numeric:tabular-nums}
-.field input[type=date]::-webkit-calendar-picker-indicator,.field input[type=time]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.85}
-.field input:disabled{color:#bcd3e5;opacity:.8}
-.second-row{display:grid;grid-template-columns:.7fr .8fr 1.95fr auto;gap:7px;align-items:stretch}
-.attendance-buttons{display:flex;gap:6px;align-items:center;justify-content:end;min-width:0}
-#actualWrap .number-entry{display:flex;gap:7px;align-items:center}
-#actualWrap .number-entry input{flex:1}
-.step{flex:none;width:30px;height:31px;padding:0;font-size:19px;border-radius:7px}
-.editor-note{font-size:12px;line-height:1.25;color:var(--muted);min-width:0}
-#validation{font-size:12px;font-weight:850;color:var(--red);min-height:15px}
-#attendBtn{min-width:100px}
-.dashboard{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.08fr);grid-template-rows:minmax(0,1fr) minmax(0,1fr);gap:clamp(7px,.95vw,14px);flex:1;min-height:0;min-width:0}
-.card{display:flex;flex-direction:column;justify-content:space-between;background:linear-gradient(130deg,#20324d,#15243b);border:1px solid var(--line);border-radius:clamp(14px,1.6vw,24px);padding:clamp(12px,2vw,31px);min-height:0;min-width:0;overflow:hidden;position:relative}
-.card-head{display:flex;align-items:center;justify-content:space-between;min-height:26px;gap:10px}
-.card-label{color:var(--muted);font-size:clamp(17px,1.6vw,27px);font-weight:850;white-space:nowrap}
-.small-status{font-weight:850;font-size:clamp(11px,1vw,17px);color:var(--mint);padding:5px 10px;border:1px solid #baf36d70;background:#baf36d19;border-radius:99px;white-space:nowrap;max-width:100%;overflow:hidden;text-overflow:ellipsis}
-.center{min-height:0;flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:clamp(3px,.9vh,12px)}
-.period{font-weight:950;font-size:clamp(32px,min(5vw,9vh),88px);line-height:1.1;letter-spacing:.01em;white-space:nowrap}
-.subject{font-size:clamp(39px,min(6.5vw,11vh),112px);font-weight:950;color:var(--mint);line-height:1.12;text-align:center;overflow-wrap:anywhere;word-break:normal;max-width:100%;min-width:0}
-.subject.long{font-size:clamp(29px,min(4.5vw,8vh),74px)}
-.subject.very-long{font-size:clamp(23px,min(3.3vw,6.1vh),55px)}
-.stat-foot{font-size:clamp(12px,1.1vw,18px);color:var(--muted);font-weight:750;text-align:center;min-height:16px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.big-clock,.big-timer{font-weight:950;white-space:nowrap;font-variant-numeric:tabular-nums;font-feature-settings:"tnum";letter-spacing:-.046em;line-height:1.08;text-align:center;max-width:100%}
-.big-clock{font-size:clamp(40px,min(7.3vw,11.2vh),130px);color:var(--blue)}
-.big-timer{font-size:clamp(43px,min(8.1vw,12vh),145px);color:var(--mint)}
-.big-timer.muted{color:#bfd0e0}
-.caption{color:var(--muted);font-size:clamp(12px,1.3vw,22px);text-align:center;white-space:normal}
-.progress{height:clamp(8px,1.15vh,15px);background:#364c62;border-radius:99px;overflow:hidden;flex:none}
-.progress-fill{height:100%;width:0;background:var(--mint);border-radius:99px;transition:width .3s}
-.attendance-cells{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(6px,.8vw,13px);flex:1;min-height:0;align-items:stretch;padding:clamp(5px,.8vh,12px) 0}
-.attendance-cell{background:#ffffff09;border-radius:13px;display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:0;gap:clamp(5px,1.2vh,12px)}
-.att-label{font-size:clamp(14px,1.5vw,24px);color:var(--muted);white-space:nowrap}
-.att-number{font-size:clamp(32px,min(6vw,9vh),95px);font-weight:950;line-height:1.1;font-variant-numeric:tabular-nums;white-space:nowrap}
-.att-number.present{color:var(--mint)}.att-number.absent{color:var(--red)}
-.att-number.pending{font-size:clamp(21px,min(3vw,5.5vh),48px);color:#ffd477}
-.att-bottom{text-align:center;color:var(--muted);font-size:clamp(12px,1vw,17px);white-space:nowrap;text-overflow:ellipsis;overflow:hidden;min-height:16px}
-.warning .big-timer,.warning .small-status{color:var(--amber)}.warning .progress-fill{background:var(--amber)}
-.warning .small-status{background:#ffd47718;border-color:#ffd47766}
-.urgent .big-timer,.urgent .small-status{color:var(--red)}.urgent .progress-fill{background:var(--red)}
-.urgent .small-status{background:#ff9a9618;border-color:#ff9a9666}
-.footer{display:flex;flex:none;justify-content:space-between;align-items:center;color:#b5c8dc;font-size:clamp(10px,.95vw,15px);gap:8px;min-height:14px}
-.footer span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.modal-shade{position:fixed;inset:0;z-index:100;background:#000a;display:flex;align-items:center;justify-content:center;padding:20px}
-.modal-shade[hidden]{display:none!important}
-.modal{width:min(500px,100%);border:1px solid #68829c;border-radius:20px;background:#16243c;box-shadow:0 20px 70px #000a;padding:24px}
-.modal h2{font-size:23px;margin:0 0 8px}.modal p{color:#d6e3f2;line-height:1.65}.modal-actions{display:flex;justify-content:end;gap:9px;margin-top:22px}
-/* Teacher editing reduces the preview card typography to prevent content collisions. */
-body:not(.view-mode) .exam-center{flex-direction:row;gap:clamp(8px,1.7vw,22px)}
-body:not(.view-mode) .period{font-size:clamp(27px,min(3.4vw,6vh),49px)}
-body:not(.view-mode) .subject{font-size:clamp(32px,min(4vw,7vh),60px);text-align:left}
-body:not(.view-mode) .subject.long{font-size:clamp(26px,min(3.4vw,6vh),47px)}
-body:not(.view-mode) .subject.very-long{font-size:clamp(22px,min(2.8vw,5vh),39px)}
-body:not(.view-mode) .big-clock{font-size:clamp(36px,min(5vw,8.2vh),75px)}
-body:not(.view-mode) .big-timer{font-size:clamp(37px,min(5.7vw,8.8vh),78px)}
-body:not(.view-mode) .att-number{font-size:clamp(31px,min(3.9vw,7vh),57px)}
-body:not(.view-mode) .att-number.pending{font-size:clamp(22px,min(2.7vw,4.8vh),36px)}
-body:not(.view-mode) .card-label{font-size:clamp(14px,1.45vw,21px)}
-body:not(.view-mode) .att-label{font-size:clamp(12px,1.2vw,18px)}
-body:not(.view-mode) .stat-foot,body:not(.view-mode) .caption,body:not(.view-mode) .att-bottom{font-size:clamp(10px,1vw,14px)}
-body.view-mode .card{padding:clamp(16px,2.3vw,35px)}
-body.view-mode .period{font-size:clamp(34px,min(5.6vw,10vh),98px)}
-body.view-mode .subject{font-size:clamp(45px,min(7.2vw,12vh),130px)}
-body.view-mode .subject.long{font-size:clamp(32px,min(5.4vw,9.5vh),82px)}
-body.view-mode .subject.very-long{font-size:clamp(24px,min(4vw,7.5vh),60px)}
-body.view-mode .big-clock{font-size:clamp(42px,min(8.5vw,14vh),150px)}
-body.view-mode .big-timer{font-size:clamp(45px,min(9.5vw,15vh),170px)}
-body.view-mode .att-number{font-size:clamp(38px,min(6.8vw,11vh),110px)}
-body.view-mode .att-number.pending{font-size:clamp(23px,min(3.4vw,6.3vh),55px)}
-@media(max-width:1100px){.date-now{display:none}.editor-head{align-items:start}.fields{grid-template-columns:1.2fr .65fr 1.25fr .85fr .8fr .85fr}}
-@media(max-height:760px) and (min-width:681px){
- .app{gap:6px;padding:8px}header{height:41px}.editor{gap:5px;padding:7px}.field{padding:4px 8px}.field input{height:29px}.mini-bar{display:none}
- .card{padding:12px 16px}.card-label{font-size:clamp(15px,1.5vw,21px)}.att-number{font-size:clamp(30px,5vw,68px)}.att-label{font-size:clamp(13px,1.2vw,18px)}
-}
-@media(max-height:540px) and (min-width:681px){
- .app{padding:5px;gap:4px}header{height:34px}.brand{font-size:18px}.brand:before{height:22px;width:6px}.version{display:none}
- .editor{gap:3px;padding:5px}.editor-title{font-size:13px}.schedule-tab{padding:3px 8px;font-size:12px}.editor-right button{padding:3px 7px;font-size:11px}.field{padding:3px 6px}.field label{font-size:10px}.field input{height:23px;font-size:14px}.second-row .field input{font-size:14px}.attendance-buttons button{padding:4px 6px;font-size:11px}.editor-note{display:none}#validation{min-height:0;font-size:11px}
- .card{padding:8px 12px}.card-label{font-size:12px}.stat-foot,.caption{font-size:10px}.period{font-size:clamp(24px,4vw,45px)}.subject{font-size:clamp(29px,4.3vw,48px)}.big-clock{font-size:clamp(37px,6vw,64px)}.big-timer{font-size:clamp(38px,6.6vw,71px)}.att-number{font-size:clamp(29px,4vw,55px)}.att-label{font-size:11px}.att-bottom{font-size:10px}.footer{display:none}
-}
-@media(max-width:680px){
- .app{padding:7px;gap:6px}header{height:40px}.brand{font-size:18px;gap:7px}.brand:before{height:25px;width:6px}.version{display:none}
- .top-actions{gap:5px}.top-actions button{font-size:11px;padding:7px 8px;border-radius:8px}.mode-pill{display:none}.date-now{display:none}
- .dashboard{grid-template-columns:1fr;grid-template-rows:repeat(4,minmax(0,1fr));gap:6px}.card{border-radius:12px;padding:8px 13px!important}
- .card-head{min-height:16px}.card-label{font-size:13px}.small-status{font-size:11px;padding:2px 7px}
- .center{gap:0}.exam-center{flex-direction:row;gap:9px}.period,body.view-mode .period{font-size:clamp(28px,9vw,40px)}
- .subject,body.view-mode .subject{font-size:clamp(31px,12vw,48px);max-width:75%;text-align:left}
- .subject.long,body.view-mode .subject.long{font-size:clamp(22px,6vw,34px)}
- .subject.very-long,body.view-mode .subject.very-long{font-size:clamp(19px,4.6vw,27px)}
- .big-clock,body.view-mode .big-clock{font-size:clamp(44px,13vw,62px)}
- .big-timer,body.view-mode .big-timer{font-size:clamp(44px,15vw,70px)}
- .caption,.stat-foot{font-size:11px;min-height:0}.progress{height:6px}
- .attendance-cells{padding:2px 0;gap:6px}.attendance-cell{gap:0}.att-label{font-size:12px}
- .att-number,body.view-mode .att-number{font-size:clamp(31px,8vw,49px)}
- .att-number.pending,body.view-mode .att-number.pending{font-size:clamp(18px,4vw,26px)}
- .att-bottom{font-size:11px;min-height:0}.footer{font-size:9px;gap:4px}
- /* Editing takes a dedicated panel only on narrow screens; the actual watch view always stays single-screen. */
- body:not(.view-mode) .editor{position:fixed;z-index:30;inset:54px 7px 7px;overflow-y:auto;overscroll-behavior:contain;gap:12px;padding:12px}
- body:not(.view-mode) .editor-head{flex-direction:column;align-items:stretch}
- body:not(.view-mode) .editor-right{justify-content:start}
- body:not(.view-mode) .schedule{flex-wrap:wrap}
- body:not(.view-mode) .schedule-list{flex-basis:100%;order:2}
- body:not(.view-mode) .fields{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
- body:not(.view-mode) .second-row{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
- body:not(.view-mode) .second-row .seat-field{grid-column:span 2}
- body:not(.view-mode) .attendance-buttons{grid-column:span 2;justify-content:space-between}
- body:not(.view-mode) .editor-note{font-size:13px}
- body:not(.view-mode) .field{padding:10px}body:not(.view-mode) .field input{height:38px;font-size:20px}
- body:not(.view-mode) .field input[type=date],body:not(.view-mode) .field input[type=time]{font-size:17px}
-}
-@media(max-height:590px) and (max-width:680px){.app{gap:4px;padding:5px}header{height:33px}.brand{font-size:16px}.top-actions button{padding:5px 7px}.card{padding:5px 11px!important}.card-label{font-size:11px}.small-status{font-size:10px}.att-label{font-size:11px}.att-number,body.view-mode .att-number{font-size:29px}.big-clock,body.view-mode .big-clock{font-size:36px}.big-timer,body.view-mode .big-timer{font-size:37px}.period,body.view-mode .period{font-size:23px}.subject,body.view-mode .subject{font-size:27px}.stat-foot,.caption{font-size:10px}.footer{display:none}}
-
-/* v2.3 — teacher setup is a normal, wheel/touch/keyboard scrollable document.
-   Student view remains a viewport-locked, non-scrolling dashboard. */
-html.teacher-scroll{height:100%;overflow-x:hidden;overflow-y:scroll;scrollbar-gutter:stable}
-html.teacher-scroll body:not(.view-mode){height:auto;min-height:100%;overflow:visible}
-html.teacher-scroll body:not(.view-mode) .app{height:auto;min-height:100vh;min-height:100dvh;overflow:visible}
-body:not(.view-mode) .editor-intro .scroll-cue{color:var(--mint);font-size:14px;font-weight:800;margin-top:12px}
-body.view-mode .scroll-cue{display:none}
-@media(max-width:680px){body:not(.view-mode) .editor-intro .scroll-cue{font-size:12px}}
-/* v2.2 — spacious, dedicated teacher editing workspace */
-body:not(.view-mode){height:auto;min-height:100%;overflow-x:hidden;overflow-y:auto}
-body:not(.view-mode) .app{height:auto;min-height:100dvh;overflow:visible;padding:20px clamp(18px,3vw,48px) 38px;gap:20px}
-body:not(.view-mode) header{width:100%;max-width:1340px;margin-inline:auto;height:auto;min-height:58px}
-body:not(.view-mode) .dashboard,body:not(.view-mode) .footer{display:none}
-body:not(.view-mode) .editor{display:flex;position:relative;inset:auto;width:100%;max-width:1340px;margin:0 auto;padding:0;overflow:visible;gap:18px;border:0;background:none;box-shadow:none;border-radius:0}
-body:not(.view-mode) .editor-intro{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:6px 4px 10px}
-body:not(.view-mode) .editor-eyebrow{color:var(--blue);font-size:14px;letter-spacing:.04em}
-body:not(.view-mode) .editor-intro h1{font-size:clamp(26px,2.3vw,35px);line-height:1.22;margin:6px 0 9px}
-body:not(.view-mode) .editor-intro p{font-size:16px;color:var(--muted);font-weight:600;margin:0}
-body:not(.view-mode) .silence-chip{padding:12px 16px;border:1px solid #57768b;border-radius:100px;color:var(--muted);white-space:nowrap;font-size:14px}
-body:not(.view-mode) .editor-block{background:#14243a;border:1px solid #3a536c;border-radius:20px;padding:clamp(18px,2vw,28px);box-shadow:0 9px 22px #0002;display:flex;flex-direction:column;gap:19px;min-width:0}
-body:not(.view-mode) .block-head{display:flex;align-items:center;justify-content:space-between;gap:24px;min-width:0}
-body:not(.view-mode) .block-head h2{font-size:clamp(20px,1.65vw,25px);margin:5px 0 4px;line-height:1.3}
-body:not(.view-mode) .block-head p{color:#c2d1e2;font-weight:600;font-size:14px;line-height:1.55;margin:2px 0 0}
-body:not(.view-mode) .block-index{font-size:13px;letter-spacing:.08em;font-weight:850;color:var(--mint)}
-body:not(.view-mode) .schedule{display:flex;min-width:0;align-items:stretch;max-width:100%}
-body:not(.view-mode) .schedule-list{width:100%;padding:4px 1px 9px;display:flex;gap:10px;overflow:auto}
-body:not(.view-mode) .schedule-tab{padding:12px 18px;max-width:unset;min-width:142px;flex:none;border-radius:12px;font-size:17px}
-body:not(.view-mode) .schedule-actions{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
-body:not(.view-mode) .nav-actions,body:not(.view-mode) .management-actions,body:not(.view-mode) .utility-actions{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
-body:not(.view-mode) .schedule-actions button,body:not(.view-mode) .attendance-buttons button,body:not(.view-mode) .finish-actions button{padding:12px 17px;font-size:15px;min-height:48px}
-body:not(.view-mode) .auto-toggle{min-height:49px;padding:10px 20px;border:2px solid var(--mint);background:#28483c;color:var(--mint);font-size:17px;font-weight:950}
-body:not(.view-mode) .auto-toggle[aria-pressed=false]{border-color:#67778a;background:#27344a;color:#cdd8e5}
-body:not(.view-mode) .fields{grid-template-columns:minmax(0,1.2fr) minmax(0,.7fr) minmax(0,1.7fr);gap:16px}
-body:not(.view-mode) .field{padding:14px 17px;gap:8px;border-radius:14px;background:#1d3049;border-color:#49617a}
-body:not(.view-mode) .field label{font-size:15px;line-height:1.4;color:#d6e4f3;white-space:normal;font-weight:750}
-body:not(.view-mode) .field input{height:46px;font-size:23px;background:#102039;border:1px solid #59718d;border-radius:9px;padding:6px 13px;outline-offset:3px}
-body:not(.view-mode) .field input[type=date]{font-size:21px}
-body:not(.view-mode) .time-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,.68fr) minmax(0,1fr);gap:17px;align-items:stretch}
-body:not(.view-mode) .time-panel{background:#1a2e48;border:1px solid #45617c;padding:20px;border-radius:16px;display:flex;flex-direction:column;gap:17px;min-width:0}
-body:not(.view-mode) .time-panel-title{display:flex;align-items:center;gap:10px;font-size:20px}
-body:not(.view-mode) .time-icon{display:inline-grid;place-items:center;background:#354d64;width:34px;height:34px;border-radius:9px;color:var(--mint);font-size:16px}
-body:not(.view-mode) .time-period{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
-body:not(.view-mode) .time-period button{font-size:21px;font-weight:900;border:2px solid #627891;padding:12px 6px;min-height:57px;background:#203751;border-radius:12px}
-body:not(.view-mode) .time-period button[aria-pressed=true]{background:var(--mint);color:#152617;border-color:var(--mint)}
-body:not(.view-mode) .time-values{display:flex;align-items:end;gap:10px;justify-content:center}
-body:not(.view-mode) .time-values label{display:flex;flex:1;min-width:0;flex-direction:column;gap:8px;font-size:15px;color:var(--muted)}
-body:not(.view-mode) .time-values select{background:#0d2037;border:2px solid #68859d;border-radius:11px;min-height:62px;width:100%;padding:5px 16px;color:#fff;font-size:clamp(23px,2.5vw,35px);font-weight:950;font-variant-numeric:tabular-nums;cursor:pointer}
-body:not(.view-mode) .time-values option{color:#18283b;background:#f7faff}
-body:not(.view-mode) .time-values .colon{padding-bottom:14px;color:var(--muted);font-size:31px}
-body:not(.view-mode) .time-reading{background:#0e223a;color:var(--blue);border:1px solid #456580;padding:10px 8px;text-align:center;border-radius:10px;font-size:16px;font-weight:900;font-variant-numeric:tabular-nums}
-body:not(.view-mode) .time-panel.duration-panel{justify-content:start}
-body:not(.view-mode) .duration-panel .field{padding:0;background:none;border:0;margin-top:11px}
-body:not(.view-mode) .duration-entry{display:flex;align-items:center;gap:8px}
-body:not(.view-mode) .duration-entry input{flex:1;min-width:0;height:62px;background:#0d2037;border:2px solid #68859d;border-radius:11px;font-size:32px;text-align:center;font-weight:950}
-body:not(.view-mode) .duration-entry span{font-size:15px;color:var(--muted);white-space:nowrap}
-body:not(.view-mode) .time-hint{font-size:14px;color:var(--muted);font-weight:600;line-height:1.5;margin-top:auto}
-body:not(.view-mode) .time-helper{font-size:13px;line-height:1.6;color:#c6d5e7;border-left:4px solid #6c91ac;padding:8px 12px;background:#1d3048;border-radius:0 9px 9px 0}
-body:not(.view-mode) .second-row{display:grid;grid-template-columns:minmax(0,.7fr) minmax(0,1fr) minmax(0,1.65fr);gap:16px}
-body:not(.view-mode) .number-entry{display:flex;align-items:center;gap:10px}
-body:not(.view-mode) .number-entry .step{height:46px;width:46px;font-size:28px;font-weight:950;border-radius:10px}
-body:not(.view-mode) .attendance-buttons{display:flex;justify-content:start;align-items:center;flex-wrap:wrap;gap:10px}
-body:not(.view-mode) .attendance-buttons #attendBtn{min-width:144px}
-body:not(.view-mode) .finish-actions{display:flex;justify-content:space-between;gap:14px;align-items:center;flex-wrap:wrap}
-body:not(.view-mode) .finish-main{font-size:20px!important;padding:15px 26px!important;min-height:60px!important}
-body:not(.view-mode) .editor-note{font-size:14px;color:var(--muted);line-height:1.55}
-body:not(.view-mode) #validation{font-size:15px;line-height:1.45;min-height:0;color:#ffd49c}
-body:not(.view-mode) #validation:empty{display:none}
-@media(max-width:900px){
- body:not(.view-mode) .time-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
- body:not(.view-mode) .duration-panel{grid-column:span 2;order:3}
- body:not(.view-mode) .duration-panel .field{margin:0}
- body:not(.view-mode) .fields{grid-template-columns:repeat(2,minmax(0,1fr))}
- body:not(.view-mode) .fields .field:last-child{grid-column:span 2}
- body:not(.view-mode) .second-row{grid-template-columns:repeat(2,minmax(0,1fr))}
- body:not(.view-mode) .second-row .seat-field{grid-column:span 2}
-}
-@media(max-width:680px){
- body:not(.view-mode){overflow-y:auto}
- body:not(.view-mode) .app{padding:10px 10px 26px;gap:13px}
- body:not(.view-mode) header{height:48px}
- body:not(.view-mode) .editor{position:static;inset:auto;overflow:visible;gap:12px;padding:0}
- body:not(.view-mode) .editor-intro{align-items:start;padding:6px 4px;gap:10px}
- body:not(.view-mode) .editor-intro h1{font-size:25px}
- body:not(.view-mode) .editor-intro p{font-size:13px}
- body:not(.view-mode) .silence-chip{display:none}
- body:not(.view-mode) .editor-block{padding:16px 13px;gap:14px;border-radius:16px}
- body:not(.view-mode) .block-head{display:block}
- body:not(.view-mode) .block-head h2{font-size:20px}
- body:not(.view-mode) .block-head p{font-size:13px}
- body:not(.view-mode) .auto-actions{margin-top:12px}
- body:not(.view-mode) .schedule-tab{font-size:15px;min-width:125px;padding:11px 12px}
- body:not(.view-mode) .schedule-actions{align-items:stretch}
- body:not(.view-mode) .schedule-actions .nav-actions,body:not(.view-mode) .schedule-actions .management-actions{width:100%;justify-content:space-between}
- body:not(.view-mode) .schedule-actions button{min-width:0;font-size:13px;padding:9px 12px;flex:1}
- body:not(.view-mode) .fields{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
- body:not(.view-mode) .fields .field:last-child{grid-column:span 2}
- body:not(.view-mode) .field{padding:10px;gap:6px}
- body:not(.view-mode) .field input{height:44px;font-size:20px}
- body:not(.view-mode) .field input[type=date]{font-size:15px}
- body:not(.view-mode) .time-grid{grid-template-columns:1fr;gap:12px}
- body:not(.view-mode) .duration-panel{grid-column:auto;order:0}
- body:not(.view-mode) .time-panel{padding:16px;gap:12px}
- body:not(.view-mode) .time-period button{min-height:48px;font-size:19px}
- body:not(.view-mode) .time-values select{min-height:55px;font-size:29px}
- body:not(.view-mode) .duration-panel .field{margin:0}
- body:not(.view-mode) .second-row{grid-template-columns:minmax(0,1fr);gap:10px}
- body:not(.view-mode) .second-row .seat-field{grid-column:auto}
- body:not(.view-mode) .number-entry input{min-width:90px}
- body:not(.view-mode) .attendance-buttons button{flex:1;font-size:13px;padding:11px 6px}
- body:not(.view-mode) .finish-actions{align-items:stretch}
- body:not(.view-mode) .finish-actions .utility-actions{width:100%;display:grid;grid-template-columns:1fr 1fr}
- body:not(.view-mode) .finish-main{width:100%}
-}
-/* Root scroller: enforce last to override legacy body rules at every breakpoint. */
-html.teacher-scroll{overflow-y:scroll!important;overflow-x:hidden!important;height:100%!important}
-html.teacher-scroll body:not(.view-mode){height:auto!important;min-height:100%!important;overflow:visible!important}
-html.teacher-scroll body:not(.view-mode) .app{height:auto!important;min-height:100dvh!important;overflow:visible!important}
-
-/* v3 pastel-white kawaii visual system; decoration is original CSS, with no external assets. */
-:root{color-scheme:light;--bg:#fffaf5;--surface:#ffffff;--surface2:#fff5ec;--line:#e9ddd5;--muted:#726e74;--white:#413b41;--mint:#f8d97f;--blue:#70a5c3;--amber:#bc7d22;--red:#d35e76;--shadow:0 7px 24px #ad8e851a}
-body{background:radial-gradient(circle at 9% 15%,#ffe8ec 0 5%,transparent 17%),radial-gradient(circle at 91% 78%,#e3f5ed 0 5%,transparent 19%),#fffaf5;color:#413b41}
-button{background:#fff;border:2px solid #e6d9d3;color:#4c4550;border-radius:16px;box-shadow:0 3px 0 #e8ded8;font-weight:850}
-button:hover:not(:disabled){background:#fff1e7;border-color:#e2b4ba}
-button:disabled{opacity:.38}.btn-primary{background:#f6d780;color:#4a3b30;border-color:#eec46b;box-shadow:0 3px 0 #e8b96a}.btn-primary:hover:not(:disabled){background:#ffe6a7}
-.btn-danger{background:#fff0f3;color:#a24f62;border-color:#f1cbd3}
-:focus-visible{outline:3px solid #e3a2af}
-.brand{color:#5a4d57}.brand:before{background:#fac0cb;box-shadow:none;border-radius:20px}.version{color:#b08091}
-.date-now,.mode-pill,.footer,.footer span{color:#766d72}.mode-pill{border-color:#ead6d9;background:#fff}
-.editor-intro .editor-eyebrow,body:not(.view-mode) .editor-eyebrow{color:#b47d90}
-body:not(.view-mode) .editor-intro p,body:not(.view-mode) .block-head p{color:#726d72}
-body:not(.view-mode) .editor-block{background:#fffefc;border:2px solid #eee0d6;border-radius:26px;box-shadow:0 8px 25px #bb9e921e}
-body:not(.view-mode) .block-index{color:#bc8192}
-body:not(.view-mode) .field{background:#fff9f2;border:2px solid #eddfd5}
-body:not(.view-mode) .field label,body:not(.view-mode) .time-values label{color:#675e62}
-body:not(.view-mode) .field input,body:not(.view-mode) .duration-entry input{background:#fff;color:#453d43;border:2px solid #e1d4d2}
-body:not(.view-mode) .field input:disabled{color:#8e8589}
-body:not(.view-mode) .time-panel{background:#fff9f5;border:2px solid #eeded9;border-radius:22px}
-body:not(.view-mode) .time-icon{background:#f8e1e8;color:#986477}
-body:not(.view-mode) .time-period button{background:#fff;border-color:#e7d5d3;color:#534b52}
-body:not(.view-mode) .time-period button[aria-pressed=true]{background:#f8d97f;color:#51402c;border-color:#e9bd66}
-body:not(.view-mode) .time-values select{background:white;border-color:#e5d5d1;color:#4d4245}
-body:not(.view-mode) .time-reading{background:#f6f9ff;border-color:#d9e8f2;color:#517d99}
-body:not(.view-mode) .time-hint,body:not(.view-mode) .editor-note{color:#726d72}
-body:not(.view-mode) .time-helper{background:#f8f7ff;border-color:#b9bedf;color:#706a7b}
-body:not(.view-mode) .auto-toggle{border-color:#eac16f;background:#fff2ca;color:#6c5426}
-body:not(.view-mode) .auto-toggle[aria-pressed=false]{border-color:#dfd5d1;background:#f3eff0;color:#74686e}
-body:not(.view-mode) .schedule-tab{background:#fff;border-color:#eaded8}
-body:not(.view-mode) .schedule-tab.active{background:#f7d2da;color:#754651;border-color:#e8b0bb}
-body:not(.view-mode) #validation{color:#aa5361}
-.card{background:#fffefa;border:2px solid #eee1d7;box-shadow:0 7px 24px #bd9a8b1c;border-radius:28px}
-.card:nth-child(1){background:#fff9fa}.card:nth-child(2){background:#f7fbff}.card:nth-child(3){background:#fcfff9}.card:nth-child(4){background:#fffdf4}
-.card-label,.caption,.stat-foot,.att-label,.att-bottom{color:#777078}
-.period{color:#534952}.subject,body.view-mode .subject{color:#c17d91}.big-clock,body.view-mode .big-clock{color:#6599b9}.big-timer,body.view-mode .big-timer{color:#bc8d36}
-.big-timer.muted{color:#a69ea0}.attendance-cell{background:#f8f3f1}.att-number.present{color:#729d84}.att-number.absent{color:#d47e91}.att-number.pending{color:#b29765}
-.small-status{background:#f5f0df;border:1px solid #e7d7a9;color:#857044}
-.progress{background:#f1e9df}.progress-fill{background:#f0cd79}
-.warning .big-timer,.warning .small-status{color:#b27e20}.warning .progress-fill{background:#edbf5c}
-.urgent .big-timer,.urgent .small-status{color:#d35e76}.urgent .progress-fill{background:#de91a1}
-.modal-shade{background:#675e6177}.modal{background:#fffdfa;color:#514852;border:2px solid #edcfd7;border-radius:26px}.modal p{color:#6e646b}
-.wizard-progress{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px}
-.wizard-pill{padding:14px 6px;white-space:normal;min-height:58px;font-size:clamp(13px,1.2vw,17px);line-height:1.2}
-.wizard-pill.current{background:#f8d5dd;border-color:#e8aebc;color:#774e5d;box-shadow:0 3px 0 #ebbec9}
-.wizard-pill.completed{background:#e8f5e9;border-color:#c4e0cb;color:#547c62}
-#editor>.editor-block[hidden]{display:none!important}
-.wizard-bottom{display:flex;align-items:center;justify-content:space-between;gap:12px;background:#fff;border:2px solid #efdfd9;border-radius:24px;padding:17px 20px;box-shadow:var(--shadow)}
-.wizard-bottom button{min-height:56px;padding:12px 25px;font-size:19px}.wizard-help{font-size:16px;text-align:center;color:#8b7480}
-body.view-mode .view-nav{display:inline-flex;align-items:center;justify-content:center}
-body:not(.view-mode) .view-nav{display:none}
-body.view-mode #viewAuto[aria-pressed=true]{background:#e7f5e8;border-color:#bfdcc7;color:#55755e}
-body.view-mode #viewAuto[aria-pressed=false]{background:#fff0f3;border-color:#eecbd4;color:#a25c6c}
-body.view-mode .top-actions button{font-size:clamp(11px,.95vw,16px);padding:8px 12px}
-@media(max-width:1000px){.wizard-progress{grid-template-columns:repeat(5,minmax(0,1fr));gap:5px}.wizard-pill{font-size:12px;padding:10px 3px;min-height:52px}body.view-mode .top-actions{flex-wrap:wrap;justify-content:flex-end}body.view-mode header{height:auto;min-height:55px}.brand{white-space:nowrap}}
-@media(max-width:680px){.wizard-progress{grid-template-columns:repeat(5,minmax(0,1fr))}.wizard-pill{font-size:11px;padding:10px 2px;min-height:48px}.wizard-bottom{padding:10px;gap:5px}.wizard-bottom button{padding:8px 10px;font-size:14px;min-height:44px}.wizard-help{font-size:11px}body.view-mode .brand{font-size:15px}body.view-mode .top-actions{gap:3px}body.view-mode .top-actions button{font-size:10px;padding:5px 6px;border-width:1px}body.view-mode .app{padding:5px}body.view-mode header{gap:3px}body.view-mode .view-nav{font-size:10px}}
-
-
-/* Decorative Usagi: self-contained SVG so the local HTML works offline. */
-.usagi-deco{background-image:url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyMjAgMjUwIj4KPGcgc3Ryb2tlPSIjNWQ0NjNlIiBzdHJva2Utd2lkdGg9IjUiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCI+CjxwYXRoIGQ9Ik02NSA5MyBRNTQgNTQgNjAgMTUgUTYyIDUgNzMgOCBROTQgMTcgOTkgODMiIGZpbGw9IiNmZmY1YjkiLz4KPHBhdGggZD0iTTEyMSA4MyBRMTMyIDIwIDE0NiAxMCBRMTU3IDMgMTYzIDE3IFExNzAgNDkgMTU3IDk2IiBmaWxsPSIjZmZmNWI5Ii8+CjxwYXRoIGQ9Ik03MiAyOCBRNzcgMjMgODMgNjQiIHN0cm9rZT0iI2Y0YWJhZSIgc3Ryb2tlLXdpZHRoPSIxMCIgZmlsbD0ibm9uZSIvPgo8cGF0aCBkPSJNMTUwIDI3IFExNDYgMzYgMTQxIDY1IiBzdHJva2U9IiNmNGFiYWUiIHN0cm9rZS13aWR0aD0iMTAiIGZpbGw9Im5vbmUiLz4KPHBhdGggZD0iTTU4IDE1MSBRMzAgMTQ5IDI3IDEyOSBRMTEgMTQxIDI3IDE2MiBRMzQgMTcxIDUzIDE3MSIgZmlsbD0iI2ZmZjRiNSIvPgo8cGF0aCBkPSJNMTY2IDE1MiBRMTk0IDEzNyAxOTcgMTE5IFEyMTYgMTM2IDE5OSAxNTkgUTE4NiAxNzMgMTcyIDE3MSIgZmlsbD0iI2ZmZjRiNSIvPgo8cGF0aCBkPSJNNzggMjA3IFE2NyAyMzAgODAgMjM3IFE5NCAyNDMgMTA2IDIyMCBNMTMzIDIxOSBRMTQwIDI0MSAxNTUgMjM2IFExNjcgMjMxIDE1NiAyMDciIGZpbGw9IiNmZmY0YjUiLz4KPHBhdGggZD0iTTExMSA3NSBDNDggNzMgMzAgMTE5IDQxIDE2NSBRNDQgMTg5IDY3IDIwMyBRODIgMjE4IDExMSAyMTYgUTE0NiAyMTggMTY4IDE5NyBRMTg3IDE3NCAxNzkgMTMwIFExNzQgODEgMTExIDc1WiIgZmlsbD0iI2ZmZjNiMyIvPgo8cGF0aCBkPSJNOTEgMTMyIFE5NCAxMjggOTYgMTMzIE0xMzIgMTMyIFExMzUgMTI4IDEzNyAxMzMiIHN0cm9rZS13aWR0aD0iOCIgZmlsbD0ibm9uZSIvPgo8cGF0aCBkPSJNMTA1IDE1MSBRMTEwIDE1NyAxMTYgMTUwIiBzdHJva2Utd2lkdGg9IjQiIGZpbGw9Im5vbmUiLz4KPHBhdGggZD0iTTExMCAxNTQgUTEwOSAxNjkgMTE2IDE3NiBRMTIzIDE2OCAxMTggMTU0WiIgZmlsbD0iI2Y0OGNhMSIgc3Ryb2tlLXdpZHRoPSIzIi8+CjwvZz4KPGVsbGlwc2UgY3g9IjcwIiBjeT0iMTUxIiByeD0iMTQiIHJ5PSI4IiBmaWxsPSIjZjlhNGFlIiBvcGFjaXR5PSIuNjIiLz4KPGVsbGlwc2UgY3g9IjE1NiIgY3k9IjE1MSIgcng9IjE0IiByeT0iOCIgZmlsbD0iI2Y5YTRhZSIgb3BhY2l0eT0iLjYyIi8+CjxnIGZpbGw9IiNmZmQ5OGEiIHN0cm9rZT0iI2M5OGY1YyIgc3Ryb2tlLXdpZHRoPSIyIj48cGF0aCBkPSJNMjUgNDggMjkgNTkgNDEgNjMgMjkgNjcgMjUgNzkgMjAgNjcgOSA2MyAyMSA1OVoiLz48cGF0aCBkPSJNMTkwIDYxIDE5NSA3MiAyMDcgNzYgMTk1IDgwIDE5MCA5MSAxODUgODAgMTczIDc2IDE4NSA3MloiLz48L2c+Cjwvc3ZnPg==");background-repeat:no-repeat;background-size:contain;background-position:center;pointer-events:none;user-select:none;position:absolute;z-index:1;filter:drop-shadow(0 5px 4px #d4af902b)}
-body.view-mode .card:first-child .usagi-board{width:clamp(75px,11vw,152px);height:clamp(95px,15vw,182px);right:clamp(2px,1.3vw,16px);bottom:clamp(8px,1vh,22px);opacity:.95}
-body:not(.view-mode) .usagi-editor{width:clamp(78px,11vw,132px);height:clamp(93px,14vw,158px);right:clamp(5px,1.3vw,18px);top:-14px;transform:rotate(8deg)}
-body:not(.view-mode) .editor-intro{position:relative;padding-right:clamp(95px,13vw,155px)}
-body.view-mode .usagi-editor,body:not(.view-mode) .usagi-board{display:none}
-body.view-mode .card:first-child .center,body.view-mode .card:first-child .stat-foot{z-index:2;position:relative}
-@media(max-width:900px){body.view-mode .card:first-child .usagi-board{width:80px;height:96px;right:0;bottom:0;opacity:.65}}
-@media(max-width:680px){body.view-mode .card:first-child .usagi-board{width:64px;height:76px;opacity:.45;right:0;bottom:0}body:not(.view-mode) .usagi-editor{width:72px;height:90px;top:2px;right:0}body:not(.view-mode) .editor-intro{padding-right:78px}}
-
-/* v3.2 — all-section review, visible validation, saved-mode feedback. */
-.editor-alert{background:#fff4e8;border:2px solid #efc894;color:#825726;border-radius:16px;padding:12px 16px;font-size:16px;font-weight:800;line-height:1.5}
-.editor-alert[hidden]{display:none!important}
-.review-summary{background:#fffaf4;border:1px solid #e8d9cf;border-radius:17px;padding:16px;color:#594c54;font-weight:650}
-.review-summary h3{margin:0 0 10px;font-size:18px}.review-stats{margin-bottom:10px;color:#80606e}
-.review-table{border-collapse:collapse;width:100%;font-size:14px}.review-table th,.review-table td{padding:8px 7px;text-align:left;border-bottom:1px solid #eadeda}.review-table th{background:#f7eef0}
-.review-table .bad{color:#ad3c53;font-weight:850}.review-table .good{color:#4c805e;font-weight:850}.review-table .warn{color:#a97933;font-weight:850}
-.review-issues{padding-left:22px;margin:10px 0 0;line-height:1.7}.review-issues .bad{color:#a83f57}.review-issues .warn{color:#9a712f}
-body.view-mode #viewAuto[aria-pressed=false]{font-weight:900;border-width:2px}
-@media(max-width:680px){.review-summary{padding:9px}.review-table{font-size:11px}.review-table th,.review-table td{padding:5px 2px}.editor-alert{font-size:13px;padding:9px}}
+:root{font-family:system-ui,-apple-system,"Microsoft JhengHei","Noto Sans TC",sans-serif;color:#15263d;background:#eaf0f8;--blue:#2164cf;--border:#cdd8e7;--card:#fff}
+*{box-sizing:border-box}html,body{height:100%;width:100%;margin:0;overflow:hidden;overscroll-behavior:none}button,input,select,textarea{font:inherit}button,select{touch-action:manipulation}button{border:1px solid var(--border);background:white;color:#223853;border-radius:11px;min-height:39px;cursor:pointer;font-weight:650;user-select:none;-webkit-tap-highlight-color:transparent}button:focus-visible,select:focus-visible,input:focus-visible{outline:3px solid #83b5ff;outline-offset:2px}button:hover{background:#f0f5fd}button:disabled{opacity:.44;cursor:default}button.primary,.active{background:#e3eeff;border-color:#7ea8ed;color:#1657b1}.top{display:flex;align-items:center;justify-content:space-between;gap:8px;background:#fff;border-bottom:1px solid var(--border);padding:6px 12px;min-height:54px}.branding{display:flex;align-items:center;gap:10px;min-width:0}.logo{font-size:25px;background:#e8f0ff;border-radius:12px;width:39px;height:39px;display:grid;place-items:center}.brandtext{min-width:0}.brandtext strong{display:block;white-space:nowrap;font-size:18px;letter-spacing:.2px}.brandtext small{display:block;color:#677990;white-space:nowrap;font-size:11px}.headerActions,.toolbar,.controls,.foot,.toolgroup{display:flex;align-items:center;gap:6px}.headerActions{flex-wrap:nowrap}.headerActions button{white-space:nowrap;padding:0 10px;font-size:13px;min-height:37px}.app{height:100dvh;min-height:0;display:flex;flex-direction:column}.toolbar{padding:7px 10px 6px;background:#fff;flex-wrap:wrap;justify-content:center;border-bottom:1px solid var(--border);gap:5px}.tool{min-height:51px;padding:4px 8px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;font-size:12px;min-width:58px}.tool .ico{font-size:22px;line-height:24px}.tool.current{color:white;background:#2466ce;border-color:#2466ce;box-shadow:0 2px 5px #225ab32b}.controls{background:#f8fbff;border-bottom:1px solid var(--border);padding:5px 12px;justify-content:center;flex-wrap:wrap;min-height:46px;gap:9px}.controlGroup{display:flex;align-items:center;gap:5px;white-space:nowrap;font-size:13px;font-weight:650}.swatch{width:27px;height:27px;border-radius:50%;min-height:27px;border:2px solid #e8edf4;box-shadow:0 0 0 1px #9eaec1}.swatch.selected{outline:3px solid #255caa;outline-offset:2px}.swatch[data-color="#111827"]{background:#111827}.swatch[data-color="#e33139"]{background:#e33139}.swatch[data-color="#2167d8"]{background:#2167d8}.swatch[data-color="#16834a"]{background:#16834a}input[type=range]{width:98px;accent-color:#2466ce}select{background:white;border:1px solid #c4d4e6;border-radius:9px;min-height:34px;padding:0 7px;max-width:150px}.controlGroup output{width:38px;color:#52657c;font-size:12px}.checkLabel{display:flex;align-items:center;gap:4px;color:#47576c;font-size:12px}.checkLabel input{width:17px;height:17px;accent-color:#256bd0}.workspace{flex:1;min-height:0;padding:10px;display:grid;place-items:center;position:relative;overflow:hidden;background-color:#e5edf7;background-image:radial-gradient(#cfdae8 1px,transparent 1px);background-size:18px 18px}.stage{position:relative;background:white;box-shadow:0 8px 30px #21375632;outline:1px solid #ccd5e2;overflow:hidden;touch-action:none;user-select:none;-webkit-user-select:none}.stage canvas{width:100%;height:100%;display:block;touch-action:none;cursor:crosshair;user-select:none}.stage.select-mode canvas{cursor:default}.stage.eraser-mode canvas{cursor:cell}.foot{background:#fff;border-top:1px solid var(--border);min-height:56px;justify-content:space-between;padding:6px 12px;gap:8px}.footGroup{display:flex;align-items:center;gap:5px;white-space:nowrap}.foot button{padding:0 9px;font-size:13px}.pageInfo{font-size:13px;font-weight:700;color:#4e6181}.footerHint{font-size:12px;color:#6b7d91;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:310px}.status{position:fixed;z-index:30;bottom:68px;left:50%;transform:translateX(-50%);pointer-events:none;background:#1a2d46;color:white;border-radius:12px;box-shadow:0 7px 24px #132c4966;padding:10px 17px;font-weight:600;font-size:13px;max-width:min(90vw,600px);text-align:center;opacity:0;transition:opacity .2s}.status.show{opacity:1}.modalBackdrop{position:fixed;inset:0;background:#13253e8a;z-index:50;display:none;align-items:center;justify-content:center;padding:15px}.modalBackdrop.open{display:flex}.dialog{width:min(540px,100%);background:white;box-shadow:0 20px 55px #071b3573;border-radius:17px;padding:22px;max-height:min(88dvh,730px);overflow:auto}.dialog h2{font-size:20px;margin:0 0 8px}.dialog p,.dialog li{color:#4e6178;font-size:14px;line-height:1.7}.dialog textarea{display:block;width:100%;min-height:130px;resize:vertical;border:1px solid var(--border);border-radius:10px;padding:12px;font-size:20px}.dialog .actions{display:flex;justify-content:flex-end;gap:8px;margin-top:16px}.dialog .actions button{padding:0 16px}.dialog button.emphasis{background:#2466ce;color:white;border-color:#2466ce}.dialog .fieldRow{display:flex;align-items:center;gap:12px;margin-top:10px;font-size:14px}.dialog input[type=number]{width:84px;border:1px solid var(--border);border-radius:8px;padding:6px}.dialog kbd{padding:2px 5px;border:1px solid #bdc9d8;border-radius:4px;background:#f3f6fb}.hidden{display:none!important}
+@media(max-width:1080px){.brandtext small{display:none}.tool{min-width:51px;padding:4px 6px}.tool .ico{font-size:20px}.headerActions button{padding:0 7px}.footerHint{display:none}.controls{gap:7px}}
+@media(max-width:680px){.top{padding:4px 6px;min-height:43px}.branding{gap:5px}.logo{font-size:20px;width:32px;height:32px}.brandtext strong{font-size:14px}.headerActions{gap:3px}.headerActions button{font-size:10px;min-height:32px;padding:0 4px}.headerActions #undoBtn,.headerActions #redoBtn{font-size:0;min-width:29px;padding:0 2px}.headerActions #undoBtn:before{content:"↶";font-size:20px}.headerActions #redoBtn:before{content:"↷";font-size:20px}.brandtext strong{font-size:12px}.brandtext strong span{display:none}.logo{display:none}.toolbar{padding:4px;gap:3px}.tool{min-width:46px;min-height:43px;font-size:10px;padding:3px 4px}.tool .ico{font-size:17px;line-height:18px}.controls{padding:4px 6px;gap:6px}.foot{min-height:74px;padding:4px 5px;flex-wrap:wrap;justify-content:center;gap:3px}.footGroup{width:100%;gap:3px;justify-content:center;flex-wrap:nowrap}.foot button{font-size:11px;min-height:30px;padding:0 5px}.pageInfo{display:none}.footGroup #prevBtn,.footGroup #nextBtn{font-size:0;min-width:29px;padding:0 3px}.footGroup #prevBtn:before{content:"‹";font-size:19px}.footGroup #nextBtn:before{content:"›";font-size:19px}.footGroup #pageSelect{max-width:79px}.controlGroup{font-size:11px}input[type=range]{width:76px}select{min-height:30px}}
+@media(min-width:681px) and (max-width:900px){.foot{flex-wrap:wrap;justify-content:center;gap:3px}.footGroup{justify-content:center}}
+@media(max-height:620px){.tool{min-height:43px}.toolbar{padding:4px}.workspace{padding:5px}.controls{min-height:37px;padding:3px}.foot{min-height:44px}}
+@media print{body{overflow:auto}.top,.toolbar,.controls,.foot,.status,.modalBackdrop{display:none!important}.app,.workspace{display:block;height:auto}.stage{width:100%!important;height:auto!important;box-shadow:none}.stage canvas{height:auto}}
 </style>
 </head>
-<body class="view-mode">
-<main class="app">
-<header>
-  <div class="brand">監考小看板 <span class="version">v3.2</span></div>
-  <div class="top-actions"><span id="topDate" class="date-now"></span><span id="modeLabel" class="mode-pill">學生觀看模式</span><button type="button" id="viewPrev" class="view-nav">◀ 上一節</button><button type="button" id="viewNext" class="view-nav btn-primary">下一節 ▶</button><button type="button" id="viewAuto" class="view-nav">自動切換：開</button><button type="button" id="modeBtn">教師設定</button><button type="button" id="fullBtn">全螢幕</button></div>
+<body>
+<div class="app">
+<header class="top">
+  <div class="branding"><div class="logo" aria-hidden="true">▣</div><div class="brandtext"><strong>教室多功能白板 <span style="color:#2164cf">V2.0</span></strong><small>離線教學版 · 可儲存多頁課程</small></div></div>
+  <div class="headerActions">
+    <button id="undoBtn" title="復原（Ctrl+Z）">↶ 復原</button><button id="redoBtn" title="重做（Ctrl+Y）">↷ 重做</button>
+    <button id="clearBtn" title="清除本頁物件">清空本頁</button><button id="fullBtn" title="進入或退出全螢幕">⛶ 全螢幕</button><button id="helpBtn">? 說明</button>
+  </div>
 </header>
-<section class="editor" id="editor" aria-label="教師設定">
-  <div class="editor-intro">
-    <div class="usagi-deco usagi-editor" aria-hidden="true"></div>
-    <div><div class="editor-eyebrow">監考資訊看板　／　教師設定</div><h1>安排今天的考試</h1><p>照著 ① → ⑤ 完成設定；最後一步會檢查全部節次。</p></div>
-    <div class="silence-chip">全程靜音・不含音效</div>
-  </div>
-
-  <nav id="wizardProgress" class="wizard-progress" aria-label="設定步驟"></nav>
-  <div id="editorAlert" class="editor-alert" role="alert" hidden></div>
-  <div class="editor-block schedule-block">
-    <div class="block-head"><div><div class="block-index">01　考程管理</div><h2>選擇要設定的考試節次</h2><p>先點選下方節次，再編輯這一節的內容。</p></div><div class="auto-actions"><button type="button" id="autoBtn" class="auto-toggle" aria-pressed="true" title="依照當天考試時間自動切換節次">全日自動：開啟</button></div></div>
-    <div class="schedule"><div class="schedule-list" id="scheduleList" aria-label="切換考試節次"></div></div>
-    <div class="schedule-actions"><div class="nav-actions"><button id="prevBtn" type="button" aria-label="上一個考程">◀ 上一節</button><button id="nextBtn" type="button" aria-label="下一個考程">下一節 ▶</button></div><div class="management-actions"><button type="button" id="addBtn" class="btn-primary">＋新增一節</button><button type="button" id="deleteBtn" class="btn-danger">刪除本節</button></div></div>
-  </div>
-
-  <div class="editor-block">
-    <div class="block-head"><div><div class="block-index">02　本節基本資料</div><h2>日期、節次與科目</h2></div></div>
-    <div class="fields">
-      <div class="field"><label for="dateInput">考試日期</label><input type="date" id="dateInput"></div>
-      <div class="field"><label for="periodInput">第幾節</label><input type="number" inputmode="numeric" id="periodInput" min="1" max="30" step="1"></div>
-      <div class="field"><label for="subjectInput">應考科目</label><input type="text" id="subjectInput" maxlength="32" placeholder="例如：國語、數學、自然"></div>
-    </div>
-  </div>
-
-  <div class="editor-block time-block">
-    <div class="block-head"><div><div class="block-index">03　考試時間</div><h2>直接點選上午、下午與時分</h2><p>先選「上午／下午」，再用滑鼠點開「時」和「分」。改動開始時間或分鐘數會自動更新結束時間。</p></div></div>
-    <div class="time-grid">
-      <div class="time-panel">
-        <div class="time-panel-title"><span class="time-icon">始</span><strong>開始時間</strong></div>
-        <input type="hidden" id="startInput">
-        <div class="time-period" id="startDaypart" data-period="am" role="group" aria-label="開始時間上午或下午"><button type="button" data-ap="am" aria-pressed="true">上午</button><button type="button" data-ap="pm" aria-pressed="false">下午</button></div>
-        <div class="time-values"><label for="startHour">小時<select id="startHour" aria-label="開始時間小時"></select></label><span class="colon">：</span><label for="startMinute">分鐘<select id="startMinute" aria-label="開始時間分鐘"></select></label></div>
-        <div class="time-reading" id="startTimeReading">上午 09:00</div>
-      </div>
-      <div class="time-panel duration-panel">
-        <div class="time-panel-title"><span class="time-icon">長</span><strong>考試時間</strong></div>
-        <div class="field duration-field"><label for="durationInput">考試分鐘數</label><div class="duration-entry"><input type="number" inputmode="numeric" id="durationInput" min="1" max="720" step="1"><span>分鐘</span></div></div>
-        <div class="time-hint">更改分鐘數，可自動計算結束時間。</div>
-      </div>
-      <div class="time-panel">
-        <div class="time-panel-title"><span class="time-icon">終</span><strong>結束時間</strong></div>
-        <input type="hidden" id="endInput">
-        <div class="time-period" id="endDaypart" data-period="am" role="group" aria-label="結束時間上午或下午"><button type="button" data-ap="am" aria-pressed="true">上午</button><button type="button" data-ap="pm" aria-pressed="false">下午</button></div>
-        <div class="time-values"><label for="endHour">小時<select id="endHour" aria-label="結束時間小時"></select></label><span class="colon">：</span><label for="endMinute">分鐘<select id="endMinute" aria-label="結束時間分鐘"></select></label></div>
-        <div class="time-reading" id="endTimeReading">上午 09:50</div>
-      </div>
-    </div>
-    <div class="time-helper">提醒：上午 12:00 是半夜 00:00；下午 12:00 是中午 12:00。畫面上的監考時鐘維持 24 小時制。</div>
-  </div>
-
-  <div class="editor-block attendance-block">
-    <div class="block-head"><div><div class="block-index">04　出席資訊</div><h2>確認應到與實到人數</h2><p>可直接輸入實到人數，或改填缺考座號，程式會自動換算。</p></div></div>
-    <div class="second-row">
-      <div class="field"><label for="expectedInput">應到人數</label><input type="number" id="expectedInput" min="0" max="999" inputmode="numeric"></div>
-      <div class="field" id="actualWrap"><label for="actualInput">實到人數（待確認）</label><div class="number-entry"><button type="button" id="minusBtn" class="step" aria-label="實到減一">−</button><input type="number" id="actualInput" min="0" max="999" inputmode="numeric" placeholder="未點名"><button type="button" id="plusBtn" class="step" aria-label="實到加一">＋</button></div></div>
-      <div class="field seat-field"><label for="seatsInput">缺考座號（選填）</label><input type="text" id="seatsInput" placeholder="例如：3、8、12" maxlength="160"></div>
-    </div>
-    <div class="attendance-buttons"><button type="button" id="attendBtn" class="btn-primary">確認點名</button><button type="button" id="clearAttendBtn">取消確認</button><button type="button" id="copyAttendanceBtn" title="將本節已確認出席資訊套用到今日相同應到人數的考程">套用到今日其他節次</button></div>
-  </div>
-
-  <div class="editor-block finish-block">
-    <div class="block-head"><div><div class="block-index">05　完成設定</div><h2>確認無誤，開始監考</h2><p>全日自動開啟時，考試與休息時段會依照設定自動切換；不會播放任何聲音。</p></div></div>
-    <div id="validation" role="status" aria-live="polite"></div>
-    <div class="review-summary" id="scheduleSummary" aria-live="polite"></div>
-    <div class="finish-actions"><div class="utility-actions"><button type="button" id="newDayBtn">新的一天</button><button type="button" id="csvBtn">匯出紀錄 CSV</button><button type="button" id="exportJsonBtn">備份設定 JSON</button><button type="button" id="importJsonBtn">還原備份 JSON</button><input id="importJsonInput" type="file" accept=".json,application/json" hidden></div><button type="button" id="lockBtn" class="btn-primary finish-main">完成設定・開始監考</button></div>
-    <div class="editor-note">本機自動儲存。換電腦或清除瀏覽器資料前，請先「備份設定 JSON」；備份含出缺席資料，請妥善保管。監考期間請勿關閉分頁或讓電腦休眠。</div>
-  </div>
-  <div class="wizard-bottom"><button type="button" id="wizardBack">◀ 上一步</button><div class="wizard-help" id="wizardHelp">設定第 1 步，共 5 步</div><button type="button" id="wizardNext" class="btn-primary">下一步 ▶</button></div>
-</section>
-<section class="dashboard" aria-label="監考看板">
-  <article class="card" aria-label="本節考試"><div class="usagi-deco usagi-board" aria-hidden="true"></div><div class="card-head"><div class="card-label">本節考試</div></div><div class="center exam-center"><div class="period" id="periodView">第 1 節</div><div class="subject" id="subjectView">國語</div></div><div class="stat-foot" id="examDateView">—</div></article>
-  <article class="card" aria-label="目前時間"><div class="card-head"><div class="card-label">目前時間</div></div><div class="center"><time class="big-clock" id="clockView">--:--:--</time><div class="caption" id="clockDateView">依本裝置時間顯示</div></div><div class="stat-foot">24 小時制・每秒更新</div></article>
-  <article class="card" aria-label="出席人數"><div class="card-head"><div class="card-label">考生出席</div><div class="small-status" id="attendStatus">尚未點名</div></div><div class="attendance-cells"><div class="attendance-cell"><div class="att-label">應到</div><div id="expectedView" class="att-number">24</div><div class="att-bottom">人</div></div><div class="attendance-cell"><div class="att-label">實到</div><div id="actualView" class="att-number present pending">待確認</div><div class="att-bottom">人</div></div><div class="attendance-cell"><div class="att-label">缺考</div><div id="absentView" class="att-number absent pending">待確認</div><div class="att-bottom">人</div></div></div><div id="seatsView" class="stat-foot">尚未完成點名確認</div></article>
-  <article id="timerCard" class="card" aria-label="考試倒數"><div class="card-head"><div class="card-label" id="timerHeading">考試剩餘時間</div><div class="small-status" id="timerStatus">尚未開始</div></div><div class="center"><div class="big-timer" role="timer" id="timerView">--:--</div><div class="caption" id="timerCaption">—</div></div><div class="progress" aria-label="考試進度"><div id="progressFill" class="progress-fill"></div></div></article>
-</section>
-<footer class="footer"><span id="footerNote">最後 10 分鐘黃色提醒，最後 5 分鐘紅色提醒；全程靜音。</span><span id="footerRecord">本機自動儲存・不連線</span></footer>
-</main>
-<div id="modalShade" class="modal-shade" hidden role="presentation"><div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle"><h2 id="modalTitle"></h2><p id="modalText"></p><div class="modal-actions"><button id="cancelModal" type="button">取消</button><button id="okModal" type="button" class="btn-primary">確認</button></div></div></div>
+<nav class="toolbar" aria-label="白板繪圖工具">
+  <button class="tool" data-tool="select" title="選取、拖曳、調整大小"><span class="ico">⌖</span>選取</button>
+  <button class="tool current" data-tool="pen" title="手寫筆"><span class="ico">✎</span>畫筆</button>
+  <button class="tool" data-tool="smart" title="自動辨識直線、圓形"><span class="ico">✧</span>智慧筆</button>
+  <button class="tool" data-tool="eraser" title="橡皮擦"><span class="ico">▧</span>橡皮擦</button>
+  <button class="tool" data-tool="line" title="畫直線"><span class="ico">╱</span>直線</button>
+  <button class="tool" data-tool="ellipse" title="畫圓形／橢圓"><span class="ico">◯</span>圓形</button>
+  <button class="tool" data-tool="rect" title="畫長方形"><span class="ico">▭</span>長方形</button>
+  <button class="tool" data-tool="triangle" title="畫三角形"><span class="ico">△</span>三角形</button>
+  <button class="tool" data-tool="arrow" title="畫箭頭"><span class="ico">➜</span>箭頭</button>
+  <button class="tool" data-tool="angle" title="畫角度標記"><span class="ico">∠</span>角度</button>
+  <button class="tool" data-tool="text" title="點選白板插入文字"><span class="ico">T</span>文字</button>
+  <button class="tool" data-tool="image" title="插入圖片"><span class="ico">▧</span>圖片</button>
+</nav>
+<div class="controls" aria-label="繪圖設定">
+ <div class="controlGroup" id="colors" aria-label="筆色"><span>顏色</span><button class="swatch selected" data-color="#111827" title="黑色" aria-label="黑色" aria-pressed="true"></button><button class="swatch" data-color="#e33139" title="紅色" aria-label="紅色" aria-pressed="false"></button><button class="swatch" data-color="#2167d8" title="藍色" aria-label="藍色" aria-pressed="false"></button><button class="swatch" data-color="#16834a" title="綠色" aria-label="綠色" aria-pressed="false"></button></div>
+ <label class="controlGroup">筆畫 <input id="penSize" type="range" min="2" max="28" step="1" value="6" aria-label="畫筆粗細"><output id="penSizeOut">6px</output></label>
+ <label class="controlGroup">橡皮擦 <input id="eraserSize" type="range" min="12" max="110" step="2" value="36" aria-label="橡皮擦大小"><output id="eraserSizeOut">36px</output></label>
+ <label class="controlGroup">背景 <select id="background"><option value="blank">純白</option><option value="grid">方格紙</option><option value="lines">橫線紙</option><option value="tian">田字格</option><option value="mi">米字格</option><option value="coords">座標平面</option></select></label>
+ <label class="checkLabel" title="啟用後只有觸控筆可在白板書寫；滑鼠仍可測試操作"><input id="penOnly" type="checkbox">只用觸控筆</label>
+ <button id="editBtn" title="選取文字後編輯；選取其他物件可複製" disabled>編輯選取</button><button id="dupBtn" title="複製目前選取物件" disabled>複製物件</button><button id="deleteObjBtn" title="刪除目前選取物件" disabled>刪除物件</button>
+</div>
+<div class="workspace" id="workspace">
+  <div class="stage" id="stage"><canvas id="board" aria-label="可使用觸控筆或滑鼠書寫的教學白板"></canvas></div>
+</div>
+<footer class="foot">
+ <div class="footGroup"><button id="prevBtn" title="上一頁">‹ 上一頁</button><span class="pageInfo" id="pageInfo">第 1 / 1 頁</span><button id="nextBtn" title="下一頁">下一頁 ›</button><select id="pageSelect" aria-label="選擇頁面"></select><button id="newPageBtn" class="primary" title="新增空白頁">＋ 新增頁</button><button id="duplicatePageBtn" title="複製目前頁面">複製頁</button><button id="deletePageBtn" title="刪除目前頁面">刪除頁</button></div>
+ <div class="footGroup"><button id="pngBtn" title="將目前整頁匯出為 PNG">PNG</button><button id="pdfBtn" class="primary" title="將所有頁面合成 PDF">多頁 PDF</button><button id="saveBtn" title="下載可再次編輯的 JSON 專案檔">儲存專案</button><button id="loadBtn" title="開啟之前儲存的 JSON 專案">載入專案</button></div>
+ <span class="footerHint" id="footerHint">滑鼠、觸控筆、觸控螢幕皆可操作</span>
+</footer>
+</div>
+<input class="hidden" type="file" id="imageFile" accept="image/png,image/jpeg,image/webp">
+<input class="hidden" type="file" id="projectFile" accept=".json,application/json">
+<div class="status" id="toast" role="status" aria-live="polite"></div>
+<div class="modalBackdrop" id="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle"><div class="dialog"><h2 id="modalTitle">插入文字</h2><div id="modalBody"></div><div class="actions"><button id="modalCancel">取消</button><button id="modalOkay" class="emphasis">確定</button></div></div></div>
 <script>
 (()=>{'use strict';
-const $=id=>document.getElementById(id);
-const KEY='proctor-board-v2'; // Keep v2 localStorage key so upgrades retain existing schedules.
-const DAY=['週日','週一','週二','週三','週四','週五','週六'];
-const pad=n=>String(n).padStart(2,'0');
-const todayLocal=(d=new Date())=>`${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
-const validDate=s=>/^\d{4}-\d{2}-\d{2}$/.test(s)&&!Number.isNaN(new Date(`${s}T12:00:00`).getTime())&&todayLocal(new Date(`${s}T12:00:00`))===s;
-const timeMins=s=>/^\d\d:\d\d$/.test(s)&&Number(s.slice(0,2))<24&&Number(s.slice(3))<60?Number(s.slice(0,2))*60+Number(s.slice(3)):null;
-const minsTime=m=>`${pad(Math.floor(m/60))}:${pad(m%60)}`;
-const number=(val,def,lo,hi)=>val===''?def:(Number.isFinite(Number(val))?Math.min(hi,Math.max(lo,Math.trunc(Number(val)))):def);
-const shortDate=s=>{if(!validDate(s))return '日期未設定';const d=new Date(s+'T12:00:00');return `${s.replaceAll('-',' / ')} ${DAY[d.getDay()]}`};
-const defaultExam=(period=1,date=todayLocal())=>({id:`s${Date.now()}_${Math.random().toString(36).slice(2,8)}`,date,period,subject:period===1?'國語':'',start:'09:00',duration:50,end:'09:50',expected:24,actual:null,seats:'',confirmed:false,confirmedAt:null});
-let state={exams:[defaultExam()],selected:0,locked:true,autoAdvance:true};let wizardStep=0;let validationMessage='';let pendingAction=null;let lastAutoPhase="",lastAutoDay="";
-const inp={date:$('dateInput'),period:$('periodInput'),subject:$('subjectInput'),start:$('startInput'),duration:$('durationInput'),end:$('endInput'),expected:$('expectedInput'),actual:$('actualInput'),seats:$('seatsInput')};
-const exam=()=>state.exams[state.selected];
-
-const timeUi={};
-function initTimeControls(){
- for(const key of ['start','end']){
-  const root=$(key+'Daypart'),hour=$(key+'Hour'),minute=$(key+'Minute'),read=$(key+'TimeReading');
-  for(let h=1;h<=12;h++){const opt=document.createElement('option');opt.value=h;opt.textContent=pad(h);hour.appendChild(opt)}
-  for(let m=0;m<60;m++){const opt=document.createElement('option');opt.value=m;opt.textContent=pad(m);minute.appendChild(opt)}
-  timeUi[key]={root,hour,minute,read};
-  root.querySelectorAll('button').forEach(btn=>btn.onclick=()=>{
-   root.dataset.period=btn.dataset.ap;
-   fromClickTime(key);
-  });
-  hour.addEventListener('change',()=>fromClickTime(key));
-  minute.addEventListener('change',()=>fromClickTime(key));
- }
-}
-function fromClickTime(key){
- const ui=timeUi[key];
- const h=Number(ui.hour.value),m=Number(ui.minute.value);
- const hour24=(h%12)+(ui.root.dataset.period==='pm'?12:0);
- applyField(key,minsTime(hour24*60+m));
-}
-function syncTimeControls(){
- for(const key of ['start','end']){
-  const ui=timeUi[key];if(!ui)continue;
-  const mins=timeMins(exam()[key]);
-  if(mins===null){ui.read.textContent='請重新選擇有效時間';continue}
-  const hour24=Math.floor(mins/60),min=mins%60;
-  const period=hour24<12?'am':'pm';
-  const hour12=hour24%12||12;
-  ui.root.dataset.period=period;ui.hour.value=String(hour12);ui.minute.value=String(min);
-  ui.root.querySelectorAll('button').forEach(btn=>btn.setAttribute('aria-pressed',String(btn.dataset.ap===period)));
-  ui.read.textContent=`${period==='am'?'上午':'下午'} ${pad(hour12)}:${pad(min)}（24 小時制 ${pad(hour24)}:${pad(min)}）`;
- }
-}
-
-function persist(){try{localStorage.setItem(KEY,JSON.stringify(state))}catch(e){$('footerRecord').textContent='無法儲存：瀏覽器可能停用本機儲存'}}
-function restore(){try{
- const raw=JSON.parse(localStorage.getItem(KEY)||'null');
- if(raw&&Array.isArray(raw.exams)&&raw.exams.length){state.exams=raw.exams.slice(0,30).map((e,i)=>({
- ...defaultExam(i+1),...e,
- id:String(e.id||`saved${i}`),date:validDate(e.date)?e.date:todayLocal(),period:number(e.period,i+1,1,30),subject:String(e.subject||'').slice(0,32),start:typeof e.start==='string'?e.start:'09:00',end:typeof e.end==='string'?e.end:'09:50',duration:number(e.duration,50,1,720),expected:number(e.expected,24,0,999),actual:e.actual===null||e.actual===undefined||e.actual===''?null:number(e.actual,0,0,999),seats:typeof e.seats==='string'?e.seats.slice(0,160):'',confirmed:!!e.confirmed,confirmedAt:typeof e.confirmedAt==='string'?e.confirmedAt:null}));state.selected=number(raw.selected,0,0,state.exams.length-1);state.locked=raw.locked!==false;state.autoAdvance=raw.autoAdvance!==false;return}
- const old=JSON.parse(localStorage.getItem('proctor-board-v1')||'null');
- if(old){const s=defaultExam(number(old.period,1,1,30));s.subject=String(old.subject||'國語');if(timeMins(old.start)!==null)s.start=old.start;if(timeMins(old.end)!==null)s.end=old.end;if(timeMins(s.start)!==null&&timeMins(s.end)!==null&&timeMins(s.end)>timeMins(s.start))s.duration=timeMins(s.end)-timeMins(s.start);s.expected=number(old.expected,24,0,999);s.actual=old.actual===''?null:number(old.actual,0,0,s.expected);s.confirmed=false;state={exams:[s],selected:0,locked:false,autoAdvance:true};validationMessage='已匯入 v1.0 資料，請重新確認點名。';}
- }catch(e){state={exams:[defaultExam()],selected:0,locked:false,autoAdvance:true}}}
-function parseSeats(value,expected){const txt=String(value||'').trim();if(!txt)return {nums:[],error:''};const list=txt.split(/[\s,，、;；]+/).filter(Boolean);const nums=[];const seen=new Set();for(const s of list){if(!/^\d+$/.test(s))return {nums:[],error:`缺考座號「${s}」格式不正確`};const n=Number(s);if(!Number.isSafeInteger(n)||n<1||n>expected)return {nums:[],error:`缺考座號 ${s} 超出應到人數（有效座號為 1～${expected}）`};if(seen.has(n))return {nums:[],error:`缺考座號 ${n} 重複輸入`};seen.add(n);nums.push(n)}nums.sort((a,b)=>a-b);return {nums,error:''}}
-function attendance(e){const n=Number(e.expected);if(!Number.isInteger(n)||n<0||n>999)return{valid:false,error:'應到人數須為 0～999'};const seats=parseSeats(e.seats,n);if(seats.error)return{valid:false,error:seats.error};const actual=seats.nums.length?n-seats.nums.length:e.actual;if(actual===null||actual===undefined||actual==='')return{valid:false,error:'請輸入實到人數，或填入缺考座號'};if(!Number.isInteger(Number(actual))||Number(actual)<0||Number(actual)>n)return{valid:false,error:`實到人數不可超過應到 ${n} 人`};return{valid:true,actual:Number(actual),absent:n-Number(actual),nums:seats.nums}}
-function markChanged(){exam().confirmed=false;exam().confirmedAt=null;}
-function showValidation(msg=''){validationMessage=msg;$('validation').textContent=msg;const alert=$('editorAlert');alert.textContent=msg;alert.hidden=!msg}
-function syncEditor(){const e=exam();if(!e)return;for(const k of ['date','period','subject','start','duration','end','expected','seats'])inp[k].value=e[k]??'';inp.actual.value=e.actual===null?'':e.actual;syncDerivedAttendance();syncTimeControls();showValidation(validationMessage);renderSchedule();if(wizardStep===4)renderScheduleReview();}
-function syncDerivedAttendance(){const e=exam();const s=parseSeats(e.seats,e.expected);const bySeats=!!e.seats.trim()&&!s.error;const next=bySeats?e.expected-s.nums.length:e.actual;inp.actual.value=next===null?'':next;inp.actual.disabled=bySeats;$('minusBtn').disabled=bySeats;$('plusBtn').disabled=bySeats;$('actualWrap').querySelector('label').textContent=bySeats?'實到人數（座號自動算）':'實到人數（待確認）';$('attendBtn').textContent=e.confirmed?'已確認・重新確認':'確認點名';}
-function renderSchedule(){const root=$('scheduleList');root.replaceChildren();state.exams.forEach((e,i)=>{const b=document.createElement('button');b.type='button';b.className=`schedule-tab ${i===state.selected?'active':''}`;b.textContent=`第${e.period}節 ${e.subject||'未設定'}`;b.title=`${e.date} ${e.subject||'未設定'}`;b.setAttribute('aria-pressed',String(i===state.selected));b.onclick=()=>selectExam(i);root.appendChild(b)});$('prevBtn').disabled=state.selected===0;$('nextBtn').disabled=state.selected===state.exams.length-1;$('deleteBtn').disabled=state.exams.length===1;$('addBtn').disabled=state.exams.length>=30;updateViewNavigation()}
-function selectExam(idx){state.selected=idx;validationMessage='';syncEditor();renderBoard();persist();updateViewNavigation();}
-function todaySchedule(now=new Date()){
- const day=todayLocal(now), valid=[];
- state.exams.forEach((e,index)=>{const start=timeMins(e.start),end=timeMins(e.end);
-  if(e.date===day&&start!==null&&end!==null&&end>start)valid.push({index,start,end,period:e.period});
- });
- valid.sort((a,b)=>a.start-b.start||a.end-b.end||a.index-b.index);
- return valid;
-}
-function automaticPhase(now=new Date()){
- const items=todaySchedule(now);if(!items.length)return {phase:'none',index:null,items};
- const minute=now.getHours()*60+now.getMinutes()+now.getSeconds()/60+now.getMilliseconds()/60000;
- const active=items.find(x=>minute>=x.start&&minute<x.end);
- if(active)return {phase:'active',index:active.index,items};
- const next=items.find(x=>minute<x.start);
- if(next)return {phase:'upcoming',index:next.index,items};
- return {phase:'finished',index:items[items.length-1].index,items};
-}
-function examProblems(){
- const errors=[],warnings=[],byDate=new Map(),seenPeriods=new Map();
- state.exams.forEach((e,index)=>{
-  const label=`第 ${e.period} 節（${e.date||'未填日期'}）`;
-  if(!validDate(e.date))errors.push({index,msg:`${label}：考試日期無效`});
-  if(!String(e.subject||'').trim())errors.push({index,msg:`${label}：未填科目`});
-  if(!Number.isInteger(e.period)||e.period<1||e.period>30)errors.push({index,msg:`${label}：節次需在 1～30`});
-  const k=`${e.date}/${e.period}`;
-  if(seenPeriods.has(k))errors.push({index,msg:`${label}：與第 ${seenPeriods.get(k)+1} 筆資料的日期、節次重複`});
-  else seenPeriods.set(k,index);
-  const st=timeMins(e.start),ed=timeMins(e.end);
-  if(st===null||ed===null||ed<=st||ed-st!==e.duration)errors.push({index,msg:`${label}：開始／結束時間或分鐘數不一致`});
-  else if(validDate(e.date)){
-   if(!byDate.has(e.date))byDate.set(e.date,[]);
-   byDate.get(e.date).push({index,start:st,end:ed,label});
-  }
-  const a=attendance(e);
-  if(e.confirmed&&!a.valid)errors.push({index,msg:`${label}：已確認的點名資料有誤：${a.error}`});
-  else if(!e.confirmed&&(parseSeats(e.seats,e.expected).error||(e.actual!==null&&!a.valid)))errors.push({index,msg:`${label}：點名資料有誤：${a.error}`});
-  else if(!e.confirmed)warnings.push({index,msg:`${label}：點名尚未確認（可以先顯示，學生畫面標示待確認）`});
- });
- for(const [date,items] of byDate){
-  items.sort((a,b)=>a.start-b.start||a.end-b.end);
-  let prev=null;
-  for(const it of items){
-   if(prev&&it.start<prev.end)errors.push({index:it.index,msg:`${date}：${prev.label} 與 ${it.label} 的考試時間重疊`});
-   if(!prev||it.end>prev.end)prev=it;
-  }
- }
- return {errors,warnings};
-}
-function overlapCount(){return examProblems().errors.filter(e=>e.msg.includes('時間重疊')).length}
-function orderedIndices(){return state.exams.map((e,i)=>({i,date:validDate(e.date)?e.date:'9999-99-99',start:timeMins(e.start)??9999,period:e.period})).sort((a,b)=>a.date.localeCompare(b.date)||a.start-b.start||a.period-b.period||a.i-b.i).map(x=>x.i)}
-function renderScheduleReview(){
- const root=$('scheduleSummary');if(!root)return;
- const {errors,warnings}=examProblems();root.replaceChildren();
- const header=document.createElement('h3');header.textContent=errors.length?'請先修正以下設定':'考程檢查完成';root.appendChild(header);
- const stat=document.createElement('div');stat.className='review-stats';stat.textContent=`共 ${state.exams.length} 節｜需修正 ${errors.length} 項｜點名待確認 ${warnings.length} 節`;
- root.appendChild(stat);
- const table=document.createElement('table');table.className='review-table';const head=document.createElement('thead');const hr=document.createElement('tr');for(const h of ['日期／節次','科目','時間','點名','檢查']){const th=document.createElement('th');th.textContent=h;hr.appendChild(th)}head.appendChild(hr);table.appendChild(head);
- const body=document.createElement('tbody');
- for(const idx of orderedIndices()){
-  const e=state.exams[idx],tr=document.createElement('tr'),broken=errors.some(x=>x.index===idx);
-  const a=attendance(e);const fields=[`${e.date}　第${e.period}節`,e.subject||'未填',`${e.start}～${e.end}`,e.confirmed&&a.valid?`已確認 ${a.actual}/${e.expected}`:'待確認',broken?'需修正':'正常'];
-  for(let j=0;j<fields.length;j++){const td=document.createElement('td');td.textContent=fields[j];if(j===4)td.className=broken?'bad':'good';if(j===3&&!(e.confirmed&&a.valid))td.className='warn';tr.appendChild(td)}
-  body.appendChild(tr);
- }
- table.appendChild(body);root.appendChild(table);
- if(errors.length||warnings.length){const list=document.createElement('ul');list.className='review-issues';for(const item of [...errors,...warnings]){const li=document.createElement('li');li.className=errors.includes(item)?'bad':'warn';li.textContent=item.msg;list.appendChild(li)}root.appendChild(list)}
- return errors.length;
-}
-function canStartMonitoring(){const {errors}=examProblems();if(errors.length){setLocked(false);showWizardStep(4);renderScheduleReview();showValidation(`尚有 ${errors.length} 項考程設定需要修正，請依照下方檢查表處理。`);return false}return true}
-
-function updateViewNavigation(){const prev=$('viewPrev'),next=$('viewNext'),auto=$('viewAuto');if(!prev||!next||!auto)return;const order=orderedIndices(),pos=order.indexOf(state.selected);prev.disabled=pos<=0;next.disabled=pos>=order.length-1;auto.textContent=state.autoAdvance?'自動切換：開':'恢復自動切換';auto.title=state.autoAdvance?'依考程時間自動切換，手動切換會暫停':'目前為手動模式；按此鈕恢復自動切換';auto.setAttribute('aria-pressed',String(state.autoAdvance));}
-function refreshAutoLabel(){
- $('autoBtn').textContent=state.autoAdvance?'全日自動：開啟':'全日自動：關閉';
- $('autoBtn').setAttribute('aria-pressed',String(state.autoAdvance));
- $('modeLabel').textContent=state.locked?(state.autoAdvance?'學生觀看・全日自動':'學生觀看・手動模式（自動暫停）'):'教師設定模式';
- updateViewNavigation();$('footerNote').textContent=state.autoAdvance?'全日自動切換｜最後 10／5 分鐘視覺提醒｜完全靜音':'手動切換節次｜最後 10／5 分鐘視覺提醒｜完全靜音';
-}
-function automaticTick(){
- const now=new Date();
- if(state.locked&&state.autoAdvance){
-  const choice=automaticPhase(now),day=todayLocal(now);
-  const changedIndex=choice.index!==null&&choice.index!==state.selected;
-  const changedPhase=choice.phase!==lastAutoPhase||day!==lastAutoDay;
-  lastAutoPhase=choice.phase;lastAutoDay=day;
-  if(changedIndex){state.selected=choice.index;syncEditor();persist();updateViewNavigation()}
-  if(changedIndex||changedPhase){renderBoard();return}
- }else{lastAutoPhase='';lastAutoDay=''}
- renderTimer();
-}
-function formatClock(d){return `${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`}
-function formatCountdown(seconds){const sec=Math.max(0,Math.ceil(seconds));return `${pad(Math.floor(sec/60))}:${pad(sec%60)}`}
-function renderBoard(){const e=exam();if(!e)return;
- const empty=state.locked&&state.autoAdvance&&automaticPhase().phase==='none';
- if(empty){
-  $('periodView').textContent='今日考程';$('subjectView').textContent='尚未設定';$('subjectView').classList.remove('long','very-long');$('examDateView').textContent=shortDate(todayLocal());
-  $('expectedView').textContent='—';$('actualView').textContent='—';$('absentView').textContent='—';
-  $('actualView').classList.add('pending');$('absentView').classList.add('pending');$('attendStatus').textContent='今日沒有考程';
-  $('seatsView').textContent='請進入教師設定，新增今天的考試';renderTimer();return;
- }
- $('periodView').textContent=`第 ${e.period} 節`;
- const subject=e.subject.trim()||'尚未設定科目';const el=$('subjectView');el.textContent=subject;el.title=subject;el.classList.toggle('long',subject.length>=5&&subject.length<10);el.classList.toggle('very-long',subject.length>=10);
- $('examDateView').textContent=shortDate(e.date);
- $('expectedView').textContent=String(e.expected);
- const a=attendance(e);const confirmed=e.confirmed&&a.valid;
- $('actualView').textContent=confirmed?String(a.actual):'待確認';$('absentView').textContent=confirmed?String(a.absent):'待確認';$('actualView').classList.toggle('pending',!confirmed);$('absentView').classList.toggle('pending',!confirmed);
- $('attendStatus').textContent=confirmed?'點名已確認':'尚未確認點名';
- $('seatsView').textContent=confirmed?(a.nums.length?`缺考座號：${a.nums.join('、')}`:`${a.absent===0?'全員到齊':`缺考 ${a.absent} 人・未登記座號`}`):'確認點名後顯示實際出席';
- syncDerivedAttendance();renderTimer();}
-function renderTimer(){const e=exam();const now=new Date();const d=shortDate(todayLocal(now));$('topDate').textContent=d;$('clockDateView').textContent=d;$('clockView').textContent=formatClock(now);$('clockView').dateTime=now.toISOString();
- const card=$('timerCard');card.classList.remove('warning','urgent');
- const auto=state.locked&&state.autoAdvance?automaticPhase(now):null;
- if(auto&&auto.phase==='none'){
-  $('timerHeading').textContent='今日尚未安排考試';$('timerStatus').textContent='等待教師設定';$('timerView').textContent='--:--';$('timerCaption').textContent='今天沒有有效的考試時段';
-  $('progressFill').style.width='0%';$('timerView').classList.add('muted');return;
- }
- if(auto&&auto.phase==='finished'){
-  $('timerHeading').textContent='今日考試全部結束';$('timerStatus').textContent='已完成';$('timerView').textContent='完成';$('timerCaption').textContent=`今天 ${auto.items.length} 節考試已結束`;
-  $('progressFill').style.width='100%';$('timerView').classList.remove('muted');return;
- }
-const start=timeMins(e.start),end=timeMins(e.end);const status=$('timerStatus'),view=$('timerView'),caption=$('timerCaption'),heading=$('timerHeading'),bar=$('progressFill');bar.style.width='0%';view.classList.remove('muted');
- if(!validDate(e.date)||start===null||end===null||end<=start){status.textContent='時間設定有誤';view.textContent='--:--';heading.textContent='請修正考試時間';caption.textContent='結束時間須晚於開始時間（同一天）';view.classList.add('muted');card.classList.add('urgent');return}
- const [y,m,day]=e.date.split('-').map(Number);const st=new Date(y,m-1,day,Math.floor(start/60),start%60,0).getTime();const ed=new Date(y,m-1,day,Math.floor(end/60),end%60,0).getTime();const ms=now.getTime();
- caption.textContent=`${e.start} 開始　｜　${e.end} 結束`;
- if(ms<st){heading.textContent='距離開考';status.textContent=(auto&&auto.phase==='upcoming'&&auto.items.some(item=>item.end<=now.getHours()*60+now.getMinutes()))?'休息中・下一節':'尚未開始';const rem=(st-ms)/1000;if(rem>86400){view.textContent='等待開考';view.classList.add('muted')}else view.textContent=formatCountdown(rem)}
- else if(ms<ed){const rem=(ed-ms)/1000;heading.textContent='考試剩餘時間';view.textContent=formatCountdown(rem);bar.style.width=`${Math.min(100,Math.max(0,(ms-st)/(ed-st)*100))}%`;
- if(rem<=300){status.textContent='最後 5 分鐘';card.classList.add('urgent')}else if(rem<=600){status.textContent='最後 10 分鐘';card.classList.add('warning')}else status.textContent='考試進行中';}
- else{heading.textContent='考試時間結束';status.textContent='考試已結束';view.textContent='00:00';bar.style.width='100%';card.classList.add('urgent');caption.textContent=`本節於 ${e.end} 結束`}
-}
-function applyField(key,value){const e=exam();validationMessage='';if(key==='date'){e.date=value}if(key==='period'){e.period=number(value,1,1,30)}if(key==='subject'){e.subject=value.slice(0,32)}
- if(key==='start'){e.start=value;const sm=timeMins(e.start);if(sm!==null){if(sm+e.duration<=1439)e.end=minsTime(sm+e.duration);else {e.end='';showValidation('開始時間加上考試分鐘數不可跨越午夜。')}}}
- if(key==='duration'){e.duration=number(value,50,1,720);const sm=timeMins(e.start);if(sm!==null&&sm+e.duration<=1439)e.end=minsTime(sm+e.duration);else {e.end='';showValidation('考試時間不可跨越午夜，請縮短分鐘數或調整開始時間。')}}
- if(key==='end'){e.end=value;const sm=timeMins(e.start),em=timeMins(e.end);if(sm!==null&&em!==null&&em>sm)e.duration=em-sm;else showValidation('結束時間必須晚於開始時間，請調整上午／下午或時分。')}
- if(key==='expected'){e.expected=number(value,24,0,999);markChanged();if(e.actual!==null&&e.actual>e.expected)e.actual=e.expected;const seat=parseSeats(e.seats,e.expected);if(e.seats.trim()&&!seat.error)e.actual=e.expected-seat.nums.length}
- if(key==='actual'){e.actual=value===''?null:number(value,0,0,999);markChanged()}
- if(key==='seats'){e.seats=value.slice(0,160);markChanged();const seat=parseSeats(e.seats,e.expected);if(e.seats.trim()&&!seat.error)e.actual=e.expected-seat.nums.length;else if(e.seats.trim()&&seat.error)showValidation(seat.error)}
- // Revalidate point-in-time attendance when input changes.
- if(['date','period','subject','start','end','duration'].includes(key)){/* Keeping attendance for the same section is intentional. */}
- syncEditor();renderBoard();persist();}
-function openModal(title,msg,action,okLabel='確認'){pendingAction=action;$('modalTitle').textContent=title;$('modalText').textContent=msg;$('okModal').textContent=okLabel;$('modalShade').hidden=false;$('cancelModal').focus()}
-function closeModal(){$('modalShade').hidden=true;pendingAction=null}
-$('cancelModal').onclick=closeModal;$('modalShade').addEventListener('click',e=>{if(e.target===$('modalShade'))closeModal()});
-$('okModal').onclick=()=>{const action=pendingAction;closeModal();if(action)action()};
-document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('modalShade').hidden)closeModal()});
-function setLocked(locked){state.locked=locked;document.body.classList.toggle('view-mode',locked);document.documentElement.classList.toggle('teacher-scroll',!locked);if(locked){window.scrollTo(0,0)}$('modeBtn').textContent=locked?'教師設定':'回到學生畫面';if(!locked){syncEditor();showWizardStep(wizardStep);}refreshAutoLabel();lastAutoPhase='';persist();if(locked)automaticTick();}
-
-$('modeBtn').onclick=()=>{if(state.locked){setLocked(false)}else{if(canStartMonitoring())setLocked(true)}};
-$('lockBtn').onclick=()=>{if(!canStartMonitoring())return;const pending=state.exams.filter(e=>!e.confirmed).length;if(pending){openModal('仍有節次尚未確認點名',`有 ${pending} 節考程尚未確認點名。仍可進入學生觀看模式，未確認的節次會顯示「待確認」。`,()=>setLocked(true),'仍要顯示')}else setLocked(true)};
-$('autoBtn').onclick=()=>{if(!state.autoAdvance&&examProblems().errors.length){showValidation('請先修正考程錯誤，再開啟自動切換。');showWizardStep(4);return}state.autoAdvance=!state.autoAdvance;refreshAutoLabel();persist();automaticTick();renderBoard()};
-$('viewPrev').onclick=()=>manualSwitch(-1);$('viewNext').onclick=()=>manualSwitch(1);
-$('viewAuto').onclick=()=>{if(!state.autoAdvance&&examProblems().errors.length){setLocked(false);showWizardStep(4);showValidation('考程設定有誤，修正後才能恢復自動切換。');return}state.autoAdvance=!state.autoAdvance;refreshAutoLabel();persist();automaticTick();renderBoard();showViewNotice(state.autoAdvance?'已恢復依照今日時間自動切換節次':'已暫停自動切換｜目前為手動模式')};
-function manualSwitch(delta){const order=orderedIndices(),pos=order.indexOf(state.selected),idx=order[pos+delta];if(idx===undefined)return;state.autoAdvance=false;selectExam(idx);refreshAutoLabel();showViewNotice('已手動切換至第 '+exam().period+' 節｜自動切換已暫停，按「恢復自動切換」可重新啟用');}
-function showViewNotice(msg){$('footerNote').textContent=msg;}
-const WIZARD_LABELS=['安排節次','填寫科目','設定時間','確認出席','完成設定'];
-function showWizardStep(n){wizardStep=Math.max(0,Math.min(4,n));if(wizardStep===4)renderScheduleReview();const sections=Array.from(document.querySelectorAll('#editor > .editor-block'));sections.forEach((el,i)=>{el.hidden=i!==wizardStep;el.setAttribute('aria-hidden',String(i!==wizardStep));});const nav=$('wizardProgress');nav.replaceChildren();WIZARD_LABELS.forEach((label,i)=>{const b=document.createElement('button');b.type='button';b.className='wizard-pill'+(i===wizardStep?' current':'')+(i<wizardStep?' completed':'');b.textContent=(i+1)+' '+label;b.setAttribute('aria-current',i===wizardStep?'step':'false');b.onclick=()=>showWizardStep(i);nav.appendChild(b)});$('wizardBack').disabled=wizardStep===0;$('wizardNext').textContent=wizardStep===4?'開始監考 ✓':'下一步 ▶';$('wizardHelp').textContent='第 '+(wizardStep+1)+' 步／共 5 步：'+WIZARD_LABELS[wizardStep];if(!state.locked)window.scrollTo({top:0,behavior:'instant'});}
-$('wizardBack').onclick=()=>showWizardStep(wizardStep-1);$('wizardNext').onclick=()=>{if(wizardStep===4){$('lockBtn').click();return;}if(wizardStep===1&&!exam().subject.trim()){showValidation('請先輸入本節應考科目。');return;}if(wizardStep===2){const e=exam();if(timeMins(e.start)===null||timeMins(e.end)===null||timeMins(e.end)<=timeMins(e.start)){showValidation('請先設定正確的開始與結束時間。');return;}}if(wizardStep===3){const e=exam(),a=attendance(e);if(e.seats.trim()&&!a.valid){showValidation(a.error);return}}showValidation('');showWizardStep(wizardStep+1)};
-$('copyAttendanceBtn').onclick=()=>{
- const current=exam(),a=attendance(current);
- if(!current.confirmed||!a.valid){showValidation('請先正確輸入本節出席人數，並按「確認點名」。');return}
- const peers=state.exams.filter(e=>e.date===current.date&&e.expected===current.expected&&e.id!==current.id);
- if(!peers.length){showValidation('沒有日期相同且應到人數相同的其他節次。');return}
- openModal('套用本節出席至今日？',`將已確認的實到 ${a.actual} 人、缺考 ${a.absent} 人套用至 ${peers.length} 節相同應到人數的考程。若其他節次出缺席不同，仍需個別修正。`,()=>{
-  for(const e of peers){e.actual=a.actual;e.seats=current.seats;e.confirmed=true;e.confirmedAt=new Date().toISOString()}
-  showValidation(`已將本節點名套用至 ${peers.length} 節考程。`);syncEditor();renderBoard();persist();
- },'確認套用');
-};
-$('addBtn').onclick=()=>{if(state.exams.length>=30)return;const prev=exam();const e=defaultExam(Math.min(30,prev.period+1),prev.date);e.expected=prev.expected;let nextStart=timeMins(prev.end);if(nextStart===null||nextStart>=1320)nextStart=540;else nextStart+=10;e.start=minsTime(nextStart);e.duration=prev.duration;e.end=nextStart+e.duration<1440?minsTime(nextStart+e.duration):'23:59';state.exams.push(e);selectExam(state.exams.length-1)};
-$('deleteBtn').onclick=()=>{if(state.exams.length===1)return;openModal('刪除本節考程？','將刪除目前這節的考試設定與點名資料，其他節次不受影響。',()=>{state.exams.splice(state.selected,1);state.selected=Math.min(state.selected,state.exams.length-1);selectExam(state.selected)},'刪除本節')};
-$('prevBtn').onclick=()=>{if(state.selected>0)selectExam(state.selected-1)};$('nextBtn').onclick=()=>{if(state.selected<state.exams.length-1)selectExam(state.selected+1)};
-$('newDayBtn').onclick=()=>openModal('開始新的一天？','保留所有節次、科目與考試時間，將每一節的日期改為今天，並清空實到、缺考座號及點名確認。此操作無法復原，建議先匯出紀錄 CSV。',()=>{state.exams.forEach(e=>{e.date=todayLocal();e.actual=null;e.seats='';e.confirmed=false;e.confirmedAt=null});selectExam(0)},'重設今日點名');
-$('attendBtn').onclick=()=>{const e=exam(),a=attendance(e);if(!a.valid){showValidation(a.error);return}e.actual=a.actual;e.confirmed=true;e.confirmedAt=new Date().toISOString();showValidation('已確認本節點名。');syncEditor();renderBoard();persist()};
-$('clearAttendBtn').onclick=()=>{markChanged();showValidation('已取消點名確認，學生畫面將顯示「待確認」。');syncEditor();renderBoard();persist()};
-$('minusBtn').onclick=()=>{const e=exam();if(e.seats.trim())return;e.actual=Math.max(0,(e.actual===null?0:e.actual)-1);markChanged();syncEditor();renderBoard();persist()};
-$('plusBtn').onclick=()=>{const e=exam();if(e.seats.trim())return;e.actual=Math.min(e.expected,(e.actual===null?0:e.actual)+1);markChanged();syncEditor();renderBoard();persist()};
-for(const key of Object.keys(inp)){
- inp[key].addEventListener('change',()=>applyField(key,inp[key].value));
- if(key==='subject'||key==='seats')inp[key].addEventListener('input',()=>applyField(key,inp[key].value));
-}
-function downloadFile(blob,name){const url=URL.createObjectURL(blob);const link=document.createElement('a');link.href=url;link.download=name;document.body.appendChild(link);link.click();link.remove();setTimeout(()=>URL.revokeObjectURL(url),1500)}
-$('exportJsonBtn').onclick=()=>{
- const payload={format:'proctor-board-backup',schemaVersion:1,appVersion:'3.2',exportedAt:new Date().toISOString(),settings:{autoAdvance:state.autoAdvance},exams:state.exams};
- downloadFile(new Blob([JSON.stringify(payload,null,2)],{type:'application/json;charset=utf-8'}),`監考設定備份_${todayLocal()}.json`);
- showValidation('設定已匯出為 JSON（包含點名資料），請存放在安全位置。');
-};
-$('importJsonBtn').onclick=()=>$('importJsonInput').click();
-$('importJsonInput').addEventListener('change',async event=>{
- const file=event.target.files&&event.target.files[0];event.target.value='';if(!file)return;
- if(file.size>500000){showValidation('備份檔超過 500 KB，已拒絕匯入。');return}
- let raw;
- try{raw=JSON.parse(await file.text())}catch(e){showValidation('無法讀取 JSON：內容不是有效備份格式。');return}
- if(!raw||raw.format!=='proctor-board-backup'||raw.schemaVersion!==1||!Array.isArray(raw.exams)||raw.exams.length<1||raw.exams.length>30){showValidation('備份格式不正確，請使用本程式匯出的 JSON（1～30 節）。');return}
- const clean=[];
- for(let i=0;i<raw.exams.length;i++){
-  const e=raw.exams[i];
-  if(!e||typeof e!=='object'||Array.isArray(e)||!validDate(e.date)||!Number.isInteger(e.period)||e.period<1||e.period>30||typeof e.subject!=='string'||e.subject.length>32||timeMins(e.start)===null||timeMins(e.end)===null||!Number.isInteger(e.duration)||e.duration<1||e.duration>720||!Number.isInteger(e.expected)||e.expected<0||e.expected>999||!(e.actual===null||e.actual===undefined||(Number.isInteger(e.actual)&&e.actual>=0&&e.actual<=999))||typeof e.seats!=='string'||e.seats.length>160){showValidation(`備份第 ${i+1} 節格式不符，已取消匯入，不會覆寫舊資料。`);return}
-  clean.push({id:`import_${i}_${Date.now()}`,date:e.date,period:e.period,subject:e.subject,start:e.start,end:e.end,duration:e.duration,expected:e.expected,actual:e.actual??null,seats:e.seats,confirmed:!!e.confirmed,confirmedAt:typeof e.confirmedAt==='string'?e.confirmedAt:null});
- }
- openModal('確定還原備份？',`即將以 ${clean.length} 節備份考程取代目前所有節次與點名資料。建議先備份目前資料，還原後仍可修改設定。`,()=>{
-  state.exams=clean;state.selected=0;state.autoAdvance=raw.settings?.autoAdvance!==false;
-  syncEditor();renderBoard();refreshAutoLabel();persist();renderScheduleReview();showWizardStep(4);
-  showValidation(`已還原 ${clean.length} 節考程；請核對完整檢查表後再開始監考。`);
- },'確認還原');
-});
-$('csvBtn').onclick=()=>{const heads=['日期','節次','科目','開始時間','結束時間','分鐘','應到','實到','缺考','缺考座號','點名狀態','確認時間'];const quote=v=>'"'+String(v??'').replaceAll('"','""')+'"';const rows=state.exams.map(e=>{const a=attendance(e),ok=e.confirmed&&a.valid;return [e.date,e.period,e.subject,e.start,e.end,e.duration,e.expected,ok?a.actual:'',ok?a.absent:'',ok?a.nums.join('、'):'',ok?'已確認':'待確認',ok?e.confirmedAt:'']});const text='\ufeff'+[heads,...rows].map(r=>r.map(quote).join(',')).join('\r\n');const blob=new Blob([text],{type:'text/csv;charset=utf-8;'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download=`監考紀錄_${todayLocal()}.csv`;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);showValidation('已產生監考紀錄 CSV。')};
-const fsBtn=$('fullBtn');fsBtn.onclick=async()=>{try{if(document.fullscreenElement)await document.exitFullscreen();else if(document.documentElement.requestFullscreen)await document.documentElement.requestFullscreen();else fsBtn.textContent='使用瀏覽器全螢幕'}catch(e){fsBtn.textContent='使用瀏覽器全螢幕'}};
-document.addEventListener('fullscreenchange',()=>{fsBtn.textContent=document.fullscreenElement?'離開全螢幕':'全螢幕'});
-initTimeControls();restore();setLocked(state.locked);showWizardStep(0);syncEditor();automaticTick();renderBoard();renderSchedule();persist();setInterval(automaticTick,250);document.addEventListener('visibilitychange',()=>{if(!document.hidden)automaticTick()});
+const $=id=>document.getElementById(id), W=1440,H=810, STORAGE='meiki-whiteboard-v2';
+const canvas=$('board'), ctx=canvas.getContext('2d',{alpha:false}),stage=$('stage'),workspace=$('workspace');
+let pages=[newPage()],active=0,tool='pen',color='#111827',penWidth=6,eraserSize=36,selectedId=null;
+let pointerId=null, interaction=null, preview=null, hover=null, modalCallback=null, db=null, saveTimer=0,toastTimer=0,lastPenTime=-Infinity;
+let undoStack=[],redoStack=[],imageCache=new Map(),renderPending=false, projectTitle='我的教學白板';
+function uid(){return 'o'+Date.now().toString(36)+Math.random().toString(36).slice(2,10)}
+function newPage(){return {id:uid(),background:'blank',objects:[]}}
+const clone=obj=>JSON.parse(JSON.stringify(obj));
+function snapshot(){return JSON.stringify({pages,active})}
+function checkpoint(){undoStack.push(snapshot());if(undoStack.length>25)undoStack.shift();redoStack=[];updateUndoBtns()}
+function undo(){if(!undoStack.length)return;redoStack.push(snapshot());restoreSnapshot(undoStack.pop());updateUndoBtns();scheduleSave()}
+function redo(){if(!redoStack.length)return;undoStack.push(snapshot());restoreSnapshot(redoStack.pop());updateUndoBtns();scheduleSave()}
+function restoreSnapshot(s){const d=JSON.parse(s);pages=d.pages;active=d.active;selectedId=null;preview=null;interaction=null;syncPageUI();requestDraw()}
+function updateUndoBtns(){$('undoBtn').disabled=undoStack.length===0;$('redoBtn').disabled=redoStack.length===0}
+const page=()=>pages[active];
+function toast(message){const t=$('toast');t.textContent=message;t.classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>t.classList.remove('show'),2600)}
+function safeDownload(blob,name){const u=URL.createObjectURL(blob),a=document.createElement('a');a.href=u;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),30000)}
+function filename(s){return (s||'教學白板').replace(/[\\/:*?"<>|\x00-\x1F]/g,'_').slice(0,45)}
+function syncPageUI(){$('pageInfo').textContent=`第 ${active+1} / ${pages.length} 頁`;$('prevBtn').disabled=active===0;$('nextBtn').disabled=active===pages.length-1;$('deletePageBtn').disabled=pages.length===1;$('pageSelect').replaceChildren(...pages.map((p,i)=>{let o=document.createElement('option');o.value=i;o.textContent='第 '+(i+1)+' 頁';return o}));$('pageSelect').value=active;$('background').value=page().background;updateSelectionUI();updateUndoBtns();requestDraw()}
+function updateSelectionUI(){const found=page().objects.find(o=>o.id===selectedId);$('editBtn').disabled=!found||found.t!=='text';$('dupBtn').disabled=!found;$('deleteObjBtn').disabled=!found}
+function setTool(t){tool=t;preview=null;selectedId=null;document.querySelectorAll('[data-tool]').forEach(b=>{b.classList.toggle('current',b.dataset.tool===t);b.setAttribute('aria-pressed',b.dataset.tool===t?'true':'false')});stage.classList.toggle('select-mode',t==='select');stage.classList.toggle('eraser-mode',t==='eraser');updateSelectionUI();requestDraw();if(t==='image')$('imageFile').click()}
+function resize(){const r=workspace.getBoundingClientRect();if(r.width<5||r.height<5)return;const margin=5;let width=Math.min(r.width-2*margin,(r.height-2*margin)*W/H),height=width*H/W;stage.style.width=Math.max(40,width)+'px';stage.style.height=Math.max(22,height)+'px';const dpr=Math.min(window.devicePixelRatio||1,2);const pxw=Math.max(1,Math.round(width*dpr)),pxh=Math.max(1,Math.round(height*dpr));if(canvas.width!==pxw||canvas.height!==pxh){canvas.width=pxw;canvas.height=pxh}requestDraw()}
+function requestDraw(){if(renderPending)return;renderPending=true;requestAnimationFrame(()=>{renderPending=false;render()})}
+function render(){if(!canvas.width)return;ctx.setTransform(canvas.width/W,0,0,canvas.height/H,0,0);drawScene(ctx,page(),{selection:true,preview:true})}
+function background(c,p){c.save();c.fillStyle='#fff';c.fillRect(0,0,W,H);const kind=p.background;if(kind==='blank'){c.restore();return}c.lineWidth=1;c.strokeStyle='#dce6f1';if(kind==='grid'||kind==='coords'){const step=45;c.beginPath();for(let x=0;x<=W;x+=step){c.moveTo(x,0);c.lineTo(x,H)}for(let y=0;y<=H;y+=step){c.moveTo(0,y);c.lineTo(W,y)}c.stroke();if(kind==='coords'){const ox=720,oy=405;c.strokeStyle='#829ab3';c.lineWidth=2;c.beginPath();c.moveTo(0,oy);c.lineTo(W,oy);c.moveTo(ox,0);c.lineTo(ox,H);c.stroke();c.fillStyle='#536f8e';c.font='17px system-ui';c.fillText('0',ox+10,oy+24);c.fillText('x',W-22,oy-8);c.fillText('y',ox+12,20);for(let x=ox%step;x<W;x+=step){c.beginPath();c.moveTo(x,oy-6);c.lineTo(x,oy+6);c.stroke()}for(let y=oy%step;y<H;y+=step){c.beginPath();c.moveTo(ox-6,y);c.lineTo(ox+6,y);c.stroke()}}}
+ else if(kind==='lines'){c.beginPath();for(let y=75;y<=H;y+=62){c.moveTo(0,y);c.lineTo(W,y)}c.stroke()}
+ else if(kind==='tian'||kind==='mi'){const s=125;c.strokeStyle='#bfd0e6';for(let x=0;x<W;x+=s){for(let y=0;y<H;y+=s){c.strokeRect(x+.5,y+.5,s,s);c.save();c.setLineDash([7,6]);c.strokeStyle='#d4dfe9';c.beginPath();c.moveTo(x+s/2,y);c.lineTo(x+s/2,y+s);c.moveTo(x,y+s/2);c.lineTo(x+s,y+s/2);if(kind==='mi'){c.moveTo(x,y);c.lineTo(x+s,y+s);c.moveTo(x+s,y);c.lineTo(x,y+s)}c.stroke();c.restore()}}}c.restore()}
+function strokeLine(c,o){const pts=o.points||[];if(!pts.length)return;c.beginPath();c.moveTo(pts[0].x,pts[0].y);if(pts.length===1){c.lineTo(pts[0].x+.01,pts[0].y+.01)}else{for(let i=1;i<pts.length-1;i++){const mid={x:(pts[i].x+pts[i+1].x)/2,y:(pts[i].y+pts[i+1].y)/2};c.quadraticCurveTo(pts[i].x,pts[i].y,mid.x,mid.y)}c.lineTo(pts[pts.length-1].x,pts[pts.length-1].y)}c.stroke()}
+function imageObj(src){let o=imageCache.get(src);if(o)return o;const img=new Image();o={img,ready:false};imageCache.set(src,o);img.onload=()=>{o.ready=true;requestDraw()};img.onerror=()=>{o.error=true;requestDraw()};img.src=src;return o}
+function drawObject(c,o){c.save();c.strokeStyle=o.color||'#111827';c.fillStyle=o.color||'#111827';c.lineWidth=o.width||6;c.lineCap='round';c.lineJoin='round';const {x1=0,y1=0,x2=0,y2=0}=o;const x=Math.min(x1,x2),y=Math.min(y1,y2),w=Math.abs(x2-x1),h=Math.abs(y2-y1);
+ if(o.t==='stroke'){strokeLine(c,o)}
+ else if(o.t==='line'||o.t==='arrow'){c.beginPath();c.moveTo(x1,y1);c.lineTo(x2,y2);c.stroke();if(o.t==='arrow'){const ang=Math.atan2(y2-y1,x2-x1),len=Math.max(18,(o.width||6)*3.3);c.beginPath();c.moveTo(x2-len*Math.cos(ang-.55),y2-len*Math.sin(ang-.55));c.lineTo(x2,y2);c.lineTo(x2-len*Math.cos(ang+.55),y2-len*Math.sin(ang+.55));c.stroke()}}
+ else if(o.t==='ellipse'){c.beginPath();c.ellipse(x+w/2,y+h/2,Math.max(.01,w/2),Math.max(.01,h/2),0,0,2*Math.PI);c.stroke()}
+ else if(o.t==='rect'){c.strokeRect(x,y,w,h)}
+ else if(o.t==='triangle'){c.beginPath();c.moveTo(x+w/2,y);c.lineTo(x+w,y+h);c.lineTo(x,y+h);c.closePath();c.stroke()}
+ else if(o.t==='angle'){const s=Math.sign((x2-x1)||(1)),t=Math.sign((y2-y1)||(1)),r=Math.min(Math.abs(x2-x1),Math.abs(y2-y1),55);c.beginPath();c.moveTo(x1,y2);c.lineTo(x1,y1);c.lineTo(x2,y1);c.stroke();c.lineWidth=Math.max(2,(o.width||6)/2);c.beginPath();c.arc(x1,y1,r,t>0?0:-Math.PI/2,s>0?(t>0?Math.PI/2:0):(t>0?Math.PI:Math.PI/2),s!==t);c.stroke()}
+ else if(o.t==='text'){c.textBaseline='top';c.font=`${o.size||38}px "Microsoft JhengHei","Noto Sans TC",system-ui,sans-serif`;const lines=(o.text||'').split('\n'),dy=(o.size||38)*1.3;lines.forEach((s,i)=>c.fillText(s,o.x,o.y+dy*i))}
+ else if(o.t==='image'){const v=imageObj(o.src);if(v.ready){c.drawImage(v.img,o.x,o.y,o.w,o.h)}else{c.fillStyle='#edf1f6';c.fillRect(o.x,o.y,o.w,o.h);c.fillStyle='#6b7e92';c.font='23px system-ui';c.fillText(v.error?'圖片無法載入':'圖片載入中',o.x+15,o.y+30)}}c.restore()}
+function drawScene(c,p,{selection=false,preview:showPreview=false}={}){background(c,p);for(const o of p.objects)drawObject(c,o);if(showPreview&&preview){if(preview.t==='erase-preview'){c.save();c.beginPath();c.arc(preview.x,preview.y,eraserSize/2,0,Math.PI*2);c.fillStyle='#ff505026';c.strokeStyle='#df4d4d';c.lineWidth=2;c.fill();c.stroke();c.restore()}else{c.save();c.globalAlpha=.7;drawObject(c,preview);c.restore()}}
+ if(selection&&selectedId){const o=p.objects.find(x=>x.id===selectedId);if(o){const b=bounds(o,c);c.save();c.strokeStyle='#1566dd';c.lineWidth=2;c.setLineDash([8,5]);c.strokeRect(b.x-9,b.y-9,Math.max(18,b.w+18),Math.max(18,b.h+18));c.setLineDash([]);c.fillStyle='#fff';c.strokeStyle='#1566dd';c.lineWidth=3;const handles=[{x:b.x+b.w,y:b.y+b.h}];for(const h of handles){c.fillRect(h.x-9,h.y-9,18,18);c.strokeRect(h.x-9,h.y-9,18,18)}c.restore()}}}
+function bounds(o,c=ctx){if(o.t==='stroke'){const a=o.points;if(!a.length)return{x:0,y:0,w:0,h:0};let xmin=Infinity,xmax=-Infinity,ymin=Infinity,ymax=-Infinity;for(let p of a){xmin=Math.min(xmin,p.x);xmax=Math.max(xmax,p.x);ymin=Math.min(ymin,p.y);ymax=Math.max(ymax,p.y)}return{x:xmin,y:ymin,w:xmax-xmin,h:ymax-ymin}}
+ if(o.t==='text'){c.save();c.font=`${o.size||38}px "Microsoft JhengHei","Noto Sans TC",system-ui,sans-serif`;let w=Math.max(18,...o.text.split('\n').map(s=>c.measureText(s).width));c.restore();return {x:o.x,y:o.y,w,h:o.text.split('\n').length*(o.size||38)*1.3}}
+ if(o.t==='image')return {x:o.x,y:o.y,w:o.w,h:o.h};return{x:Math.min(o.x1,o.x2),y:Math.min(o.y1,o.y2),w:Math.abs(o.x2-o.x1),h:Math.abs(o.y2-o.y1)}}
+function xy(e){const r=canvas.getBoundingClientRect();return{x:Math.max(0,Math.min(W,(e.clientX-r.left)/r.width*W)),y:Math.max(0,Math.min(H,(e.clientY-r.top)/r.height*H))}}
+function distToSegment(p,a,b){const dx=b.x-a.x,dy=b.y-a.y,t=dx*dx+dy*dy?Math.max(0,Math.min(1,((p.x-a.x)*dx+(p.y-a.y)*dy)/(dx*dx+dy*dy))):0;return Math.hypot(p.x-a.x-t*dx,p.y-a.y-t*dy)}
+function hit(o,p,pad=10){const b=bounds(o),wide=Math.max(12,(o.width||0)/2+pad);if(o.t==='stroke'){if(!o.points.length)return false;for(let i=1;i<o.points.length;i++)if(distToSegment(p,o.points[i-1],o.points[i])<=wide)return true;return o.points.some(a=>Math.hypot(a.x-p.x,a.y-p.y)<wide)}if(o.t==='line'||o.t==='arrow')return distToSegment(p,{x:o.x1,y:o.y1},{x:o.x2,y:o.y2})<=wide;if(o.t==='text'||o.t==='image')return p.x>=b.x-pad&&p.x<=b.x+b.w+pad&&p.y>=b.y-pad&&p.y<=b.y+b.h+pad;if(p.x<b.x-pad||p.x>b.x+b.w+pad||p.y<b.y-pad||p.y>b.y+b.h+pad)return false;if(o.t==='rect'||o.t==='ellipse'||o.t==='triangle'||o.t==='angle')return true;return false}
+function findHit(p){for(let i=page().objects.length-1;i>=0;i--)if(hit(page().objects[i],p))return page().objects[i];return null}
+function moveObject(o,orig,dx,dy){if(orig.t==='stroke'){o.points=orig.points.map(p=>({x:clamp(p.x+dx,0,W),y:clamp(p.y+dy,0,H)}))}else if(orig.t==='text'||orig.t==='image'){o.x=clamp(orig.x+dx,0,W);o.y=clamp(orig.y+dy,0,H)}else{o.x1=clamp(orig.x1+dx,0,W);o.y1=clamp(orig.y1+dy,0,H);o.x2=clamp(orig.x2+dx,0,W);o.y2=clamp(orig.y2+dy,0,H)}}
+const clamp=(n,a,b)=>Math.min(b,Math.max(a,n));
+function scaleObject(o,orig,origin,sx,sy){sx=clamp(sx,.1,15);sy=clamp(sy,.1,15);if(orig.t==='stroke'){o.points=orig.points.map(p=>({x:origin.x+(p.x-origin.x)*sx,y:origin.y+(p.y-origin.y)*sy}))}else if(orig.t==='image'){o.x=orig.x;o.y=orig.y;o.w=Math.max(20,orig.w*sx);o.h=Math.max(20,orig.h*sy)}else if(orig.t==='text'){o.size=Math.round(clamp(orig.size*Math.max(sx,sy),12,220))}else{o.x1=origin.x+(orig.x1-origin.x)*sx;o.y1=origin.y+(orig.y1-origin.y)*sy;o.x2=origin.x+(orig.x2-origin.x)*sx;o.y2=origin.y+(orig.y2-origin.y)*sy}}
+function pointWithinHandle(p,b){return Math.hypot(p.x-(b.x+b.w),p.y-(b.y+b.h))<24}
+function onDown(e){if(pointerId!==null)return;if(e.button!==undefined&&e.button!==0)return;if(e.pointerType==='pen')lastPenTime=performance.now();if($('penOnly').checked&&e.pointerType==='touch'&&tool!=='select'){toast('已啟用「只用觸控筆」');return}if(e.pointerType==='touch'&&performance.now()-lastPenTime<750&&tool!=='select')return;
+ e.preventDefault();const p=xy(e);pointerId=e.pointerId;try{canvas.setPointerCapture(pointerId)}catch{};hover=p;
+ if(tool==='select'){const sel=page().objects.find(o=>o.id===selectedId);if(sel&&pointWithinHandle(p,bounds(sel))){checkpoint();interaction={kind:'resize',start:p,id:sel.id,original:clone(sel),b:bounds(sel)};requestDraw();return}const hitObj=findHit(p);selectedId=hitObj?hitObj.id:null;updateSelectionUI();if(hitObj){checkpoint();interaction={kind:'move',start:p,id:hitObj.id,original:clone(hitObj)}}else interaction={kind:'idle'};requestDraw();return}
+ if(tool==='text'){pointerId=null;try{canvas.releasePointerCapture(e.pointerId)}catch{};showTextModal(p,null);return}
+ if(tool==='image'){pointerId=null;try{canvas.releasePointerCapture(e.pointerId)}catch{};$('imageFile').click();return}
+ if(tool==='eraser'){interaction={kind:'erase',pts:[p]};preview={t:'erase-preview',...p};requestDraw();return}
+ if(tool==='pen'||tool==='smart'){interaction={kind:'stroke',pts:[p]};preview={t:'stroke',points:[p],width:penWidth,color};requestDraw();return}
+ interaction={kind:'shape',start:p};preview={t:tool,x1:p.x,y1:p.y,x2:p.x,y2:p.y,color,width:penWidth};requestDraw()}
+function onMove(e){const p=xy(e);hover=p;if(pointerId!==e.pointerId){if(tool==='eraser'){preview={t:'erase-preview',...p};requestDraw()}return}e.preventDefault();if(!interaction)return;
+ if(interaction.kind==='move'){const o=page().objects.find(x=>x.id===interaction.id);if(o)moveObject(o,interaction.original,p.x-interaction.start.x,p.y-interaction.start.y)}
+ else if(interaction.kind==='resize'){const o=page().objects.find(x=>x.id===interaction.id);if(o){const b=interaction.b;const sx=(p.x-b.x)/Math.max(1,b.w),sy=(p.y-b.y)/Math.max(1,b.h);scaleObject(o,interaction.original,{x:b.x,y:b.y},sx,sy)}}
+ else if(interaction.kind==='stroke'){const pts=interaction.pts;const last=pts[pts.length-1];if(Math.hypot(last.x-p.x,last.y-p.y)>1.2){pts.push(p);preview={t:'stroke',points:pts,width:penWidth,color}}}
+ else if(interaction.kind==='shape'){preview.x2=p.x;preview.y2=p.y}
+ else if(interaction.kind==='erase'){const pts=interaction.pts,last=pts[pts.length-1];if(Math.hypot(last.x-p.x,last.y-p.y)>2)pts.push(p);preview={t:'erase-preview',...p}}
+ requestDraw()}
+function onUp(e){if(pointerId!==e.pointerId)return;e.preventDefault();const p=xy(e);const it=interaction;pointerId=null;interaction=null;try{canvas.releasePointerCapture(e.pointerId)}catch{};
+ if(!it){preview=null;requestDraw();return}
+ if(it.kind==='stroke'){const pts=it.pts.slice();if(pts.length===1||Math.hypot(pts[pts.length-1].x-p.x,pts[pts.length-1].y-p.y)>1)pts.push(p);const o={id:uid(),t:'stroke',points:pts,color,width:penWidth};checkpoint();page().objects.push(tool==='smart'?smartify(o):o)}
+ else if(it.kind==='shape'){if(Math.hypot(it.start.x-p.x,it.start.y-p.y)>4){checkpoint();let o={id:uid(),t:tool,x1:it.start.x,y1:it.start.y,x2:p.x,y2:p.y,color,width:penWidth};if(o.t==='ellipse'&&e.shiftKey){const s=Math.max(Math.abs(o.x2-o.x1),Math.abs(o.y2-o.y1));o.x2=o.x1+Math.sign(o.x2-o.x1||1)*s;o.y2=o.y1+Math.sign(o.y2-o.y1||1)*s}page().objects.push(o)}}
+ else if(it.kind==='erase'){eraseAt(it.pts.concat([p]))}
+ else if(it.kind==='move'||it.kind==='resize'){const o=page().objects.find(x=>x.id===it.id);if(o&&JSON.stringify(o)===JSON.stringify(it.original)){undoStack.pop();updateUndoBtns()}}
+ preview=null;requestDraw();scheduleSave();updateSelectionUI()}
+function onCancel(e){if(pointerId!==e.pointerId)return;onUp(e)}
+function smartify(o){const ps=o.points;if(ps.length<3)return o;const a=ps[0],b=ps[ps.length-1];const diag=Math.hypot(Math.max(...ps.map(p=>p.x))-Math.min(...ps.map(p=>p.x)),Math.max(...ps.map(p=>p.y))-Math.min(...ps.map(p=>p.y)));if(diag<25)return o;const deviation=ps.reduce((s,p)=>s+distToSegment(p,a,b),0)/ps.length;if(deviation<Math.max(8,diag*.035)&&Math.hypot(a.x-b.x)>diag*.68){return{id:o.id,t:'line',x1:a.x,y1:a.y,x2:b.x,y2:b.y,color:o.color,width:o.width}}const close=Math.hypot(a.x-b.x,a.y-b.y);if(close<diag*.26&&ps.length>8){const xs=ps.map(p=>p.x),ys=ps.map(p=>p.y),x1=Math.min(...xs),x2=Math.max(...xs),y1=Math.min(...ys),y2=Math.max(...ys);const cx=(x1+x2)/2,cy=(y1+y2)/2,rx=(x2-x1)/2,ry=(y2-y1)/2;if(rx>15&&ry>15){const err=ps.reduce((s,p)=>s+Math.abs(Math.sqrt(((p.x-cx)/rx)**2+((p.y-cy)/ry)**2)-1),0)/ps.length;if(err<.20)return{id:o.id,t:'ellipse',x1,y1,x2,y2,color:o.color,width:o.width}}}return o}
+function eraseAt(points){const radius=eraserSize/2;if(!page().objects.length)return;const curr=page().objects;let next=[],changed=false;function affected(p){return points.some(q=>Math.hypot(p.x-q.x,p.y-q.y)<radius)}
+ for(const o of curr){if(o.t!=='stroke'){const b=bounds(o);if(points.some(q=>hit(o,q,radius))){changed=true;continue}next.push(o);continue}
+ const ps=o.points;if(!ps.length){next.push(o);continue}
+ let fragments=[],fragment=[];for(let k=0;k<ps.length;k++){const a=ps[k],prev=ps[k-1];if(prev&&Math.hypot(a.x-prev.x,a.y-prev.y)>4){const n=Math.min(120,Math.ceil(Math.hypot(a.x-prev.x,a.y-prev.y)/Math.max(2,radius/3)));for(let j=1;j<n;j++){const m={x:prev.x+(a.x-prev.x)*j/n,y:prev.y+(a.y-prev.y)*j/n};if(affected(m)){if(fragment.length)fragments.push(fragment);fragment=[];changed=true}else fragment.push(m)}}if(affected(a)){if(fragment.length)fragments.push(fragment);fragment=[];changed=true}else fragment.push(a)}if(fragment.length)fragments.push(fragment);if(fragments.length===1&&fragments[0].length===ps.length&&!changed){next.push(o)}else if(fragments.length){fragments.forEach((f,i)=>next.push({...o,id:i===0?o.id:uid(),points:f}));if(fragments.length!==1||fragments[0].length!==ps.length)changed=true}else changed=true}
+ if(changed){checkpoint();page().objects=next;selectedId=null;updateSelectionUI()} }
+function modalOpen(title,content,okayLabel,cb){$('modalTitle').textContent=title;$('modalBody').replaceChildren();if(typeof content==='string')$('modalBody').innerHTML=content;else $('modalBody').appendChild(content);$('modalOkay').textContent=okayLabel||'確定';$('modal').classList.add('open');modalCallback=cb;}
+function modalClose(){$('modal').classList.remove('open');modalCallback=null}
+function showTextModal(pos,existing){const wrap=document.createElement('div'),ta=document.createElement('textarea'),row=document.createElement('div'),label=document.createElement('label'),size=document.createElement('input');ta.placeholder='輸入要顯示在白板上的文字';ta.value=existing?existing.text:'';ta.id='textEditArea';label.textContent='字體大小';size.type='number';size.min='12';size.max='160';size.value=existing?existing.size:40;row.className='fieldRow';row.append(label,size);wrap.append(ta,row);modalOpen(existing?'編輯文字':'插入文字',wrap,'放上白板',()=>{const text=ta.value.trim();if(!text)return toast('請先輸入文字');checkpoint();if(existing){const obj=page().objects.find(o=>o.id===existing.id);if(obj){obj.text=text;obj.size=clamp(+size.value||40,12,160)}}else{const obj={id:uid(),t:'text',text,size:clamp(+size.value||40,12,160),x:pos.x,y:pos.y,color};page().objects.push(obj);selectedId=obj.id;setTool('select');selectedId=obj.id}updateSelectionUI();requestDraw();scheduleSave();modalClose()});setTimeout(()=>ta.focus(),0)}
+function chooseImage(file){if(!file)return;if(!['image/png','image/jpeg','image/webp'].includes(file.type)){toast('請使用 PNG、JPG 或 WebP 圖片');return}if(file.size>20*1024*1024){toast('圖片過大，請選擇 20MB 以下的檔案');return}const reader=new FileReader();reader.onload=()=>{const img=new Image();img.onload=()=>{const scale=Math.min(1,1600/Math.max(img.width,img.height));const cn=document.createElement('canvas');cn.width=Math.max(1,Math.round(img.width*scale));cn.height=Math.max(1,Math.round(img.height*scale));cn.getContext('2d').drawImage(img,0,0,cn.width,cn.height);let src;try{src=cn.toDataURL('image/jpeg',.88)}catch{toast('圖片讀取失敗');return}const f=Math.min(620/cn.width,510/cn.height,1.5),w=cn.width*f,h=cn.height*f;checkpoint();const o={id:uid(),t:'image',src,x:(W-w)/2,y:(H-h)/2,w,h};page().objects.push(o);setTool('select');selectedId=o.id;updateSelectionUI();requestDraw();scheduleSave();toast('圖片已插入，可用選取工具移動和縮放')};img.onerror=()=>toast('無法解析圖片');img.src=reader.result};reader.onerror=()=>toast('讀取圖片失敗');reader.readAsDataURL(file)}
+function addPage(duplicate=false){checkpoint();const n=duplicate?clone(page()):newPage();n.id=uid();if(duplicate)n.objects=n.objects.map(o=>({...o,id:uid()}));pages.splice(active+1,0,n);active++;selectedId=null;syncPageUI();scheduleSave();toast(duplicate?'已複製頁面':'已新增空白頁')}
+function removePage(){if(pages.length===1)return;modalOpen('刪除頁面',`<p>確定刪除第 ${active+1} 頁及其中所有內容？此動作可以使用「復原」還原。</p>`,'刪除',()=>{checkpoint();pages.splice(active,1);active=Math.min(active,pages.length-1);selectedId=null;modalClose();syncPageUI();scheduleSave()})}
+function deleteSelection(){if(!selectedId)return;checkpoint();page().objects=page().objects.filter(o=>o.id!==selectedId);selectedId=null;updateSelectionUI();requestDraw();scheduleSave()}
+function duplicateSelection(){const o=page().objects.find(x=>x.id===selectedId);if(!o)return;checkpoint();const n=clone(o);n.id=uid();moveObject(n,clone(n),30,30);page().objects.push(n);selectedId=n.id;updateSelectionUI();requestDraw();scheduleSave()}
+function changePage(n){if(n<0||n>=pages.length)return;active=n;selectedId=null;preview=null;syncPageUI();scheduleSave()}
+function makeRenderCanvas(p){const cn=document.createElement('canvas');cn.width=W;cn.height=H;const c=cn.getContext('2d',{alpha:false});drawScene(c,p);return cn}
+function exportPNG(){try{const c=makeRenderCanvas(page());c.toBlob(b=>{if(b){safeDownload(b,filename(projectTitle)+'_第'+(active+1)+'頁.png');toast('已輸出目前完整頁面的 PNG')}else toast('匯出 PNG 失敗')},'image/png')}catch(e){toast('匯出 PNG 失敗：'+e.message)}}
+function bytesLatin1(s){return Uint8Array.from(s,character=>character.charCodeAt(0)&255)}
+function base64Bytes(data){const bin=atob(data.slice(data.indexOf(',')+1)),a=new Uint8Array(bin.length);for(let i=0;i<bin.length;i++)a[i]=bin.charCodeAt(i);return a}
+function makePDF(jpegs){const count=jpegs.length,encoder=new TextEncoder();let chunks=[],position=0,offsets=[0];const write=v=>{const a=typeof v==='string'?encoder.encode(v):v;chunks.push(a);position+=a.length};const obj=(id,content)=>{offsets[id]=position;write(`${id} 0 obj\n`);if(typeof content==='function')content();else write(content);write('\nendobj\n')};
+ write('%PDF-1.4\n%PDF-GENERATED\n');obj(1,'<< /Type /Catalog /Pages 2 0 R >>');obj(2,`<< /Type /Pages /Kids [${jpegs.map((_,i)=>3+i*3+' 0 R').join(' ')}] /Count ${count} >>`);
+ jpegs.forEach((bytes,i)=>{const pg=3+i*3,content=pg+1,img=pg+2,pw=842,ph=595,margin=16,sw=pw-2*margin,sh=sw*H/W,sy=(ph-sh)/2;obj(pg,`<< /Type /Page /Parent 2 0 R /MediaBox [0 0 ${pw} ${ph}] /Resources << /XObject << /Im0 ${img} 0 R >> >> /Contents ${content} 0 R >>`);const operations=`q\n${sw.toFixed(3)} 0 0 ${sh.toFixed(3)} ${margin} ${sy.toFixed(3)} cm\n/Im0 Do\nQ\n`;const op=encoder.encode(operations);obj(content,()=>{write(`<< /Length ${op.length} >>\nstream\n`);write(op);write('endstream')});obj(img,()=>{write(`<< /Type /XObject /Subtype /Image /Width ${W} /Height ${H} /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length ${bytes.length} >>\nstream\n`);write(bytes);write('\nendstream')})});const xref=position,n=3+count*3;write(`xref\n0 ${n}\n0000000000 65535 f \n`);for(let i=1;i<n;i++)write(`${String(offsets[i]).padStart(10,'0')} 00000 n \n`);write(`trailer\n<< /Size ${n} /Root 1 0 R >>\nstartxref\n${xref}\n%%EOF`);return new Blob(chunks,{type:'application/pdf'})}
+async function exportPDF(){const btn=$('pdfBtn');btn.disabled=true;btn.textContent='製作中…';try{const jpegs=[];for(let i=0;i<pages.length;i++){const c=makeRenderCanvas(pages[i]);await Promise.all(pages[i].objects.filter(o=>o.t==='image').map(o=>ensureImage(o.src)));jpegs.push(base64Bytes(makeRenderCanvas(pages[i]).toDataURL('image/jpeg',.87)));await new Promise(r=>setTimeout(r,0))}const pdf=makePDF(jpegs);safeDownload(pdf,filename(projectTitle)+'_全部'+pages.length+'頁.pdf');toast(`PDF 匯出完成：共 ${pages.length} 頁`)}catch(e){console.error(e);toast('PDF 匯出失敗：'+e.message)}finally{btn.disabled=false;btn.textContent='多頁 PDF'}}
+function ensureImage(src){return new Promise(resolve=>{const obj=imageObj(src);if(obj.ready||obj.error)return resolve();obj.img.addEventListener('load',resolve,{once:true});obj.img.addEventListener('error',resolve,{once:true})})}
+function exportProject(){const p={app:'meiki-classroom-whiteboard',version:2,title:projectTitle,exportedAt:new Date().toISOString(),pages,active};safeDownload(new Blob([JSON.stringify(p)],{type:'application/json'}),filename(projectTitle)+'_可編輯專案.json');toast('專案已下載；建議定期備份')}
+function importProject(file){if(!file)return;if(file.size>40*1024*1024){toast('專案檔案過大（上限 40MB）');return}const reader=new FileReader();reader.onload=()=>{let p;try{p=JSON.parse(reader.result);if(p.app!=='meiki-classroom-whiteboard'||p.version!==2||!Array.isArray(p.pages)||p.pages.length<1||p.pages.length>300)throw Error('格式或版本不相容');for(const item of p.pages){if(!Array.isArray(item.objects)||item.objects.length>10000||!['blank','grid','lines','tian','mi','coords'].includes(item.background))throw Error('頁面資料不完整');for(const o of item.objects){if(!['stroke','line','arrow','ellipse','rect','triangle','angle','text','image'].includes(o.t))throw Error('物件類型不支援');if(o.t==='image'&&(!String(o.src).startsWith('data:image/jpeg;base64,')&&!String(o.src).startsWith('data:image/png;base64,')&&!String(o.src).startsWith('data:image/webp;base64,')))throw Error('圖片來源不支援')}}}catch(e){toast('無法載入：'+e.message);return}modalOpen('載入專案',`<p>將開啟 <b>${p.pages.length} 頁</b>專案，取代目前白板內容。建議先使用「儲存專案」備份。</p>`,'確認載入',()=>{pages=p.pages;active=clamp(Number(p.active)||0,0,pages.length-1);projectTitle=String(p.title||'我的教學白板').slice(0,80);undoStack=[];redoStack=[];selectedId=null;imageCache.clear();modalClose();syncPageUI();scheduleSave();toast('已載入完整可編輯專案')})};reader.readAsText(file)}
+function scheduleSave(){clearTimeout(saveTimer);saveTimer=setTimeout(saveLocal,550)}
+function dbOpen(){return new Promise(resolve=>{if(!window.indexedDB)return resolve(null);try{const req=indexedDB.open('MeikiWhiteboardV2',1);req.onupgradeneeded=()=>{const d=req.result;if(!d.objectStoreNames.contains('projects'))d.createObjectStore('projects')};req.onsuccess=()=>resolve(req.result);req.onerror=()=>resolve(null)}catch{resolve(null)}})}
+function dbSet(d){return new Promise(resolve=>{if(!db)return resolve(false);try{let tx=db.transaction('projects','readwrite'),req=tx.objectStore('projects').put(d,STORAGE);tx.oncomplete=()=>resolve(true);tx.onerror=()=>resolve(false);req.onerror=()=>resolve(false)}catch{resolve(false)}})}
+function dbGet(){return new Promise(resolve=>{if(!db)return resolve(null);try{let tx=db.transaction('projects','readonly');let r=tx.objectStore('projects').get(STORAGE);r.onsuccess=()=>resolve(r.result||null);r.onerror=()=>resolve(null)}catch{resolve(null)}})}
+async function saveLocal(){const obj={app:'meiki-classroom-whiteboard',version:2,title:projectTitle,pages,active};const ok=await dbSet(obj);if(!ok){try{localStorage.setItem(STORAGE,JSON.stringify(obj))}catch{ $('footerHint').textContent='自動儲存空間不足，請按「儲存專案」備份';return}}$('footerHint').textContent='已在此瀏覽器自動儲存 · 建議定期下載專案備份'}
+async function initPersistence(){db=await dbOpen();let data=await dbGet();if(!data){try{data=JSON.parse(localStorage.getItem(STORAGE)||'null')}catch{}}if(data?.version===2&&data?.app==='meiki-classroom-whiteboard'&&Array.isArray(data.pages)&&data.pages.length){pages=data.pages;active=clamp(+data.active||0,0,pages.length-1);projectTitle=String(data.title||projectTitle);toast('已還原上次白板內容')}syncPageUI()}
+function help(){modalOpen('白板 V2.0 操作說明',`<p><b>基本書寫：</b>選擇畫筆與四色筆色，利用「筆畫」調整粗細。橡皮擦可調半徑，支援手寫筆跡局部擦除及移除形狀。</p><p><b>智慧幾何：</b>智慧筆會把大致筆直的筆跡轉成直線、封閉橢圓轉成標準橢圓；直線、圓形、長方形、三角形、箭頭及角度工具可精準繪圖。圓形工具拖曳時按 Shift 可畫正圓。</p><p><b>編輯物件：</b>按「選取」，點物件拖曳移動；拖曳右下角白色控制點調整大小，文字可使用「編輯選取」修改。雙擊文字也可編輯；按 Delete 刪除選取，Ctrl+C/Ctrl+V 複製貼上。</p><p><b>觸控螢幕：</b>畫布支援 Pointer Events、單指／單筆書寫，阻止畫布觸控捲動；可勾「只用觸控筆」減少手掌誤觸。滑鼠可繼續操作。建議 Edge 或 Chrome 全螢幕。</p><p><b>頁面與背景：</b>每頁獨立設定背景，可新增、複製、刪除、切換頁面。背景不會被橡皮擦清除。</p><p><b>下載與備份：</b>PNG 輸出目前完整頁面；多頁 PDF 匯出所有頁；「儲存專案」下載含圖像、文字、筆跡的 JSON，可「載入專案」繼續編輯。平時也會自動保存於本裝置瀏覽器（清除網站資料可能消失）。</p><p><b>快捷鍵：</b><kbd>Ctrl</kbd>+<kbd>Z</kbd> 復原、<kbd>Ctrl</kbd>+<kbd>Y</kbd> 重做、<kbd>Delete</kbd> 刪除選取、<kbd>Esc</kbd> 取消選取。</p>`,'關閉',()=>modalClose())}
+// Button and pointer wiring
+ document.querySelectorAll('[data-tool]').forEach(b=>b.addEventListener('click',()=>setTool(b.dataset.tool)));
+ document.querySelectorAll('[data-color]').forEach(b=>b.addEventListener('click',()=>{color=b.dataset.color;document.querySelectorAll('[data-color]').forEach(x=>{x.classList.toggle('selected',x===b);x.setAttribute('aria-pressed',x===b?'true':'false')})}));
+ $('penSize').oninput=e=>{penWidth=+e.target.value;$('penSizeOut').textContent=penWidth+'px'};
+ $('eraserSize').oninput=e=>{eraserSize=+e.target.value;$('eraserSizeOut').textContent=eraserSize+'px';requestDraw()};
+ $('background').onchange=e=>{checkpoint();page().background=e.target.value;requestDraw();scheduleSave()};
+ $('undoBtn').onclick=undo;$('redoBtn').onclick=redo;$('fullBtn').onclick=()=>{if(document.fullscreenElement)document.exitFullscreen().catch(()=>toast('無法離開全螢幕'));else document.documentElement.requestFullscreen?.().catch(()=>toast('瀏覽器不支援全螢幕'))};
+ $('helpBtn').onclick=help;$('prevBtn').onclick=()=>changePage(active-1);$('nextBtn').onclick=()=>changePage(active+1);$('pageSelect').onchange=e=>changePage(+e.target.value);
+ $('newPageBtn').onclick=()=>addPage(false);$('duplicatePageBtn').onclick=()=>addPage(true);$('deletePageBtn').onclick=removePage;
+ $('clearBtn').onclick=()=>{if(!page().objects.length){toast('這一頁已經是空白');return}modalOpen('清空本頁',`<p>清除本頁的筆跡、圖片、文字與幾何物件？背景會保留，可使用「復原」還原。</p>`,'清空',()=>{checkpoint();page().objects=[];selectedId=null;modalClose();updateSelectionUI();requestDraw();scheduleSave()})};
+ $('editBtn').onclick=()=>{const o=page().objects.find(x=>x.id===selectedId);if(o&&o.t==='text')showTextModal({x:o.x,y:o.y},o)};
+ $('dupBtn').onclick=duplicateSelection;$('deleteObjBtn').onclick=deleteSelection;$('pngBtn').onclick=exportPNG;$('pdfBtn').onclick=exportPDF;$('saveBtn').onclick=exportProject;$('loadBtn').onclick=()=>$('projectFile').click();
+ $('imageFile').onchange=e=>{const f=e.target.files[0];e.target.value='';if(f)chooseImage(f)};
+ $('projectFile').onchange=e=>{const f=e.target.files[0];e.target.value='';if(f)importProject(f)};
+ $('modalCancel').onclick=modalClose;$('modalOkay').onclick=()=>{if(modalCallback)modalCallback();else modalClose()};$('modal').onclick=e=>{if(e.target===$('modal'))modalClose()};
+ canvas.addEventListener('pointerdown',onDown);canvas.addEventListener('pointermove',onMove);canvas.addEventListener('pointerup',onUp);canvas.addEventListener('pointercancel',onCancel);canvas.addEventListener('contextmenu',e=>e.preventDefault());
+ canvas.addEventListener('dblclick',e=>{if(tool!=='select')return;const o=findHit(xy(e));if(o?.t==='text'){selectedId=o.id;updateSelectionUI();showTextModal({x:o.x,y:o.y},o)}});
+ let clip=null;document.addEventListener('keydown',e=>{if($('modal').classList.contains('open')){if(e.key==='Escape'){modalClose();e.preventDefault()}return}const tag=e.target?.tagName;if(['INPUT','TEXTAREA','SELECT'].includes(tag))return;if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='z'){e.preventDefault();e.shiftKey?redo():undo()}else if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='y'){e.preventDefault();redo()}else if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='c'&&selectedId){const o=page().objects.find(x=>x.id===selectedId);if(o){clip=clone(o);e.preventDefault();toast('已複製物件')}}else if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='v'&&clip){checkpoint();const o=clone(clip);o.id=uid();moveObject(o,clone(o),35,35);page().objects.push(o);selectedId=o.id;setTool('select');selectedId=o.id;updateSelectionUI();requestDraw();scheduleSave();e.preventDefault()}else if(['Delete','Backspace'].includes(e.key)&&selectedId){deleteSelection();e.preventDefault()}else if(e.key==='Escape'){selectedId=null;updateSelectionUI();requestDraw()}});
+ if('ResizeObserver' in window)new ResizeObserver(resize).observe(workspace);window.addEventListener('resize',resize);document.addEventListener('visibilitychange',()=>{if(document.hidden)saveLocal()});
+ syncPageUI();resize();initPersistence();
+ // Test interface: read-only public diagnostics for automated browser checks.
+ window.__whiteboardV2Test={getState:()=>clone({pages,active,tool,selectedId,undo:undoStack.length,redo:redoStack.length}),canvasSize:()=>({width:canvas.width,height:canvas.height}),exportPDF:makePDF,renderPage:i=>makeRenderCanvas(pages[i]),getStage:()=>stage.getBoundingClientRect().toJSON()};
 })();
 </script>
 </body>
