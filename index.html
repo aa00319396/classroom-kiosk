@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1, user-scalable=no" />
   <meta name="theme-color" content="#c9ddff" />
-  <title>節奏星球 RHYTHM POP V12｜FEVER 狂熱模式</title>
+  <title>節奏星球 RHYTHM POP V13｜雙人對戰・FEVER</title>
   <style>
     :root{color-scheme:dark;--bg:#090c16;--surface:#131929;--surface-2:#1a2235;--line:#2c3550;--muted:#8793ac;--text:#f1f4ff;--aqua:#55e7da;--pink:#ff759e;--gold:#ffc775;--blue:#91a9ff;--shadow:0 18px 70px #0005}
     *{box-sizing:border-box}body{margin:0;font-family:Inter,"Noto Sans TC","Microsoft JhengHei",system-ui,-apple-system,sans-serif;background:radial-gradient(ellipse at 23% -15%,#173444 0,transparent 39%),radial-gradient(ellipse at 100% 20%,#28203a 0,transparent 42%),var(--bg);color:var(--text);min-height:100vh;letter-spacing:.015em}
@@ -853,6 +853,67 @@ body.board-mode .fever-hud{top:12px;left:clamp(194px,16vw,254px);width:clamp(142
 @media(max-width:560px){body.board-mode .fever-hud{top:96px;left:14px;width:116px;padding:4px 5px;border-radius:8px}.fever-title{font-size:9px}.fever-title strong{font-size:10px}body.board-mode .fever-title output{font-size:9px}body.board-mode .fever-track{height:5px;margin-top:3px}body.board-mode .fever-sub{font-size:7px;margin-top:2px}}
 @media(prefers-reduced-motion:reduce){.fever-hud,.fever-track span{transition:none!important}}
 
+/* === V13 Two Player Duel === */
+/* V13 DUEL — isolated stage; does not modify the legacy solo canvas and mascot art. */
+.vs-picker{margin:12px 0 14px;background:#eaf3ff;border:1px solid #cadcf5;border-radius:14px;padding:12px}
+.vs-picker-label{font-weight:950;color:#4168ac;font-size:13px;margin-bottom:8px}
+.vs-mode-options{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.vs-mode-btn{min-height:51px;border-radius:10px;border:2px solid #b9ccef;background:white;color:#46618c;font-weight:950;font-size:14px;cursor:pointer}
+.vs-mode-btn[aria-pressed="true"]{border-color:#648bf0;background:linear-gradient(125deg,#4c7de4,#9a6de1);color:white;box-shadow:0 3px 9px #6d7cf950}
+.vs-player-setup{margin:10px 0 0;display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.vs-player-setup[hidden]{display:none}
+.vs-player-setup label{font-weight:850;color:#5876ac;font-size:11px}
+.vs-player-setup input{display:block;width:100%;min-height:39px;margin-top:4px;border-radius:8px;background:white;border:1px solid #c8d7f0;padding:7px;font-size:14px;color:#2a4d84;font-weight:900}
+.vs-help{font-size:11px;line-height:1.5;color:#6684b4;margin:8px 1px 0}
+.vs-stage[hidden]{display:none!important}
+.vs-stage{position:absolute;inset:3px 0 0;display:flex;gap:9px;z-index:9;padding:6px 7px 7px;background:#0c1630;touch-action:none;user-select:none;-webkit-user-select:none;overflow:hidden}
+.vs-arena{--vs-accent:#51b6fc;min-width:0;flex:1 1 0;display:flex;flex-direction:column;background:#142345;border:2px solid color-mix(in srgb,var(--vs-accent) 72%,white);border-radius:12px;overflow:hidden;position:relative}
+.vs-p2{--vs-accent:#ff7fae}
+.vs-player-head{flex:0 0 auto;display:flex;gap:8px;align-items:center;min-height:65px;padding:6px 10px 3px;background:#20365a}
+.vs-player-head img{width:52px;height:53px;object-fit:contain;filter:drop-shadow(0 2px 4px #0006);pointer-events:none;animation:mascotBop 2s ease-in-out infinite}
+.vs-head-main{flex:1;min-width:0}.vs-player-tag{color:var(--vs-accent);font-size:11px;font-weight:950;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.vs-score{font-size:clamp(20px,2.6vw,40px);line-height:1.08;letter-spacing:.03em;font-weight:1000;color:#fff;font-variant-numeric:tabular-nums}
+.vs-meta{display:flex;gap:14px;color:#d3e1ff;font-size:11px;font-weight:850}.vs-meta b{font-variant-numeric:tabular-nums;color:#fff}
+.vs-bars{flex:0 0 auto;padding:3px 10px 7px;background:#20365a;font-size:11px;font-weight:850;color:#e8eeff}
+.vs-hp-label{display:flex;justify-content:space-between}.vs-hp-label b{font-size:14px;color:#88f5d2}.vs-hp-label small{font-weight:750;color:#b5cff6}
+.vs-fever-label{margin-top:4px;display:flex;justify-content:space-between;color:#ffe39d}
+.vs-meter{height:6px;border-radius:8px;overflow:hidden;background:#0a1b36}.vs-meter span{display:block;height:100%;width:100%;background:linear-gradient(90deg,#2ed9a4,#baffcd);transition:width .12s linear}
+.vs-meter.fever{height:5px}.vs-meter.fever span{width:0%;background:linear-gradient(90deg,#5addfa,#ff8dd7,#ffe9a5)}
+.vs-playfield{flex:1 1 auto;min-height:0;position:relative;background:#080d21;overflow:hidden}.vs-canvas{display:block;width:100%;height:100%;touch-action:none;cursor:crosshair}
+.vs-judgement{position:absolute;top:33%;left:0;right:0;text-align:center;font-size:clamp(20px,3vw,42px);font-weight:1000;pointer-events:none;opacity:0;transition:opacity .14s}
+.vs-judgement.show{opacity:1;text-shadow:0 2px 8px #000,0 0 14px currentColor}
+.vs-ko{position:absolute;inset:0;background:#120c25ce;color:#ff8caf;font-size:clamp(35px,6vw,80px);font-weight:1000;display:grid;place-items:center;text-shadow:0 0 15px #bd4477;pointer-events:none}
+.vs-ko[hidden]{display:none}
+.vs-pads{flex:0 0 clamp(65px,17%,130px);display:grid;grid-template-columns:repeat(4,minmax(0,1fr));background:#0b1531}
+.vs-pads button{font:1000 clamp(16px,2.1vw,28px) system-ui;color:white;background:#315077;min-width:0;min-height:0;border:1px solid #a3bddd70;touch-action:none;user-select:none;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;position:relative}
+.vs-pads button:nth-child(2){background:#434f92}.vs-pads button:nth-child(3){background:#896d52}.vs-pads button:nth-child(4){background:#944e75}
+.vs-pads button small{font-size:clamp(9px,1vw,14px);font-weight:900;opacity:.9}
+.vs-pads button.active{box-shadow:inset 0 0 35px #fff9;background:var(--vs-accent);color:#162344}
+.vs-middle{position:absolute;z-index:12;top:28%;left:50%;transform:translateX(-50%);width:48px;height:48px;display:grid;place-items:center;pointer-events:none;border:3px solid #fff;background:#202555;color:#ffdd9b;border-radius:50%;box-shadow:0 0 15px #d7b4ff9a;font-size:20px;letter-spacing:-.06em}
+.vs-countdown{position:absolute;inset:0;z-index:18;display:grid;place-items:center;pointer-events:none;font-size:clamp(80px,18vw,180px);font-weight:1000;color:#f5fcff;text-shadow:0 0 45px #ed89ff;background:#020d256e}
+.vs-countdown[hidden]{display:none}
+body.vs-mode #gameWrap #game,body.vs-mode #gameWrap #keyButtons,body.vs-mode #gameWrap .hud,body.vs-mode #gameWrap .health-hud,body.vs-mode #gameWrap .fever-hud,body.vs-mode #gameWrap .note-legend,body.vs-mode #gameWrap .stage-spark,body.vs-mode #gameWrap #stageMascot,body.vs-mode #gameWrap .dance-stage,body.vs-mode #gameWrap #judgement,body.vs-mode #gameWrap #v12FeverToast,body.vs-mode #gameWrap #v11Toast,body.vs-mode #gameWrap #touchStatus,body.vs-mode #gameWrap #countdownDisplay,body.vs-mode #gameWrap #stageStartFab,body.vs-mode #gameWrap #boardMessage{display:none!important}
+body.vs-mode #stageCard .mascot-rail{display:none!important}
+body.vs-mode #gameWrap{min-height:490px;display:block}
+body.vs-mode.board-mode #gameWrap{min-height:0!important;flex:1 1 auto!important}
+body.vs-mode.board-mode #gameWrap:before{display:none}
+body.vs-mode #gameWrap.fever-live{box-shadow:none}
+body.vs-mode #gameWrap .vs-stage{display:flex}
+body.vs-mode #gameWrap .vs-stage .vs-countdown:not([hidden]){display:grid}
+body.vs-mode .stage-foot{display:none}
+.vs-results{width:min(780px,96vw);max-height:88dvh;overflow:auto;border:3px solid #d3e3ff;border-radius:24px;background:linear-gradient(140deg,#142347,#302450);color:white;box-shadow:0 25px 85px #0009;padding:20px}
+.vs-results::backdrop{background:#080f26ce}
+.vs-result-kicker{text-align:center;font-size:13px;color:#bdcafa;font-weight:950;letter-spacing:.08em}
+.vs-winner{font-size:clamp(23px,4vw,44px);text-align:center;font-weight:1000;color:#ffe6a7;margin:6px 0 18px}
+.vs-result-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.vs-result-card{border:2px solid #719dd2;border-radius:14px;padding:15px;background:#0d1b3d}
+.vs-result-card:last-child{border-color:#e58eb8}.vs-result-card h3{font-size:17px;margin:0 0 8px}.vs-result-card strong{font-size:25px;font-variant-numeric:tabular-nums;color:#fff}
+.vs-result-card p{font-size:13px;line-height:1.7;margin:4px 0;color:#d9e4ff}
+.vs-result-actions{display:flex;gap:10px;justify-content:center;margin-top:18px}.vs-result-actions button{min-height:46px;border-radius:10px;padding:8px 18px;font-weight:950;cursor:pointer;border:0;background:#ffe8aa;color:#354778}
+.vs-result-actions button:last-child{background:#dce6ff}
+@media(max-width:680px){.vs-stage{gap:3px;padding:3px 3px 4px}.vs-arena{border-width:1px;border-radius:8px}.vs-middle{width:32px;height:32px;font-size:14px}.vs-player-head{min-height:49px;padding:3px 5px}.vs-player-head img{width:30px;height:35px}.vs-player-tag{font-size:9px}.vs-score{font-size:clamp(15px,3.4vw,25px)}.vs-meta{font-size:8px;gap:4px;flex-direction:column;line-height:1.1}.vs-bars{padding:3px 4px 4px}.vs-hp-label,.vs-fever-label{font-size:9px}.vs-hp-label small{font-size:8px}.vs-pads{flex-basis:68px}.vs-results{padding:12px}.vs-result-card{padding:8px}.vs-result-card strong{font-size:19px}}
+@media(max-height:680px){body.board-mode .vs-player-head{min-height:46px;padding:2px 8px}.vs-player-head img{height:36px;width:36px}body.board-mode .vs-score{font-size:clamp(20px,2.6vw,29px)}body.board-mode .vs-bars{padding:2px 8px 3px}body.board-mode .vs-pads{flex-basis:clamp(55px,13%,90px)}}
+@media(prefers-reduced-motion:reduce){.vs-player-head img{animation:none}}
+
 </style>
 </head>
 <body>
@@ -892,6 +953,24 @@ body.board-mode .fever-hud{top:12px;left:clamp(194px,16vw,254px);width:clamp(142
           <div class="stage-tools"><div class="stage-chips"><span class="chip accent" id="diffChip">NORMAL</span><span class="chip" id="bpmChip">-- BPM</span><span class="chip" id="noteChip">-- NOTES</span></div><button type="button" id="boardToggle" class="stage-toggle">⛶ 白板全螢幕</button></div>
         </div>
         <div class="game-wrap" id="gameWrap">
+<!-- V13 Duel stage: two independent four-lane canvases share the same music clock -->
+<div class="vs-stage" id="vsStage" aria-label="雙人對戰遊戲區" hidden>
+  <div class="vs-arena vs-p1" data-player="0">
+    <div class="vs-player-head"><img id="vsAvatar0" alt="節奏星球經典角色" draggable="false"><div class="vs-head-main"><div class="vs-player-tag">PLAYER 1 · <strong id="vsNameView0">P1</strong></div><div class="vs-score" id="vsScore0">0000000</div><div class="vs-meta"><span>COMBO <b id="vsCombo0">0</b></span><span>成功率 <b id="vsRate0">—</b></span></div></div></div>
+    <div class="vs-bars"><div class="vs-hp-label"><span>HP <b id="vsHP0">100</b></span> <small id="vsPerfect0">Perfect 0/5</small></div><div class="vs-meter hp"><span id="vsHPFill0"></span></div><div class="vs-fever-label">FEVER <strong id="vsFever0">0/10</strong></div><div class="vs-meter fever"><span id="vsFeverFill0"></span></div></div>
+    <div class="vs-playfield"><canvas class="vs-canvas" id="vsCanvas0" aria-label="玩家一四軌音符跑道"></canvas><div class="vs-judgement" id="vsJudge0" aria-live="off"></div><div class="vs-ko" id="vsKO0" hidden>K.O.</div></div>
+    <div class="vs-pads" data-player="0"><button data-player="0" data-lane="0" aria-label="玩家一第1軌，鍵盤A">1<small>A</small></button><button data-player="0" data-lane="1" aria-label="玩家一第2軌，鍵盤S">2<small>S</small></button><button data-player="0" data-lane="2" aria-label="玩家一第3軌，鍵盤D">3<small>D</small></button><button data-player="0" data-lane="3" aria-label="玩家一第4軌，鍵盤F">4<small>F</small></button></div>
+  </div>
+  <div class="vs-middle"><strong>VS</strong></div>
+  <div class="vs-arena vs-p2" data-player="1">
+    <div class="vs-player-head"><img id="vsAvatar1" alt="節奏星球經典角色" draggable="false"><div class="vs-head-main"><div class="vs-player-tag">PLAYER 2 · <strong id="vsNameView1">P2</strong></div><div class="vs-score" id="vsScore1">0000000</div><div class="vs-meta"><span>COMBO <b id="vsCombo1">0</b></span><span>成功率 <b id="vsRate1">—</b></span></div></div></div>
+    <div class="vs-bars"><div class="vs-hp-label"><span>HP <b id="vsHP1">100</b></span> <small id="vsPerfect1">Perfect 0/5</small></div><div class="vs-meter hp"><span id="vsHPFill1"></span></div><div class="vs-fever-label">FEVER <strong id="vsFever1">0/10</strong></div><div class="vs-meter fever"><span id="vsFeverFill1"></span></div></div>
+    <div class="vs-playfield"><canvas class="vs-canvas" id="vsCanvas1" aria-label="玩家二四軌音符跑道"></canvas><div class="vs-judgement" id="vsJudge1" aria-live="off"></div><div class="vs-ko" id="vsKO1" hidden>K.O.</div></div>
+    <div class="vs-pads" data-player="1"><button data-player="1" data-lane="0" aria-label="玩家二第1軌，鍵盤J">1<small>J</small></button><button data-player="1" data-lane="1" aria-label="玩家二第2軌，鍵盤K">2<small>K</small></button><button data-player="1" data-lane="2" aria-label="玩家二第3軌，鍵盤L">3<small>L</small></button><button data-player="1" data-lane="3" aria-label="玩家二第4軌，鍵盤分號">4<small>;</small></button></div>
+  </div>
+  <div class="vs-countdown" id="vsCountdown" hidden>3</div>
+</div>
+
           <div class="progress-track"><span id="songProgress"></span></div>
           <canvas id="game" aria-label="四軌觸控節奏遊戲，支援 Tap 點擊與可選 Hold 長按"></canvas>
           <div class="note-legend" aria-label="音符判定說明"><span id="modeLegend"><b class="legend-dot">●</b> TAP 點擊</span><span>Perfect · Good · Miss</span></div>
@@ -930,6 +1009,11 @@ body.board-mode .fever-hud{top:12px;left:clamp(194px,16vw,254px);width:clamp(142
     <aside class="side" id="sidePanel" data-active-tab="setup"><nav class="side-tabs" id="sideTabs" aria-label="設定選單"><button type="button" data-tab="setup" aria-selected="true">選歌設定</button><button type="button" data-tab="ranks" aria-selected="false">排行榜</button><button type="button" data-tab="missions" aria-selected="false">挑戰／成就</button></nav>
       <section class="panel">
         <h2 class="section-title"><span class="num">01</span> 匯入喜歡的音樂</h2>
+        <section class="vs-picker" aria-label="遊玩模式設定"><div class="vs-picker-label">遊玩模式 · V13 新增</div>
+          <div class="vs-mode-options"><button class="vs-mode-btn" type="button" data-mode="solo" aria-pressed="true">單人遊玩 1P</button><button class="vs-mode-btn" type="button" data-mode="duel" aria-pressed="false">雙人對戰 2P VS</button></div>
+          <div class="vs-player-setup" id="vsNameFields" hidden><label>玩家 1（左側）<input id="vsName1" maxlength="12" value="P1" aria-label="第一位玩家暱稱"></label><label>玩家 2（右側）<input id="vsName2" maxlength="12" value="P2" aria-label="第二位玩家暱稱"></label></div>
+          <p class="vs-help">兩人同一首音樂、左右獨立四軌。白板建議至少支援雙點觸控；鍵盤 P1：A/S/D/F，P2：J/K/L/;。兩人各自 FEVER、HP 與評分，歌曲最長 2 分鐘。</p>
+        </section>
         <label class="drop" id="dropzone"><input type="file" id="audioInput" accept=".mp3,audio/mpeg,audio/mp3,audio/*" aria-label="選擇 MP3 音樂檔案" /><span class="drop-icon">♫</span><strong>點選或拖曳 MP3 到這裡</strong><small>在裝置內完成分析，檔案不會上傳</small></label>
         <div class="song-data" id="songData"><strong id="songName">—</strong><small id="songStats">—</small></div>
         <div class="clip-hint" id="clipInfo" role="status" aria-live="polite">自動限時：每首歌曲最多遊玩 <b>2:00</b>，只在本機擷取，不會改動原始音檔。</div>
@@ -955,13 +1039,13 @@ body.board-mode .fever-hud{top:12px;left:clamp(194px,16vw,254px);width:clamp(142
       </section>
       <section class="panel rank-panel" id="rankings">
         <h2 class="section-title"><span class="num">03</span> 本機排行榜 <button type="button" class="v11-shortcut" id="v11MissionShortcut">挑戰／成就</button></h2><p class="rank-qualification">通關且成功率達 80% 才能登榜</p>
-        <div class="rank-tabs"><button class="rank-tab on" id="rankCurrent" aria-pressed="true">這首歌 · 此難度</button><button class="rank-tab" id="rankAll" aria-pressed="false">本機全部紀錄</button></div>
+        <div class="rank-tabs"><button class="rank-tab on" id="rankCurrent" aria-pressed="true">單人 · 本曲</button><button class="rank-tab" id="rankAll" aria-pressed="false">單人 · 全部</button><button class="rank-tab" id="rankVersus" aria-pressed="false">雙人 · 對戰榜</button></div>
         <div class="rank-list" id="rankList"><div class="rank-empty">尚無遊玩紀錄<br/>通關且成功率 80% 以上才會記錄。</div></div>
         <div class="rank-page-controls" aria-label="排行榜分頁"><button type="button" id="rankPrev">◀ 上頁</button><output id="rankPage">1 / 1</output><button type="button" id="rankNext">下頁 ▶</button></div>
         <button class="tiny-btn" id="clearRank">清除本機排行榜紀錄</button>
       </section>
     <section class="panel v11-missions-panel" id="v11MissionsPanel">
-<div class="v11-missions-nav"><button type="button" id="v11BackSetup">← 返回選歌</button><span>V12.1 ARCADE CHALLENGE</span></div>
+<div class="v11-missions-nav"><button type="button" id="v11BackSetup">← 返回選歌</button><span>V13 ARCADE CHALLENGE</span></div>
 <h2 class="section-title"><span class="num">04</span> 挑戰與成就 <small id="v11BadgeCount">0 / 8</small></h2>
 <div class="v11-setting-row"><label for="v11Challenge">本曲挑戰</label><select id="v11Challenge">
 <option value="none">自由演奏</option><option value="perfect10">Perfect 10 連</option><option value="accuracy80">成功率 80%</option><option value="fullcombo">Full Combo</option><option value="survive">無傷通關</option><option value="hold5">Hold 成功 5 次</option></select></div>
@@ -972,8 +1056,12 @@ body.board-mode .fever-hud{top:12px;left:clamp(194px,16vw,254px);width:clamp(142
 </section>
     </aside>
   </main>
-  <footer class="footer"><span>RHYTHM POP V12.1 / 2:00 自動裁切 · FEVER ×2 · HP 0 即結束 · 80% 登榜</span><span>歌曲自動擷取至最多 2:00；原始音檔不變。排行榜只保存在本機。</span></footer>
+  <footer class="footer"><span>RHYTHM POP V13 / 單人＋雙人對戰 · 2:00 自動裁切 · FEVER ×2 · HP 0 即結束 · 80% 登榜</span><span>歌曲自動擷取至最多 2:00；原始音檔不變。排行榜只保存在本機。</span></footer>
 </div>
+
+<dialog id="vsResultDialog" class="vs-results" aria-labelledby="vsWinner"><div id="vsResultKicker" class="vs-result-kicker">2P VS · 雙人對戰結算</div><div id="vsWinner" class="vs-winner">勝利者</div>
+<div class="vs-result-grid"><div class="vs-result-card"><h3 id="vsResultName0">P1</h3><strong id="vsResultScore0">0</strong><p id="vsResultStats0"></p><p id="vsResultHits0"></p><p id="vsResultRank0"></p></div><div class="vs-result-card"><h3 id="vsResultName1">P2</h3><strong id="vsResultScore1">0</strong><p id="vsResultStats1"></p><p id="vsResultHits1"></p><p id="vsResultRank1"></p></div></div>
+<div class="vs-result-actions"><button type="button" id="vsResultRetry">↺ 再比一次</button><button type="button" id="vsResultClose">關閉</button></div></dialog>
 
 <dialog class="v11-touch-dialog" id="v11TouchDialog" aria-labelledby="v11TouchTitle"><div class="v11-diag-body">
 <h2 id="v11TouchTitle">電子白板觸控診斷</h2><p>依序點四軌，再同時用兩隻手指按住不同軌道。顯示的是瀏覽器實際收到的 Pointer 事件。</p>
@@ -1195,7 +1283,7 @@ self.onmessage = e => {
   const MAX_GAME_SECONDS=120;
   let audioCtx=null,audioBuffer=null,source=null,analysis=null,chart=[],fileInfo=null;
   window.__rhythmAudioCtx=()=>audioCtx;window.__v11LastMissSound=-1000;
-  let state='idle',difficulty='normal',noteMode='tap',speed=6,rankMode='current',calibrationMs=0,rankPage=0;
+  let state='idle',difficulty='normal',noteMode='tap',speed=6,rankMode='current',calibrationMs=0,rankPage=0,gameMode='solo';
   let startAt=0,startOffset=0,pausedOffset=0,lastFrame=performance.now(),gameStarted=false;
   let rawScore=0,baseScore=0,feverBonus=0,combo=0,maxCombo=0,counts={perfect:0,good:0,miss:0},missIndex=0;
   const fever=window.RhythmFeverV12.create();
@@ -1273,7 +1361,7 @@ self.onmessage = e => {
     $('playButton').disabled=!analysis || state==='analyzing' || state==='playing';
     $('pauseButton').disabled=!['playing','paused'].includes(state);
     $('restartButton').disabled=!analysis || state==='analyzing';
-    $('playButton').textContent=state==='paused'?'▶ 繼續遊戲':'▶ 開始遊戲';
+    $('playButton').textContent=state==='paused'?'▶ 繼續遊戲':gameMode==='duel'?'▶ 開始雙人對戰':'▶ 開始遊戲';
     $('pauseButton').textContent=state==='paused'?'▶':'Ⅱ';
     $('boardPause').textContent=state==='paused'?'▶ 繼續':'⏸ 暫停';
     $('boardPause').disabled=!['playing','paused'].includes(state);
@@ -1281,13 +1369,13 @@ self.onmessage = e => {
     if(stageFab){
       stageFab.hidden=state==='playing'||state==='results';
       stageFab.disabled=!analysis || state==='analyzing' || state==='playing';
-      stageFab.textContent=!analysis?'♫ 先匯入歌曲':(state==='paused'?'▶ 繼續遊戲':'▶ 開始遊戲');
+      stageFab.textContent=!analysis?'♫ 先匯入歌曲':(state==='paused'?'▶ 繼續遊戲':gameMode==='duel'?'▶ 開始雙人對戰':'▶ 開始遊戲');
     }
     for(const b of document.querySelectorAll('.diff')) b.disabled=state==='playing'||state==='paused'||state==='analyzing';
     $('noteModeSelect').disabled=['playing','paused','analyzing'].includes(state);
   }
   function stopSource(){if(source){source.onended=null;try{source.stop(0);}catch(e){}try{source.disconnect();}catch(e){}source=null;}}
-  function stopGame(){stopSource();clearInput();$('countdownDisplay').hidden=true;}
+  function stopGame(){stopSource();clearInput();versus.clearInputs();$('countdownDisplay').hidden=true;}
   // Use a real, memory-resident audio crop so playback, worker analysis, chart,
   // progress and finish conditions all share precisely the same <=120s timeline.
   // The uploaded MP3 is never overwritten or exported.
@@ -1320,7 +1408,7 @@ self.onmessage = e => {
     $('nowTitle').textContent=file.name.replace(/\.[^.]+$/,'');$('nowSub').textContent='正在讀取音樂…';
     $('songData').classList.remove('show');$('bpmChip').textContent='-- BPM';$('noteChip').textContent='-- NOTES';
     $('clipInfo').textContent='正在確認歌曲長度並準備最多 2:00 的遊玩片段…';
-    resetCounters();updateHud(0);setMessage('正在解析音訊','讀取歌曲並解碼為音訊資料…','♫',8);refreshButtons();
+    resetCounters();versus.resetUI();updateHud(0);setMessage('正在解析音訊','讀取歌曲並解碼為音訊資料…','♫',8);refreshButtons();
     try {
       if(!audioCtx)audioCtx=new (window.AudioContext||window.webkitAudioContext)();
       if(audioCtx.state==='suspended')await audioCtx.resume();
@@ -1485,11 +1573,11 @@ self.onmessage = e => {
     $('difficultySummary').textContent=diffNames[difficulty];$('difficultyHint').textContent=diffHints[difficulty];
     $('diffChip').textContent=diffEnglish[difficulty];
     if(analysis){chart=makeChart();$('bpmChip').textContent=`${analysis.bpm} BPM`;$('noteChip').textContent=`${chart.length} NOTES`;}
-    resetCounters();updateHud(0);refreshButtons();refreshRanking();refreshBest();
+    resetCounters();versus.resetUI();updateHud(0);refreshButtons();refreshRanking();refreshBest();
   }
   function updateNoteLabels(){
     const hold=noteMode==='hold';
-    $('modeHero').textContent=hold?'TAP＋HOLD':'TAP ONLY';
+    $('modeHero').textContent=gameMode==='duel'?'2P VS · 四軌 × 2':hold?'TAP＋HOLD':'TAP ONLY';
     $('modeLegend').textContent=hold?'● TAP 點擊　▰ HOLD 長按':'● TAP 點擊';
     document.querySelectorAll('#keyButtons .key small').forEach(el=>el.textContent=hold?'TAP / HOLD':'TAP');
     const rail=$('.mascot-rail');if(rail){const label=rail.querySelector('.rail-steps span:first-child b');if(label)label.textContent=hold?'● TAP＋HOLD':'● TAP ONLY';}
@@ -1498,7 +1586,7 @@ self.onmessage = e => {
     if(!['tap','hold'].includes(next)||['playing','paused','analyzing'].includes(state))return;
     noteMode=next;$('noteModeSelect').value=noteMode;saveSettings();updateNoteLabels();
     if(analysis){chart=makeChart();$('noteChip').textContent=`${chart.length} NOTES`;}
-    resetCounters();updateHud(0);refreshRanking();refreshBest();refreshButtons();
+    resetCounters();versus.resetUI();updateHud(0);refreshRanking();refreshBest();refreshButtons();
     showNotice(noteMode==='hold'?'Tap＋Hold 模式：黃色長條到達判定線時按住，直到尾端通過。':'純 Tap 模式：只要點擊，不需長按。');
   }
   function renderFever(time=0){
@@ -1548,6 +1636,7 @@ self.onmessage = e => {
     source.onended=()=>{};
   }
   async function playGame(resume=false){
+    if(gameMode==='duel')return versus.play(resume);
     if(calibration||!analysis||!audioBuffer)return;
     if(state==='playing')return;
     try{if(audioCtx.state==='suspended')await audioCtx.resume();}catch(err){showNotice(`音訊播放失敗：${err.message}`);return;}
@@ -1558,12 +1647,13 @@ self.onmessage = e => {
     state='playing';gameStarted=true;clearMessage();refreshButtons();$('nowSub').textContent=`${fmtTime(audioBuffer.duration)} · ${diffNames[difficulty]} · 遊戲進行中`; 
   }
   function pauseGame(){
+    if(gameMode==='duel')return versus.pause();
     if(state==='playing'){
       pausedOffset=Math.max(0,Math.min(audioBuffer.duration,getTime()));
       stopSource();clearInput();state='paused';setMessage('遊戲暫停','按右側的 ▶ 按鈕繼續，或按空白鍵繼續。','Ⅱ');refreshButtons();
     }else if(state==='paused'){playGame(true);}
   }
-  function replay(){if(!analysis)return;stopGame();state='ready';playGame(false);}
+  function replay(){if(gameMode==='duel')return versus.replay();if(!analysis)return;stopGame();state='ready';playGame(false);}
   const touchStatus=$('touchStatus');
   let touchTimer=null,missFeedbackAt=0;
   function showTouchStatus(message, ms=440){
@@ -1714,15 +1804,15 @@ self.onmessage = e => {
   }
   function refreshRanking(){
     const list=$('rankList');list.replaceChildren();
-    let items=rankMode==='current'?(fileInfo?rankCache.filter(x=>x.id===fileInfo.id&&x.diff===difficulty&&(x.noteMode||'tap')===noteMode):[]):rankCache.slice();
+    let items=rankMode==='versus'?versus.readRanking():(rankMode==='current'?(fileInfo?rankCache.filter(x=>x.id===fileInfo.id&&x.diff===difficulty&&(x.noteMode||'tap')===noteMode):[]):rankCache.slice());
     items=items.filter(e=>Number.isFinite(+e.successRate) && +e.successRate>=RANK_MIN_SUCCESS);
     items.sort((a,b)=>b.score-a.score||b.accuracy-a.accuracy);const pages=Math.max(1,Math.ceil(items.length/6));rankPage=Math.max(0,Math.min(rankPage,pages-1));$('rankPage').textContent=`${rankPage+1} / ${pages}`;$('rankPrev').disabled=rankPage<=0;$('rankNext').disabled=rankPage>=pages-1;items=items.slice(rankPage*6,rankPage*6+6);
-    if(!items.length){const e=document.createElement('div');e.className='rank-empty';e.textContent=rankMode==='current'?'此歌曲尚無達標紀錄，成功率 ≥80% 才能登榜。':'尚無達標紀錄，完成歌曲且成功率 ≥80% 才能登榜。';list.append(e);return;}
+    if(!items.length){const e=document.createElement('div');e.className='rank-empty';e.textContent=rankMode==='versus'?'尚無雙人對戰的達標紀錄（完整通關且成功率 ≥80%）。':rankMode==='current'?'此歌曲尚無達標紀錄，成功率 ≥80% 才能登榜。':'尚無達標紀錄，完成歌曲且成功率 ≥80% 才能登榜。';list.append(e);return;}
     for(let i=0;i<items.length;i++){
       const e=items[i],row=document.createElement('div');row.className='rank-item';
       const order=document.createElement('div');order.className='rank-order';order.textContent=String(i+1+rankPage*6).padStart(2,'0');
       const body=document.createElement('div');body.className='rank-body';const player=document.createElement('div');player.className='rank-player';player.textContent=e.player;
-      const track=document.createElement('div');track.className='rank-track';      track.textContent=`${e.song} · ${diffNames[e.diff]||e.diff} · ${(e.noteMode||'tap')==='hold'?'Tap+Hold':'Tap'}${e.fullCombo?' · FC':''}`;
+      const track=document.createElement('div');track.className='rank-track';      track.textContent=`${e.song} · ${diffNames[e.diff]||e.diff} · ${(e.noteMode||'tap')==='hold'?'Tap+Hold':'Tap'}${e.versus?' · VS':''}${e.fullCombo?' · FC':''}`;
       body.append(player,track);const col=document.createElement('div');const score=document.createElement('div');score.className='rank-score';score.textContent=fmtScore(e.score);
       const acc=document.createElement('div');acc.className='rank-acc';acc.textContent=`成功率 ${Number(e.successRate).toFixed(2)}%`;col.append(score,acc);
       row.append(order,body,col);list.append(row);
@@ -1783,6 +1873,7 @@ self.onmessage = e => {
     danceLabel.textContent=playing?'DANCE LIVE · '+Math.round(analysis.bpm)+' BPM':state==='paused'?'DANCE PAUSE':'DANCE LIVE';
   }
   function paintFrame(now){
+    if(gameMode==='duel'){if(now-frameRenderedAt>=1000/fpsTarget-1.2){frameRenderedAt=now;versus.frame(now);}requestAnimationFrame(paintFrame);return;}
     const w=viewport.w,h=viewport.h;
     if(w<=0||h<=0){requestAnimationFrame(paintFrame);return;}
     // Limit rendering work on slower classroom PCs without affecting audio timing.
@@ -2027,11 +2118,13 @@ self.onmessage = e => {
     const focus=document.activeElement;
     if(focus&&(focus.tagName==='INPUT'||focus.tagName==='TEXTAREA'||focus.tagName==='SELECT'))return;
     if(e.code==='Space'){e.preventDefault();if(!e.repeat)pauseGame();return;}
+    if(gameMode==='duel')return;
     if(Object.hasOwn(keyMap,e.code)){
       e.preventDefault();if(!e.repeat){const lane=keyMap[e.code];keyboardHeld.add(lane);updateHeld();pulseLane(lane);if(state==='playing')startGesture('key'+lane,lane,0,0);else showTouchStatus('L'+(lane+1)+' OK',300);}
     }
   });
   window.addEventListener('keyup',e=>{
+    if(gameMode==='duel')return;
     if(Object.hasOwn(keyMap,e.code)){e.preventDefault();const lane=keyMap[e.code];endGesture('key'+lane);keyboardHeld.delete(lane);updateHeld();}
   });
   window.addEventListener('blur',()=>{clearInput();if(state==='playing')pauseGame();});
@@ -2155,7 +2248,7 @@ self.onmessage = e => {
     chart=makeChart();
     $('noteChip').textContent=`${chart.length} NOTES`;
     $('bpmChip').textContent=`${analysis.bpm} BPM`;
-    resetCounters();updateHud(0);refreshBest();
+    resetCounters();versus.resetUI();updateHud(0);refreshBest();
   }
   function applyBpmManual(value){
     if(!analysis)return;
@@ -2198,13 +2291,216 @@ self.onmessage = e => {
   $('stageStartFab').addEventListener('click',()=>{if(!analysis)return;enterBoardMode(true);playGame(state==='paused');});
   $('pauseButton').addEventListener('click',pauseGame);$('restartButton').addEventListener('click',replay);
   $('playerName').addEventListener('change',()=>{try{localStorage.setItem(PLAYER_KEY,$('playerName').value.trim().slice(0,12)||'PLAYER');}catch(e){}});
-  function setRankMode(mode){rankMode=mode;rankPage=0;$('rankCurrent').classList.toggle('on',mode==='current');$('rankAll').classList.toggle('on',mode==='all');$('rankCurrent').setAttribute('aria-pressed',String(mode==='current'));$('rankAll').setAttribute('aria-pressed',String(mode==='all'));refreshRanking();}
+  function setRankMode(mode){rankMode=mode;rankPage=0;for(const [id,m] of [['rankCurrent','current'],['rankAll','all'],['rankVersus','versus']]){$(id).classList.toggle('on',mode===m);$(id).setAttribute('aria-pressed',String(mode===m));}refreshRanking();}
   $('rankPrev').addEventListener('click',()=>{rankPage--;refreshRanking()});$('rankNext').addEventListener('click',()=>{rankPage++;refreshRanking()});
-  $('rankCurrent').addEventListener('click',()=>setRankMode('current'));$('rankAll').addEventListener('click',()=>setRankMode('all'));
-  $('clearRank').addEventListener('click',()=>{if(window.confirm('確定要清除這台裝置上的所有排行榜紀錄嗎？此操作無法復原。')){rankCache=[];saveRank();refreshRanking();}});
+  $('rankCurrent').addEventListener('click',()=>setRankMode('current'));$('rankAll').addEventListener('click',()=>setRankMode('all'));$('rankVersus').addEventListener('click',()=>setRankMode('versus'));
+  $('clearRank').addEventListener('click',()=>{if(window.confirm(rankMode==='versus'?'確定清除雙人對戰排行榜紀錄？':'確定清除單人排行榜紀錄？此操作無法復原。')){if(rankMode==='versus'){versus.eraseRanking();}else{rankCache=[];saveRank();}refreshRanking();}});
   $('resultClose').addEventListener('click',()=>{$('resultDialog').close();});
   $('resultRetry').addEventListener('click',()=>{$('resultDialog').close();replay();});
   $('resultDialog').addEventListener('close',()=>{if(state==='results')refreshButtons();});
+  // V13 DUEL controller: one shared audio source, two independent four-lane game states.
+  // Existing solo timing, V11 achievements and solo ranking remain unchanged.
+  const versus=(()=>{
+    const root=$('vsStage'),DKEY='rhythm-pop-duel-ranking-v13',NKEY='rhythm-pop-duel-names-v13';
+    const canvases=[$('vsCanvas0'),$('vsCanvas1')],ctxs=canvases.map(c=>c.getContext('2d'));
+    const colors=['#55e7da','#91a9ff','#ffc775','#ff759e'];
+    let players=[],presses=new Map(),finishing=false,finished=false,finalDetails=null;
+    let sizes=[{w:0,h:0,dpr:1},{w:0,h:0,dpr:1}],flashUntil=[0,0];
+    let names=['P1','P2'];
+    try{const stored=JSON.parse(localStorage.getItem(NKEY)||'null');if(Array.isArray(stored)) names=stored.map((v,i)=>String(v||('P'+(i+1))).slice(0,12));}catch(_e){}
+    for(let i=0;i<2;i++){$('vsName'+(i+1)).value=names[i]||('P'+(i+1));$('vsNameView'+i).textContent=names[i];$('vsAvatar'+i).src=$('danceImage').src;}
+    const blank=i=>({id:i,name:names[i],notes:[],missIndex:0,base:0,raw:0,bonus:0,combo:0,maxCombo:0,hp:MAX_HEALTH,chain:0,
+      counts:{perfect:0,good:0,miss:0},fever:window.RhythmFeverV12.create(),ko:false,fx:[]});
+    const number=n=>Math.round(n).toLocaleString('en-US');
+    const score=p=>Math.round(p.raw/Math.max(1,p.notes.length*1000)*1000000);
+    const success=p=>{const n=p.counts.perfect+p.counts.good+p.counts.miss;return n?(p.counts.perfect+p.counts.good)/n*100:0;};
+    const accuracy=p=>p.base/Math.max(1,p.notes.length*1000)*100;
+    function storeNames(){for(let i=0;i<2;i++){names[i]=$('vsName'+(i+1)).value.trim().slice(0,12)||'P'+(i+1);$('vsNameView'+i).textContent=names[i];}
+      try{localStorage.setItem(NKEY,JSON.stringify(names));}catch(_e){}
+    }
+    function readRanking(){try{const a=JSON.parse(localStorage.getItem(DKEY)||'[]');return Array.isArray(a)?a.filter(x=>x&&Number.isFinite(x.score)&&x.successRate>=80):[];}catch(_e){return [];}}
+    function saveRanking(data){try{localStorage.setItem(DKEY,JSON.stringify(data.slice(0,250)));}catch(_e){showNotice('雙人排行無法寫入本機儲存空間。');}}
+    function eraseRanking(){try{localStorage.removeItem(DKEY);}catch(_e){}}
+    function resetUI(){finished=false;finalDetails=null;players=[blank(0),blank(1)];clearInputs();
+      for(let i=0;i<2;i++){$('vsKO'+i).hidden=true;$('vsJudge'+i).classList.remove('show');$('vsJudge'+i).textContent='';}
+      $('vsCountdown').hidden=true;update(0);}
+    function setMode(next){if(!['solo','duel'].includes(next)||['playing','paused','analyzing'].includes(state))return;
+      if(gameMode===next)return;
+      gameMode=next;resetUI();
+      root.hidden=next!=='duel';document.body.classList.toggle('vs-mode',next==='duel');
+      for(const b of document.querySelectorAll('.vs-mode-btn'))b.setAttribute('aria-pressed',String(b.dataset.mode===next));
+      $('vsNameFields').hidden=next!=='duel';
+      $('modeHero').textContent=next==='duel'?'2P VS · 四軌 × 2':noteMode==='hold'?'TAP＋HOLD':'TAP ONLY';
+      $('playButton').textContent=next==='duel'?'▶ 開始雙人對戰':'▶ 開始遊戲';
+      $('stageStartFab').textContent=next==='duel'?'▶ 開始雙人對戰':$('stageStartFab').textContent;
+      if($('resultDialog').open)$('resultDialog').close();if($('vsResultDialog').open)$('vsResultDialog').close();
+      if(state==='results')state='ready';
+      showNotice(next==='duel'?'雙人同步：同一首歌曲，左右各四軌。鍵盤 P1 A/S/D/F；P2 J/K/L/;，建議白板至少雙點觸控。':'已切回 V12.1 單人模式，原有成就與排行榜保留。');
+      refreshButtons();requestAnimationFrame(()=>resize());
+    }
+    function clearInputs(){for(const s of presses.values()){if(s.note&&!s.note.judged)s.note.active=false;}
+      presses.clear();document.querySelectorAll('.vs-pads button').forEach(b=>b.classList.remove('active'));}
+    function resize(){if(gameMode!=='duel')return;for(let i=0;i<2;i++){
+      const rect=canvases[i].getBoundingClientRect();if(rect.width<=0||rect.height<=0)continue;
+      const dpr=Math.min(window.devicePixelRatio||1,fpsTarget===30?1:2);
+      if(Math.abs(sizes[i].w-rect.width)<.4&&Math.abs(sizes[i].h-rect.height)<.4&&sizes[i].dpr===dpr)continue;
+      sizes[i]={w:rect.width,h:rect.height,dpr};canvases[i].width=Math.max(1,Math.round(rect.width*dpr));canvases[i].height=Math.max(1,Math.round(rect.height*dpr));ctxs[i].setTransform(dpr,0,0,dpr,0,0);
+    }}
+    function update(t){for(let i=0;i<2;i++){const p=players[i];if(!p)continue;const f=p.fever.tick(t);
+      $('vsNameView'+i).textContent=names[i];$('vsScore'+i).textContent=fmtScore(score(p));$('vsCombo'+i).textContent=p.combo;
+      $('vsRate'+i).textContent=(p.counts.perfect+p.counts.good+p.counts.miss)?success(p).toFixed(1)+'%':'—';
+      $('vsHP'+i).textContent=p.hp;$('vsHPFill'+i).style.width=p.hp+'%';$('vsPerfect'+i).textContent='Perfect '+p.chain+'/5';
+      $('vsFever'+i).textContent=f.active?'×2 · '+f.remaining.toFixed(1)+'s':f.streak+'/10';
+      $('vsFeverFill'+i).style.width=(f.active?100*f.remaining/f.duration:100*f.streak/f.required)+'%';
+    }
+      if(fileInfo)$('songProgress').style.width=(Math.max(0,Math.min(1,t/fileInfo.duration))*100).toFixed(2)+'%';
+    }
+    async function play(resume=false){if(calibration||!analysis||!audioBuffer)return;
+      if(state==='playing')return;
+      try{if(audioCtx.state==='suspended')await audioCtx.resume();}catch(e){showNotice('音訊無法播放：'+e.message);return;}
+      if(resume&&state!=='paused')return;
+      if(!resume){storeNames();const template=makeChart();chart=template;resetUI();players.forEach(p=>{p.notes=template.map(n=>({...n,judged:false,active:false,quality:''}));});pausedOffset=0;}
+      try{createSource(resume?pausedOffset:0,resume?1.1:2.2);}catch(e){showNotice('音訊開始失敗：'+e.message);return;}
+      state='playing';gameStarted=true;finished=false;clearMessage();refreshButtons();root.hidden=false;
+      $('nowSub').textContent=`雙人對戰 · ${fmtTime(fileInfo.duration)} · ${diffNames[difficulty]} · ${noteMode==='hold'?'Tap＋Hold':'Tap'}`;
+      resize();update(0);
+    }
+    function pause(){if(state==='playing'){
+        pausedOffset=Math.max(0,Math.min(audioBuffer.duration,getTime()));stopSource();clearInputs();state='paused';
+        $('vsCountdown').hidden=true;refreshButtons();showNotice('雙人對戰已暫停，按空白鍵或 ▶ 繼續。');
+      }else if(state==='paused')play(true);
+    }
+    function replay(){if(!analysis)return;stopSource();clearInputs();state='ready';play(false);}
+    function judgement(p,q,n){if(n.judged||p.ko)return;
+      n.judged=true;n.active=false;n.quality=q;p.counts[q]++;
+      const wt=q==='perfect'?1000:q==='good'?650:0;
+      const f=p.fever.judge(q,Math.max(0,getTime()-calibrationMs/1000));p.base+=wt;p.raw+=wt*(f.multiplier);p.bonus+=wt*(f.multiplier-1);
+      if(q==='miss'){p.combo=0;p.chain=0;p.hp=Math.max(0,p.hp-MISS_DAMAGE);}else{
+        p.combo++;p.maxCombo=Math.max(p.maxCombo,p.combo);
+        if(q==='perfect'){p.chain++;if(p.chain>=PERFECTS_PER_HEAL){p.chain=0;p.hp=Math.min(MAX_HEALTH,p.hp+HEAL_AMOUNT);}}
+        else p.chain=0;
+      }
+      p.fx.push({lane:n.lane,q,at:performance.now()});if(p.fx.length>12)p.fx.shift();
+      const jud=$('vsJudge'+p.id);jud.textContent=f.started?'FEVER ×2！':q.toUpperCase();jud.style.color=f.started?'#ffdd96':q==='perfect'?'#78ffe5':q==='good'?'#ffe4a0':'#ff8bb1';jud.classList.add('show');flashUntil[p.id]=performance.now()+430;
+      if(q!=='miss')window.v11Sound?.(q,audioCtx);
+      if(p.hp<=0){p.ko=true;$('vsKO'+p.id).hidden=false;for(const s of presses.values()){if(s.player===p.id&&s.note)s.note.active=false;}
+        /* Let the other player finish the same judgement frame before resolving KO. */}
+    }
+    function noteNear(p,lane,t){let best=null,bestDiff=MAX_JUDGE+.001;
+      for(let i=p.missIndex;i<p.notes.length;i++){
+        const n=p.notes[i];if(n.time>t+MAX_JUDGE)break;
+        if(n.lane===lane&&!n.judged&&!n.active){const delta=Math.abs(n.time-t);if(delta<=MAX_JUDGE&&delta<bestDiff){best=n;bestDiff=delta;}}
+      }return best;
+    }
+    function press(id,player,lane){if(presses.has(id))return;
+      const button=document.querySelector('.vs-pads button[data-player="'+player+'"][data-lane="'+lane+'"]');if(button)button.classList.add('active');
+      const session={player,lane,note:null,q:''};presses.set(id,session);
+      if(state!=='playing'||audioCtx.currentTime<startAt)return;
+      const t=getTime()-calibrationMs/1000,p=players[player];if(t<-.12||p.ko)return;
+      const n=noteNear(p,lane,t);if(!n)return;
+      const diff=Math.abs(t-n.time),q=diff<=.115?'perfect':'good';n.hitError=n.time-t;
+      if(n.type==='hold') {n.active=true;session.note=n;session.q=q;return;}
+      judgement(p,q,n);update(t);
+    }
+    function release(id){const session=presses.get(id);if(!session)return;presses.delete(id);
+      const {player,lane,note,q}=session;const b=document.querySelector('.vs-pads button[data-player="'+player+'"][data-lane="'+lane+'"]');if(b)b.classList.remove('active');
+      if(note&&!note.judged){note.active=false;const t=getTime()-calibrationMs/1000;judgement(players[player],t>=note.end-.10?q:'miss',note);update(t);}
+    }
+    function resolve(t){for(const [id,s] of [...presses]){if(!s.note||s.note.judged)continue;
+      if(t>=s.note.end){s.note.active=false;judgement(players[s.player],s.q,s.note);s.note=null;}
+    }}
+    function misses(t){for(const p of players){if(p.ko)continue;
+      while(p.missIndex<p.notes.length && p.notes[p.missIndex].time<t-MAX_JUDGE){const n=p.notes[p.missIndex++];if(!n.judged&&!n.active)judgement(p,'miss',n);if(finishing||state!=='playing')return;}
+    }}
+    function finish(reason='complete'){
+      if(finishing||finished||state!=='playing')return;finishing=true;
+      const completed=reason==='complete';
+      if(completed){for(const p of players){if(!p.ko)for(const n of p.notes){if(!n.judged)judgement(p,'miss',n);}}}
+      finished=true;stopSource();clearInputs();$('vsCountdown').hidden=true;state='results';
+      let winner=-1;
+      if(players[0].ko!==players[1].ko)winner=players[0].ko?1:0;
+      else if(score(players[0])!==score(players[1]))winner=score(players[0])>score(players[1])?0:1;
+      else if(Math.abs(accuracy(players[0])-accuracy(players[1]))>.0001)winner=accuracy(players[0])>accuracy(players[1])?0:1;
+      else if(players[0].hp!==players[1].hp)winner=players[0].hp>players[1].hp?0:1;
+      const rank=readRanking();
+      if(completed){for(const p of players){if(p.ko||success(p)<RANK_MIN_SUCCESS)continue;
+        rank.push({id:fileInfo.id,song:fileInfo.name,diff:difficulty,noteMode,player:p.name,score:score(p),accuracy:+accuracy(p).toFixed(2),successRate:+success(p).toFixed(2),maxCombo:p.maxCombo,date:new Date().toISOString(),versus:true});}}
+      if(completed)saveRanking(rank.sort((a,b)=>b.score-a.score||b.successRate-a.successRate));
+      $('vsWinner').textContent=winner<0?'平手！':`勝利者：${players[winner].name}`;
+      $('vsResultKicker').textContent=completed?'2P VS · 雙人同步結算':'2P VS · HP 歸零，提前結束';
+      for(let i=0;i<2;i++){const p=players[i];
+        $('vsResultName'+i).textContent=p.name+(p.ko?' · K.O.':'');$('vsResultScore'+i).textContent=number(score(p));
+        $('vsResultStats'+i).textContent=`成功率 ${success(p).toFixed(1)}% · 最大 COMBO ${p.maxCombo} · HP ${p.hp}`;
+        $('vsResultHits'+i).textContent=`Perfect ${p.counts.perfect}／Good ${p.counts.good}／Miss ${p.counts.miss} · FEVER ${p.fever.snapshot(Math.max(0,getTime())).activations} 次`;
+        $('vsResultRank'+i).textContent=completed&&!p.ko&&success(p)>=80?'已達雙人排行榜資格':!completed?'提前結束，不寫入排行榜':'未達 80% 或 HP 歸零，不登榜';
+      }
+      finalDetails={reason,winner,players:players.map(p=>({name:p.name,score:score(p),accuracy:accuracy(p),success:success(p),hp:p.hp,counts:{...p.counts},fever:p.fever.snapshot(Math.max(0,getTime())).activations}))};
+      $('nowSub').textContent=winner<0?'雙人對戰平手':`雙人對戰結束 · ${players[winner].name} 獲勝`;
+      refreshButtons();refreshRanking();update(Math.max(0,getTime()));exitBoardMode();
+      const dlg=$('vsResultDialog');if(!dlg.open)dlg.showModal();finishing=false;
+    }
+    function paintPlayer(index,now,t){const p=players[index],g=ctxs[index],{w,h}=sizes[index];if(!g||w<=0||h<=0)return;
+      const top=0,hitY=h-45,laneWidth=w/4,pxSec=Math.max(130,Math.min(470,h*speed/11));
+      const travel=(hitY+45)/pxSec;
+      const bg=g.createLinearGradient(0,0,0,h);bg.addColorStop(0,index===0?'#081c3b':'#2b1330');bg.addColorStop(1,'#0d0d2a');g.fillStyle=bg;g.fillRect(0,0,w,h);
+      for(let l=0;l<4;l++){const x=l*laneWidth;
+        g.fillStyle=l%2===0?'#ffffff07':'#ffffff0d';g.fillRect(x,0,laneWidth,h);
+        if(l>0){g.strokeStyle='#a9bdff45';g.beginPath();g.moveTo(x,0);g.lineTo(x,h);g.stroke();}
+        if([...presses.values()].some(s=>s.player===index&&s.lane===l)) {g.fillStyle=colors[l]+'42';g.fillRect(x,0,laneWidth,h);}
+      }
+      g.save();g.shadowBlur=15;g.shadowColor='#6dfffb';g.fillStyle='#8bfff5';g.fillRect(0,hitY-3,w,5);g.restore();
+      if(state==='playing'||state==='paused')for(const n of p.notes){if(n.judged)continue;if(n.time>t+travel+.1)break;
+        const y=hitY-(n.time-t)*pxSec;if(n.type!=='hold'&&(y<-30||y>h+20))continue;
+        if(n.type==='hold'&&n.end<t-.2)continue;
+        const x=n.lane*laneWidth+laneWidth*.10,ww=laneWidth*.80;
+        if(n.type==='hold'){const endY=hitY-(n.end-t)*pxSec;const ty=Math.max(0,Math.min(n.active?hitY:y,endY));const by=Math.min(h,Math.max(n.active?hitY:y,endY));
+          if(by>ty){g.fillStyle=n.active?'#ffe69adc':'#f2b55c99';g.fillRect(x+ww*.22,ty,ww*.56,by-ty);}
+        }
+        const yy=n.active?hitY:y;g.save();g.shadowColor=n.type==='hold'?'#ffdc80':colors[n.lane];g.shadowBlur=fxMode==='low'?0:15;
+        g.fillStyle=n.type==='hold'?'#ffe1a1':colors[n.lane];roundRect(g,x,yy-10,ww,20,7);g.fill();g.restore();
+      }
+      for(const fx of p.fx){const a=(now-fx.at)/420;if(a>=1||a<0)continue;g.save();g.globalAlpha=1-a;g.strokeStyle=fx.q==='perfect'?'#7effe3':fx.q==='good'?'#ffdf8e':'#ff92ac';g.lineWidth=3*(1-a);
+        g.beginPath();g.arc((fx.lane+.5)*laneWidth,hitY,17+a*40,0,Math.PI*2);g.stroke();g.restore();}
+      p.fx=p.fx.filter(x=>now-x.at<430);
+      if(now>flashUntil[index])$('vsJudge'+index).classList.remove('show');
+    }
+    function frame(now){if(gameMode!=='duel')return;resize();
+      const time=state==='playing'?getTime():state==='paused'?pausedOffset:-1;
+      const t=time-calibrationMs/1000;
+      if(state==='playing'){
+        if(audioCtx.currentTime<startAt){$('vsCountdown').hidden=false;$('vsCountdown').textContent=String(Math.max(1,Math.min(3,Math.ceil((startAt-audioCtx.currentTime)/.733))));}
+        else{$('vsCountdown').hidden=true;resolve(t);misses(t);if(state==='playing'&&players.some(p=>p.ko))finish('knockout');else if(state==='playing' && time>=audioBuffer.duration+(fileInfo?.trimmed?0:.40))finish('complete');}
+      }else $('vsCountdown').hidden=true;
+      for(let i=0;i<2;i++)paintPlayer(i,now,time);
+      update(Math.max(0,t));
+    }
+    function snapshot(){return {mode:gameMode,state,duration:fileInfo?.duration||0,result:finalDetails,players:players.map(p=>({name:p.name,noteCount:p.notes.length,judged:p.counts.perfect+p.counts.good+p.counts.miss,combo:p.combo,hp:p.hp,fever:p.fever.snapshot(Math.max(0,getTime())).active,counts:{...p.counts}}))};}
+    const keymap={KeyA:[0,0],KeyS:[0,1],KeyD:[0,2],KeyF:[0,3],KeyJ:[1,0],KeyK:[1,1],KeyL:[1,2],Semicolon:[1,3]};
+    window.addEventListener('keydown',e=>{if(gameMode!=='duel'||!Object.hasOwn(keymap,e.code)||e.repeat)return;
+      const active=document.activeElement;if(active&&['INPUT','SELECT','TEXTAREA'].includes(active.tagName))return;
+      e.preventDefault();press('key:'+e.code,...keymap[e.code]);});
+    window.addEventListener('keyup',e=>{if(gameMode==='duel'&&Object.hasOwn(keymap,e.code)){e.preventDefault();release('key:'+e.code);}});
+    const attach=(el,index,laneOrNull)=>{el.addEventListener('pointerdown',e=>{
+        if(gameMode!=='duel'||e.button!==0)return;e.preventDefault();
+        const lane=laneOrNull===null?Math.min(3,Math.max(0,Math.floor((e.clientX-el.getBoundingClientRect().left)/el.getBoundingClientRect().width*4))):laneOrNull;
+        try{el.setPointerCapture(e.pointerId);}catch(_e){}press('ptr:'+e.pointerId,index,lane);
+      },{passive:false});
+      const up=e=>{if(gameMode==='duel'){e.preventDefault();release('ptr:'+e.pointerId);}};
+      for(const type of ['pointerup','pointercancel','lostpointercapture'])el.addEventListener(type,up,{passive:false});
+      el.addEventListener('contextmenu',e=>e.preventDefault());
+    };
+    canvases.forEach((c,i)=>attach(c,i,null));
+    for(const el of document.querySelectorAll('.vs-pads button'))attach(el,+el.dataset.player,+el.dataset.lane);
+    for(let i=0;i<2;i++)$('vsName'+(i+1)).addEventListener('change',storeNames);
+    document.querySelectorAll('.vs-mode-btn').forEach(b=>b.addEventListener('click',()=>setMode(b.dataset.mode)));
+    $('vsResultClose').addEventListener('click',()=>$('vsResultDialog').close());
+    $('vsResultRetry').addEventListener('click',()=>{$('vsResultDialog').close();replay();enterBoardMode(true);});
+    if('ResizeObserver' in window)new ResizeObserver(()=>resize()).observe(root);
+    resetUI();
+    return {play,pause,replay,resetUI,clearInputs,resize,frame,readRanking,eraseRanking,snapshot,setMode};
+  })();
+  window.rhythmV13Status=()=>versus.snapshot(); // read-only QA and classroom diagnostics
+
   // Audio is suspended when the page leaves focus; explicit player resume re-syncs timing.
   if('ResizeObserver' in window)new ResizeObserver(resizeCanvas).observe($('game'));
   window.addEventListener('resize',resizeCanvas);resizeCanvas();updateNoteLabels();selectDifficulty('normal');refreshRanking();refreshButtons();requestAnimationFrame(paintFrame);
