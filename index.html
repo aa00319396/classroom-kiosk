@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover">
-<title>教室多功能白板 V2.0｜離線教學版</title>
+<title>教室多功能白板 V2.1｜離線教學版</title>
 <style>
 :root{font-family:system-ui,-apple-system,"Microsoft JhengHei","Noto Sans TC",sans-serif;color:#15263d;background:#eaf0f8;--blue:#2164cf;--border:#cdd8e7;--card:#fff}
 *{box-sizing:border-box}html,body{height:100%;width:100%;margin:0;overflow:hidden;overscroll-behavior:none}button,input,select,textarea{font:inherit}button,select{touch-action:manipulation}button{border:1px solid var(--border);background:white;color:#223853;border-radius:11px;min-height:39px;cursor:pointer;font-weight:650;user-select:none;-webkit-tap-highlight-color:transparent}button:focus-visible,select:focus-visible,input:focus-visible{outline:3px solid #83b5ff;outline-offset:2px}button:hover{background:#f0f5fd}button:disabled{opacity:.44;cursor:default}button.primary,.active{background:#e3eeff;border-color:#7ea8ed;color:#1657b1}.top{display:flex;align-items:center;justify-content:space-between;gap:8px;background:#fff;border-bottom:1px solid var(--border);padding:6px 12px;min-height:54px}.branding{display:flex;align-items:center;gap:10px;min-width:0}.logo{font-size:25px;background:#e8f0ff;border-radius:12px;width:39px;height:39px;display:grid;place-items:center}.brandtext{min-width:0}.brandtext strong{display:block;white-space:nowrap;font-size:18px;letter-spacing:.2px}.brandtext small{display:block;color:#677990;white-space:nowrap;font-size:11px}.headerActions,.toolbar,.controls,.foot,.toolgroup{display:flex;align-items:center;gap:6px}.headerActions{flex-wrap:nowrap}.headerActions button{white-space:nowrap;padding:0 10px;font-size:13px;min-height:37px}.app{height:100dvh;min-height:0;display:flex;flex-direction:column}.toolbar{padding:7px 10px 6px;background:#fff;flex-wrap:wrap;justify-content:center;border-bottom:1px solid var(--border);gap:5px}.tool{min-height:51px;padding:4px 8px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;font-size:12px;min-width:58px}.tool .ico{font-size:22px;line-height:24px}.tool.current{color:white;background:#2466ce;border-color:#2466ce;box-shadow:0 2px 5px #225ab32b}.controls{background:#f8fbff;border-bottom:1px solid var(--border);padding:5px 12px;justify-content:center;flex-wrap:wrap;min-height:46px;gap:9px}.controlGroup{display:flex;align-items:center;gap:5px;white-space:nowrap;font-size:13px;font-weight:650}.swatch{width:27px;height:27px;border-radius:50%;min-height:27px;border:2px solid #e8edf4;box-shadow:0 0 0 1px #9eaec1}.swatch.selected{outline:3px solid #255caa;outline-offset:2px}.swatch[data-color="#111827"]{background:#111827}.swatch[data-color="#e33139"]{background:#e33139}.swatch[data-color="#2167d8"]{background:#2167d8}.swatch[data-color="#16834a"]{background:#16834a}input[type=range]{width:98px;accent-color:#2466ce}select{background:white;border:1px solid #c4d4e6;border-radius:9px;min-height:34px;padding:0 7px;max-width:150px}.controlGroup output{width:38px;color:#52657c;font-size:12px}.checkLabel{display:flex;align-items:center;gap:4px;color:#47576c;font-size:12px}.checkLabel input{width:17px;height:17px;accent-color:#256bd0}.workspace{flex:1;min-height:0;padding:10px;display:grid;place-items:center;position:relative;overflow:hidden;background-color:#e5edf7;background-image:radial-gradient(#cfdae8 1px,transparent 1px);background-size:18px 18px}.stage{position:relative;background:white;box-shadow:0 8px 30px #21375632;outline:1px solid #ccd5e2;overflow:hidden;touch-action:none;user-select:none;-webkit-user-select:none}.stage canvas{width:100%;height:100%;display:block;touch-action:none;cursor:crosshair;user-select:none}.stage.select-mode canvas{cursor:default}.stage.eraser-mode canvas{cursor:cell}.foot{background:#fff;border-top:1px solid var(--border);min-height:56px;justify-content:space-between;padding:6px 12px;gap:8px}.footGroup{display:flex;align-items:center;gap:5px;white-space:nowrap}.foot button{padding:0 9px;font-size:13px}.pageInfo{font-size:13px;font-weight:700;color:#4e6181}.footerHint{font-size:12px;color:#6b7d91;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:310px}.status{position:fixed;z-index:30;bottom:68px;left:50%;transform:translateX(-50%);pointer-events:none;background:#1a2d46;color:white;border-radius:12px;box-shadow:0 7px 24px #132c4966;padding:10px 17px;font-weight:600;font-size:13px;max-width:min(90vw,600px);text-align:center;opacity:0;transition:opacity .2s}.status.show{opacity:1}.modalBackdrop{position:fixed;inset:0;background:#13253e8a;z-index:50;display:none;align-items:center;justify-content:center;padding:15px}.modalBackdrop.open{display:flex}.dialog{width:min(540px,100%);background:white;box-shadow:0 20px 55px #071b3573;border-radius:17px;padding:22px;max-height:min(88dvh,730px);overflow:auto}.dialog h2{font-size:20px;margin:0 0 8px}.dialog p,.dialog li{color:#4e6178;font-size:14px;line-height:1.7}.dialog textarea{display:block;width:100%;min-height:130px;resize:vertical;border:1px solid var(--border);border-radius:10px;padding:12px;font-size:20px}.dialog .actions{display:flex;justify-content:flex-end;gap:8px;margin-top:16px}.dialog .actions button{padding:0 16px}.dialog button.emphasis{background:#2466ce;color:white;border-color:#2466ce}.dialog .fieldRow{display:flex;align-items:center;gap:12px;margin-top:10px;font-size:14px}.dialog input[type=number]{width:84px;border:1px solid var(--border);border-radius:8px;padding:6px}.dialog kbd{padding:2px 5px;border:1px solid #bdc9d8;border-radius:4px;background:#f3f6fb}.hidden{display:none!important}
@@ -11,18 +11,74 @@
 @media(max-width:680px){.top{padding:4px 6px;min-height:43px}.branding{gap:5px}.logo{font-size:20px;width:32px;height:32px}.brandtext strong{font-size:14px}.headerActions{gap:3px}.headerActions button{font-size:10px;min-height:32px;padding:0 4px}.headerActions #undoBtn,.headerActions #redoBtn{font-size:0;min-width:29px;padding:0 2px}.headerActions #undoBtn:before{content:"↶";font-size:20px}.headerActions #redoBtn:before{content:"↷";font-size:20px}.brandtext strong{font-size:12px}.brandtext strong span{display:none}.logo{display:none}.toolbar{padding:4px;gap:3px}.tool{min-width:46px;min-height:43px;font-size:10px;padding:3px 4px}.tool .ico{font-size:17px;line-height:18px}.controls{padding:4px 6px;gap:6px}.foot{min-height:74px;padding:4px 5px;flex-wrap:wrap;justify-content:center;gap:3px}.footGroup{width:100%;gap:3px;justify-content:center;flex-wrap:nowrap}.foot button{font-size:11px;min-height:30px;padding:0 5px}.pageInfo{display:none}.footGroup #prevBtn,.footGroup #nextBtn{font-size:0;min-width:29px;padding:0 3px}.footGroup #prevBtn:before{content:"‹";font-size:19px}.footGroup #nextBtn:before{content:"›";font-size:19px}.footGroup #pageSelect{max-width:79px}.controlGroup{font-size:11px}input[type=range]{width:76px}select{min-height:30px}}
 @media(min-width:681px) and (max-width:900px){.foot{flex-wrap:wrap;justify-content:center;gap:3px}.footGroup{justify-content:center}}
 @media(max-height:620px){.tool{min-height:43px}.toolbar{padding:4px}.workspace{padding:5px}.controls{min-height:37px;padding:3px}.foot{min-height:44px}}
+
+/* V2.1 — compact bottom toolbars: maximize the 16:9 drawing canvas. */
+.app{height:100dvh;min-height:0;overflow:hidden}
+.top{flex:0 0 auto;min-height:43px;padding:4px 10px;gap:6px}
+.logo{width:31px;height:31px;font-size:19px;border-radius:8px}
+.brandtext strong{font-size:15px}
+.brandtext small{font-size:10px}
+.headerActions{gap:4px}
+.headerActions button{min-height:32px;padding:0 8px;font-size:12px}
+.workspace{order:1;flex:1 1 auto;min-height:0;padding:3px}
+.toolbar{order:2;flex:0 0 auto;min-height:43px;padding:4px 8px;display:flex;justify-content:center;flex-wrap:nowrap;align-items:center;gap:4px;overflow-x:auto;overflow-y:hidden;scrollbar-width:thin;overscroll-behavior-x:contain}
+.tool{flex:0 0 auto;min-height:35px;min-width:55px;padding:4px 7px;flex-direction:row;gap:4px;font-size:12px;line-height:1.1;border-radius:8px}
+.tool .ico{font-size:18px;line-height:1}
+.controls{order:3;flex:0 0 auto;min-height:37px;padding:3px 8px;display:flex;flex-wrap:nowrap;justify-content:center;align-items:center;gap:8px;overflow-x:auto;overflow-y:hidden;white-space:nowrap;scrollbar-width:thin;overscroll-behavior-x:contain}
+.controlGroup{gap:4px;font-size:12px}
+.swatch{width:23px;height:23px;min-height:23px}
+input[type=range]{width:74px}
+.controls select{min-height:30px;padding:0 5px;max-width:115px}
+.controls>button{min-height:29px;padding:0 7px;font-size:11px;border-radius:7px;flex-shrink:0}
+.checkLabel{font-size:11px}
+.checkLabel input{width:15px;height:15px}
+.foot{order:4;flex:0 0 auto;min-height:41px;padding:4px 8px;flex-wrap:nowrap;justify-content:space-between;gap:5px}
+.footGroup{gap:4px}
+.foot button{min-height:30px;padding:0 7px;font-size:11px;border-radius:7px}
+.foot select{min-height:30px}
+.pageInfo{font-size:11px}
+.footerHint{display:none}
+@media(max-width:1380px){.toolbar,.controls{justify-content:flex-start}}
+@media(max-width:680px){
+ .top{min-height:39px;padding:3px 6px}
+ .brandtext strong{font-size:12px}
+ .headerActions button{min-height:30px;padding:0 4px;font-size:10px}
+ .toolbar{min-height:39px;padding:3px 4px;gap:3px}
+ .tool{min-width:46px;min-height:33px;padding:3px 5px;font-size:10px;gap:3px}
+ .tool .ico{font-size:16px;line-height:1}
+ .controls{min-height:35px;padding:3px 6px;gap:7px}
+ .controlGroup{font-size:11px}
+ input[type=range]{width:65px}
+ .foot{min-height:67px;padding:3px 4px;gap:3px;flex-wrap:wrap;justify-content:center}
+ .footGroup{width:100%;justify-content:center;gap:3px;flex-wrap:nowrap}
+ .foot button{min-height:28px;font-size:10px;padding:0 5px}
+ .foot select{min-height:28px}
+ .workspace{padding:2px}
+}
+@media(max-height:620px){
+ .top{min-height:35px;padding:2px 6px}
+ .headerActions button{min-height:29px}
+ .toolbar{min-height:34px;padding:2px 5px}
+ .tool{min-height:30px}
+ .controls{min-height:31px;padding:2px 6px}
+ .foot{min-height:34px;padding:2px 5px}
+ .foot button{min-height:27px}
+}
 @media print{body{overflow:auto}.top,.toolbar,.controls,.foot,.status,.modalBackdrop{display:none!important}.app,.workspace{display:block;height:auto}.stage{width:100%!important;height:auto!important;box-shadow:none}.stage canvas{height:auto}}
 </style>
 </head>
 <body>
 <div class="app">
 <header class="top">
-  <div class="branding"><div class="logo" aria-hidden="true">▣</div><div class="brandtext"><strong>教室多功能白板 <span style="color:#2164cf">V2.0</span></strong><small>離線教學版 · 可儲存多頁課程</small></div></div>
+  <div class="branding"><div class="logo" aria-hidden="true">▣</div><div class="brandtext"><strong>教室多功能白板 <span style="color:#2164cf">V2.1</span></strong><small>離線教學版 · 可儲存多頁課程</small></div></div>
   <div class="headerActions">
     <button id="undoBtn" title="復原（Ctrl+Z）">↶ 復原</button><button id="redoBtn" title="重做（Ctrl+Y）">↷ 重做</button>
     <button id="clearBtn" title="清除本頁物件">清空本頁</button><button id="fullBtn" title="進入或退出全螢幕">⛶ 全螢幕</button><button id="helpBtn">? 說明</button>
   </div>
 </header>
+<div class="workspace" id="workspace">
+  <div class="stage" id="stage"><canvas id="board" aria-label="可使用觸控筆或滑鼠書寫的教學白板"></canvas></div>
+</div>
 <nav class="toolbar" aria-label="白板繪圖工具">
   <button class="tool" data-tool="select" title="選取、拖曳、調整大小"><span class="ico">⌖</span>選取</button>
   <button class="tool current" data-tool="pen" title="手寫筆"><span class="ico">✎</span>畫筆</button>
@@ -44,9 +100,6 @@
  <label class="controlGroup">背景 <select id="background"><option value="blank">純白</option><option value="grid">方格紙</option><option value="lines">橫線紙</option><option value="tian">田字格</option><option value="mi">米字格</option><option value="coords">座標平面</option></select></label>
  <label class="checkLabel" title="啟用後只有觸控筆可在白板書寫；滑鼠仍可測試操作"><input id="penOnly" type="checkbox">只用觸控筆</label>
  <button id="editBtn" title="選取文字後編輯；選取其他物件可複製" disabled>編輯選取</button><button id="dupBtn" title="複製目前選取物件" disabled>複製物件</button><button id="deleteObjBtn" title="刪除目前選取物件" disabled>刪除物件</button>
-</div>
-<div class="workspace" id="workspace">
-  <div class="stage" id="stage"><canvas id="board" aria-label="可使用觸控筆或滑鼠書寫的教學白板"></canvas></div>
 </div>
 <footer class="foot">
  <div class="footGroup"><button id="prevBtn" title="上一頁">‹ 上一頁</button><span class="pageInfo" id="pageInfo">第 1 / 1 頁</span><button id="nextBtn" title="下一頁">下一頁 ›</button><select id="pageSelect" aria-label="選擇頁面"></select><button id="newPageBtn" class="primary" title="新增空白頁">＋ 新增頁</button><button id="duplicatePageBtn" title="複製目前頁面">複製頁</button><button id="deletePageBtn" title="刪除目前頁面">刪除頁</button></div>
@@ -166,7 +219,7 @@ function dbSet(d){return new Promise(resolve=>{if(!db)return resolve(false);try{
 function dbGet(){return new Promise(resolve=>{if(!db)return resolve(null);try{let tx=db.transaction('projects','readonly');let r=tx.objectStore('projects').get(STORAGE);r.onsuccess=()=>resolve(r.result||null);r.onerror=()=>resolve(null)}catch{resolve(null)}})}
 async function saveLocal(){const obj={app:'meiki-classroom-whiteboard',version:2,title:projectTitle,pages,active};const ok=await dbSet(obj);if(!ok){try{localStorage.setItem(STORAGE,JSON.stringify(obj))}catch{ $('footerHint').textContent='自動儲存空間不足，請按「儲存專案」備份';return}}$('footerHint').textContent='已在此瀏覽器自動儲存 · 建議定期下載專案備份'}
 async function initPersistence(){db=await dbOpen();let data=await dbGet();if(!data){try{data=JSON.parse(localStorage.getItem(STORAGE)||'null')}catch{}}if(data?.version===2&&data?.app==='meiki-classroom-whiteboard'&&Array.isArray(data.pages)&&data.pages.length){pages=data.pages;active=clamp(+data.active||0,0,pages.length-1);projectTitle=String(data.title||projectTitle);toast('已還原上次白板內容')}syncPageUI()}
-function help(){modalOpen('白板 V2.0 操作說明',`<p><b>基本書寫：</b>選擇畫筆與四色筆色，利用「筆畫」調整粗細。橡皮擦可調半徑，支援手寫筆跡局部擦除及移除形狀。</p><p><b>智慧幾何：</b>智慧筆會把大致筆直的筆跡轉成直線、封閉橢圓轉成標準橢圓；直線、圓形、長方形、三角形、箭頭及角度工具可精準繪圖。圓形工具拖曳時按 Shift 可畫正圓。</p><p><b>編輯物件：</b>按「選取」，點物件拖曳移動；拖曳右下角白色控制點調整大小，文字可使用「編輯選取」修改。雙擊文字也可編輯；按 Delete 刪除選取，Ctrl+C/Ctrl+V 複製貼上。</p><p><b>觸控螢幕：</b>畫布支援 Pointer Events、單指／單筆書寫，阻止畫布觸控捲動；可勾「只用觸控筆」減少手掌誤觸。滑鼠可繼續操作。建議 Edge 或 Chrome 全螢幕。</p><p><b>頁面與背景：</b>每頁獨立設定背景，可新增、複製、刪除、切換頁面。背景不會被橡皮擦清除。</p><p><b>下載與備份：</b>PNG 輸出目前完整頁面；多頁 PDF 匯出所有頁；「儲存專案」下載含圖像、文字、筆跡的 JSON，可「載入專案」繼續編輯。平時也會自動保存於本裝置瀏覽器（清除網站資料可能消失）。</p><p><b>快捷鍵：</b><kbd>Ctrl</kbd>+<kbd>Z</kbd> 復原、<kbd>Ctrl</kbd>+<kbd>Y</kbd> 重做、<kbd>Delete</kbd> 刪除選取、<kbd>Esc</kbd> 取消選取。</p>`,'關閉',()=>modalClose())}
+function help(){modalOpen('白板 V2.1 操作說明',`<p><b>基本書寫：</b>選擇畫筆與四色筆色，利用「筆畫」調整粗細。橡皮擦可調半徑，支援手寫筆跡局部擦除及移除形狀。</p><p><b>智慧幾何：</b>智慧筆會把大致筆直的筆跡轉成直線、封閉橢圓轉成標準橢圓；直線、圓形、長方形、三角形、箭頭及角度工具可精準繪圖。圓形工具拖曳時按 Shift 可畫正圓。</p><p><b>編輯物件：</b>按「選取」，點物件拖曳移動；拖曳右下角白色控制點調整大小，文字可使用「編輯選取」修改。雙擊文字也可編輯；按 Delete 刪除選取，Ctrl+C/Ctrl+V 複製貼上。</p><p><b>觸控螢幕：</b>畫布支援 Pointer Events、單指／單筆書寫，阻止畫布觸控捲動；可勾「只用觸控筆」減少手掌誤觸。滑鼠可繼續操作。建議 Edge 或 Chrome 全螢幕。</p><p><b>頁面與背景：</b>每頁獨立設定背景，可新增、複製、刪除、切換頁面。背景不會被橡皮擦清除。</p><p><b>下載與備份：</b>PNG 輸出目前完整頁面；多頁 PDF 匯出所有頁；「儲存專案」下載含圖像、文字、筆跡的 JSON，可「載入專案」繼續編輯。平時也會自動保存於本裝置瀏覽器（清除網站資料可能消失）。</p><p><b>快捷鍵：</b><kbd>Ctrl</kbd>+<kbd>Z</kbd> 復原、<kbd>Ctrl</kbd>+<kbd>Y</kbd> 重做、<kbd>Delete</kbd> 刪除選取、<kbd>Esc</kbd> 取消選取。</p>`,'關閉',()=>modalClose())}
 // Button and pointer wiring
  document.querySelectorAll('[data-tool]').forEach(b=>b.addEventListener('click',()=>setTool(b.dataset.tool)));
  document.querySelectorAll('[data-color]').forEach(b=>b.addEventListener('click',()=>{color=b.dataset.color;document.querySelectorAll('[data-color]').forEach(x=>{x.classList.toggle('selected',x===b);x.setAttribute('aria-pressed',x===b?'true':'false')})}));
