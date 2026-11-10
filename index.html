@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1, user-scalable=no" />
   <meta name="theme-color" content="#c9ddff" />
-  <title>節奏星球 RHYTHM POP V13｜雙人對戰・FEVER</title>
+  <title>節奏星球 RHYTHM POP V13.1｜雙人對戰・FEVER 修正版</title>
   <style>
     :root{color-scheme:dark;--bg:#090c16;--surface:#131929;--surface-2:#1a2235;--line:#2c3550;--muted:#8793ac;--text:#f1f4ff;--aqua:#55e7da;--pink:#ff759e;--gold:#ffc775;--blue:#91a9ff;--shadow:0 18px 70px #0005}
     *{box-sizing:border-box}body{margin:0;font-family:Inter,"Noto Sans TC","Microsoft JhengHei",system-ui,-apple-system,sans-serif;background:radial-gradient(ellipse at 23% -15%,#173444 0,transparent 39%),radial-gradient(ellipse at 100% 20%,#28203a 0,transparent 42%),var(--bg);color:var(--text);min-height:100vh;letter-spacing:.015em}
@@ -914,6 +914,95 @@ body.vs-mode .stage-foot{display:none}
 @media(max-height:680px){body.board-mode .vs-player-head{min-height:46px;padding:2px 8px}.vs-player-head img{height:36px;width:36px}body.board-mode .vs-score{font-size:clamp(20px,2.6vw,29px)}body.board-mode .vs-bars{padding:2px 8px 3px}body.board-mode .vs-pads{flex-basis:clamp(55px,13%,90px)}}
 @media(prefers-reduced-motion:reduce){.vs-player-head img{animation:none}}
 
+
+/* V13.2 — All essential controls visible in one viewport, no clipped Start button. */
+body:not(.board-mode) .control-column{gap:5px;min-height:0}
+body:not(.board-mode) .control-column>.panel:first-child{flex:0 0 auto}
+body:not(.board-mode) .control-column>.panel:nth-child(2){flex:1 1 auto;min-height:0;overflow:hidden}
+body:not(.board-mode) .side .panel{padding:7px 9px}
+body:not(.board-mode) .side .panel .section-title{margin:0 0 5px;font-size:12px}
+body:not(.board-mode) .vs-picker{margin:4px 0 6px;padding:6px 7px;border-radius:10px}
+body:not(.board-mode) .vs-picker-label{font-size:10px;margin-bottom:4px}
+body:not(.board-mode) .vs-mode-options{gap:5px}
+body:not(.board-mode) .vs-mode-btn{min-height:34px;border-width:1px;font-size:12px;border-radius:7px}
+body:not(.board-mode) .vs-player-setup{margin:5px 0 0;gap:6px}
+body:not(.board-mode) .vs-player-setup label{font-size:10px}
+body:not(.board-mode) .vs-player-setup input{min-height:30px;margin-top:2px;padding:3px 6px;font-size:12px}
+body:not(.board-mode) .vs-help{display:none}
+body:not(.board-mode) .drop{min-height:46px!important;gap:0!important;padding:3px 5px!important}
+body:not(.board-mode) .drop-icon{font-size:17px!important;line-height:1}
+body:not(.board-mode) .drop strong{font-size:11px!important}
+body:not(.board-mode) .drop small{display:none}
+body:not(.board-mode) .song-data{margin-top:4px;padding:3px 6px}
+body:not(.board-mode) .clip-hint{margin-top:4px!important;padding:3px 6px!important;font-size:10px!important;line-height:1.25!important}
+body:not(.board-mode) .field-label{margin:5px 0 3px;font-size:10px}
+body:not(.board-mode) .diff{min-height:34px!important;padding:2px 0!important;font-size:12px!important}
+body:not(.board-mode) .note-mode-control{margin:4px 0!important;padding:3px 0!important;min-height:0}
+body:not(.board-mode) .note-mode-control label{font-size:10px!important}
+body:not(.board-mode) .note-mode-control select{min-height:29px!important;padding:3px 5px!important;font-size:11px!important}
+body:not(.board-mode) .slider-line{gap:5px;min-height:30px}
+body:not(.board-mode) .slider-line input{min-height:26px!important}
+body:not(.board-mode) .speed-value{font-size:15px!important;min-width:39px}
+body:not(.board-mode) #rpSoloNameLabel{margin:5px 0 2px}
+body:not(.board-mode) #playerName{min-height:32px;padding:5px 7px;font-size:12px}
+body:not(.board-mode):not(.vs-mode) #rpSoloNameLabel{display:inline-flex;width:43%;vertical-align:middle;align-items:center;margin:3px 0 2px!important;white-space:nowrap}
+body:not(.board-mode):not(.vs-mode) #rpSoloNameLabel span{display:none}
+body:not(.board-mode):not(.vs-mode) #playerName{display:inline-block;width:55%;vertical-align:middle;min-height:28px!important;margin-top:2px}
+body.vs-mode:not(.board-mode) #rpSoloNameLabel,body.vs-mode:not(.board-mode) #playerName{display:none!important}
+body:not(.board-mode) .rp-advanced-trigger{display:block;width:100%;min-height:28px;margin-top:5px;padding:3px 8px;text-align:center;border:1px solid #c6d7ef;border-radius:8px;background:#f0f6ff;color:#426aa6;font-size:11px;font-weight:900}
+body:not(.board-mode) .cta-row{margin-top:6px;gap:5px}
+body:not(.board-mode) .cta-row .cta,body:not(.board-mode) .cta-row .secondary{min-height:41px!important;padding:5px 8px!important;font-size:14px!important}
+body:not(.board-mode) .cta-row .secondary{min-width:37px}
+/* Right-hand settings remain fully visible; alternate settings open in a modal rather than overflowing. */
+.rp-settings-modal{width:min(580px,calc(100vw - 22px));max-height:min(86dvh,760px);overflow:auto;border:2px solid #bfd4ef;border-radius:15px;padding:0;background:#f6faff;color:#293e65;box-shadow:0 18px 70px #0c244e88}
+.rp-settings-modal::backdrop{background:#09162bd0}
+.rp-settings-modal>.rp-modal-header{position:sticky;z-index:2;top:0;display:flex;align-items:center;justify-content:space-between;padding:11px 15px;background:#e7f1ff;border-bottom:1px solid #bfd4ef}
+.rp-settings-modal>.rp-modal-header strong{font-size:17px}
+.rp-settings-modal>.rp-modal-header button{background:white;border:1px solid #a6c6e5;border-radius:7px;padding:5px 10px;font-weight:800;color:#4165a7}
+.rp-settings-modal .rp-modal-content{padding:12px 16px 18px}
+.rp-settings-modal .rp-modal-content>*{margin-top:10px}
+.rp-settings-modal .rp-modal-content .field-label{color:#425e93}
+.rp-settings-modal .rp-modal-content button,.rp-settings-modal .rp-modal-content input,.rp-settings-modal .rp-modal-content select{touch-action:auto}
+@media(max-height:670px){
+ body:not(.board-mode) .top{height:42px!important;padding-bottom:2px!important}
+ body:not(.board-mode) .welcome{height:56px!important;margin-bottom:3px!important}
+ body:not(.board-mode) .welcome-copy p,body:not(.board-mode) .welcome-kicker{display:none!important}
+ body:not(.board-mode) .hero-character{height:49px!important}
+ body:not(.board-mode) .stage-head{min-height:43px!important;padding:4px 8px!important}
+ body:not(.board-mode) .vs-player-head{min-height:43px;padding:2px 5px}
+ body:not(.board-mode) .vs-player-head img{width:30px;height:32px}
+ body:not(.board-mode) .vs-score{font-size:19px}
+ body:not(.board-mode) .vs-bars{padding:2px 5px 3px}
+ body:not(.board-mode) .vs-pads{flex-basis:clamp(55px,16%,82px)}
+ body:not(.board-mode) .clip-hint{font-size:9px!important}
+ body:not(.board-mode) .vs-player-setup input{min-height:27px}
+}
+@media(max-height:560px) and (min-width:801px){
+ body:not(.board-mode) .side-tabs{height:32px!important;min-height:32px!important;flex:0 0 32px!important;padding:2px!important}
+ body:not(.board-mode) .side-tabs button{min-height:26px!important}
+ body:not(.board-mode) .clip-hint{display:none!important}
+ body:not(.board-mode) .song-data.show{margin-top:2px!important;padding:2px 5px!important}
+ body:not(.board-mode) .song-data strong{font-size:10px!important;line-height:1.1!important}
+ body:not(.board-mode) .song-data small{font-size:9px!important;line-height:1.1!important;margin-top:1px!important}
+ body:not(.board-mode) .vs-picker-label{margin-bottom:2px!important}
+ body:not(.board-mode) .vs-picker-label::after{content:" · 最長 2:00";font-weight:800;color:#6681a9}
+ body:not(.board-mode) .vs-player-setup input{min-height:25px!important;margin-top:1px!important}
+ body:not(.board-mode) .drop{min-height:31px!important}
+ body:not(.board-mode) .side-tabs button{padding:3px!important;font-size:10px!important}
+ body:not(.board-mode) .side .panel{padding:4px 7px}
+ body:not(.board-mode) .vs-picker{padding:3px 5px;margin:2px 0 3px}
+ body:not(.board-mode) .vs-mode-btn{min-height:28px;font-size:10px}
+ body:not(.board-mode) .vs-player-setup{margin-top:3px}
+ body:not(.board-mode) .drop{min-height:34px!important}
+ body:not(.board-mode) .drop-icon{display:none}
+ body:not(.board-mode) .clip-hint{font-size:9px!important;margin-top:2px!important;padding:2px 4px!important}
+ body:not(.board-mode) .diff{min-height:29px!important;font-size:11px!important}
+ body:not(.board-mode) .note-mode-control{margin:1px 0!important}
+ body:not(.board-mode) .field-label{margin:3px 0 2px}
+ body:not(.board-mode) #playerName{min-height:27px;padding:3px 5px}
+ body:not(.board-mode) .rp-advanced-trigger{min-height:25px;margin-top:2px}
+ body:not(.board-mode) .cta-row .cta,body:not(.board-mode) .cta-row .secondary{min-height:32px!important;font-size:12px!important}
+}
 </style>
 </head>
 <body>
@@ -1056,7 +1145,7 @@ body.vs-mode .stage-foot{display:none}
 </section>
     </aside>
   </main>
-  <footer class="footer"><span>RHYTHM POP V13 / 單人＋雙人對戰 · 2:00 自動裁切 · FEVER ×2 · HP 0 即結束 · 80% 登榜</span><span>歌曲自動擷取至最多 2:00；原始音檔不變。排行榜只保存在本機。</span></footer>
+  <footer class="footer"><span>RHYTHM POP V13.2 / 單人＋雙人對戰 · 2:00 自動裁切 · FEVER ×2 · HP 0 即結束 · 80% 登榜</span><span>歌曲自動擷取至最多 2:00；原始音檔不變。排行榜只保存在本機。</span></footer>
 </div>
 
 <dialog id="vsResultDialog" class="vs-results" aria-labelledby="vsWinner"><div id="vsResultKicker" class="vs-result-kicker">2P VS · 雙人對戰結算</div><div id="vsWinner" class="vs-winner">勝利者</div>
@@ -2360,19 +2449,37 @@ self.onmessage = e => {
       try{if(audioCtx.state==='suspended')await audioCtx.resume();}catch(e){showNotice('音訊無法播放：'+e.message);return;}
       if(resume&&state!=='paused')return;
       if(!resume){storeNames();const template=makeChart();chart=template;resetUI();players.forEach(p=>{p.notes=template.map(n=>({...n,judged:false,active:false,quality:''}));});pausedOffset=0;}
+      else {
+        const resumedJudgementTime=pausedOffset-calibrationMs/1000;
+        for(const p of players)for(const n of p.notes)if(n.resumePending&&!n.judged){
+          n.resumeDeadline=Math.min(n.end,resumedJudgementTime+.55);
+        }
+      }
       try{createSource(resume?pausedOffset:0,resume?1.1:2.2);}catch(e){showNotice('音訊開始失敗：'+e.message);return;}
       state='playing';gameStarted=true;finished=false;clearMessage();refreshButtons();root.hidden=false;
       $('nowSub').textContent=`雙人對戰 · ${fmtTime(fileInfo.duration)} · ${diffNames[difficulty]} · ${noteMode==='hold'?'Tap＋Hold':'Tap'}`;
       resize();update(0);
     }
     function pause(){if(state==='playing'){
-        pausedOffset=Math.max(0,Math.min(audioBuffer.duration,getTime()));stopSource();clearInputs();state='paused';
-        $('vsCountdown').hidden=true;refreshButtons();showNotice('雙人對戰已暫停，按空白鍵或 ▶ 繼續。');
+        pausedOffset=Math.max(0,Math.min(audioBuffer.duration,getTime()));
+        // A pause must not turn an in-progress HOLD into an unavoidable Miss.
+        // Preserve its opening judgement; after resuming, the player must re-press
+        // the same lane during a short grace window and hold through its tail.
+        const pausedJudgementTime=pausedOffset-calibrationMs/1000;
+        for(const session of presses.values()){
+          if(!session.note || session.note.judged)continue;
+          const n=session.note;
+          if(n.end-pausedJudgementTime<=.10){judgement(players[session.player],session.q,n);session.note=null;}
+          else {n.resumePending=true;n.resumeQuality=session.q;n.resumeDeadline=Infinity;}
+        }
+        stopSource();clearInputs();state='paused';
+        $('vsCountdown').hidden=true;refreshButtons();
+        showNotice('雙人對戰已暫停。繼續時，尚未完成的 HOLD 需重新按住原軌道。');
       }else if(state==='paused')play(true);
     }
     function replay(){if(!analysis)return;stopSource();clearInputs();state='ready';play(false);}
     function judgement(p,q,n){if(n.judged||p.ko)return;
-      n.judged=true;n.active=false;n.quality=q;p.counts[q]++;
+      n.judged=true;n.active=false;n.resumePending=false;n.quality=q;p.counts[q]++;
       const wt=q==='perfect'?1000:q==='good'?650:0;
       const f=p.fever.judge(q,Math.max(0,getTime()-calibrationMs/1000));p.base+=wt;p.raw+=wt*(f.multiplier);p.bonus+=wt*(f.multiplier-1);
       if(q==='miss'){p.combo=0;p.chain=0;p.hp=Math.max(0,p.hp-MISS_DAMAGE);}else{
@@ -2397,6 +2504,11 @@ self.onmessage = e => {
       const session={player,lane,note:null,q:''};presses.set(id,session);
       if(state!=='playing'||audioCtx.currentTime<startAt)return;
       const t=getTime()-calibrationMs/1000,p=players[player];if(t<-.12||p.ko)return;
+      // HOLD re-grab after pause: original head has already passed, so a
+      // conventional near-head lookup cannot find it. Restrict to its lane,
+      // remaining body and the short post-resume grace interval.
+      const pending=p.notes.find(n=>n.resumePending&&!n.judged&&n.lane===lane&&t<n.end&&t<=n.resumeDeadline);
+      if(pending){pending.resumePending=false;pending.active=true;session.note=pending;session.q=pending.resumeQuality||'good';return;}
       const n=noteNear(p,lane,t);if(!n)return;
       const diff=Math.abs(t-n.time),q=diff<=.115?'perfect':'good';n.hitError=n.time-t;
       if(n.type==='hold') {n.active=true;session.note=n;session.q=q;return;}
@@ -2410,7 +2522,9 @@ self.onmessage = e => {
       if(t>=s.note.end){s.note.active=false;judgement(players[s.player],s.q,s.note);s.note=null;}
     }}
     function misses(t){for(const p of players){if(p.ko)continue;
-      while(p.missIndex<p.notes.length && p.notes[p.missIndex].time<t-MAX_JUDGE){const n=p.notes[p.missIndex++];if(!n.judged&&!n.active)judgement(p,'miss',n);if(finishing||state!=='playing')return;}
+      while(p.missIndex<p.notes.length && p.notes[p.missIndex].time<t-MAX_JUDGE){const n=p.notes[p.missIndex++];if(!n.judged&&!n.active&&!n.resumePending)judgement(p,'miss',n);if(finishing||state!=='playing')return;}
+      // Pending HOLD notes bypass normal head-time misses until re-grab expires.
+      for(const n of p.notes){if(n.resumePending&&!n.judged&&t>=n.resumeDeadline){n.resumePending=false;judgement(p,'miss',n);}}
     }}
     function finish(reason='complete'){
       if(finishing||finished||state!=='playing')return;finishing=true;
@@ -2471,7 +2585,9 @@ self.onmessage = e => {
         if(audioCtx.currentTime<startAt){$('vsCountdown').hidden=false;$('vsCountdown').textContent=String(Math.max(1,Math.min(3,Math.ceil((startAt-audioCtx.currentTime)/.733))));}
         else{$('vsCountdown').hidden=true;resolve(t);misses(t);if(state==='playing'&&players.some(p=>p.ko))finish('knockout');else if(state==='playing' && time>=audioBuffer.duration+(fileInfo?.trimmed?0:.40))finish('complete');}
       }else $('vsCountdown').hidden=true;
-      for(let i=0;i<2;i++)paintPlayer(i,now,time);
+      // The visual position and input judgement must use the same calibrated clock.
+      // Previously the canvas used `time` while judging used `t` (up to 250ms apart).
+      for(let i=0;i<2;i++)paintPlayer(i,now,t);
       update(Math.max(0,t));
     }
     function snapshot(){return {mode:gameMode,state,duration:fileInfo?.duration||0,result:finalDetails,players:players.map(p=>({name:p.name,noteCount:p.notes.length,judged:p.counts.perfect+p.counts.good+p.counts.miss,combo:p.combo,hp:p.hp,fever:p.fever.snapshot(Math.max(0,getTime())).active,counts:{...p.counts}}))};}
@@ -2676,6 +2792,35 @@ self.onmessage = e => {
  render();progress();syncMode();
 })();
 
+</script>
+
+<script>
+/* V13.2: Keep main controls on screen. Move nonessential options to an accessible dialog. */
+(()=>{
+  const panel=document.getElementById('difficultyButtons')?.closest('.panel');
+  const row=document.querySelector('.control-column #playButton')?.closest('.cta-row');
+  if(!panel||!row)return;
+  const label=document.getElementById('playerName')?.previousElementSibling;
+  if(label)label.id='rpSoloNameLabel';
+  const dialog=document.createElement('dialog');
+  dialog.id='rpAdvancedDialog';dialog.className='rp-settings-modal';
+  const header=document.createElement('div');header.className='rp-modal-header';
+  const heading=document.createElement('strong');heading.textContent='進階設定與校正';
+  const close=document.createElement('button');close.type='button';close.textContent='完成 ✕';close.setAttribute('aria-label','關閉進階設定');
+  close.addEventListener('click',()=>dialog.close());
+  header.append(heading,close);
+  const content=document.createElement('div');content.className='rp-modal-content';
+  ['#difficultyHint','.calibration','#bestSummary','.compact-settings','.dance-settings','.training-launch','#gameNotice'].forEach(q=>{
+    const node=panel.querySelector(q);if(node)content.append(node);
+  });
+  const more=panel.querySelector('.field-label[style]');
+  // Preserve the original settings element IDs and event listeners by moving the nodes, not cloning them.
+  dialog.append(header,content);document.body.append(dialog);
+  dialog.addEventListener('click',e=>{if(e.target===dialog)dialog.close()});
+  const advanced=document.createElement('button');advanced.className='rp-advanced-trigger';advanced.type='button';advanced.textContent='⚙ 進階設定・延遲校正・特效';
+  advanced.addEventListener('click',()=>dialog.showModal());
+  panel.insertBefore(advanced,row);
+})();
 </script>
 </body>
 </html>
