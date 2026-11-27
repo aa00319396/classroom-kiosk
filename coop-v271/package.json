@@ -1,0 +1,1 @@
+{"name":"cat-maid-coop-v271","version":"2.71.0","private":true,"scripts":{"start":"node server.cjs"},"dependencies":{"ws":"8.18.3"}}
